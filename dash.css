@@ -9,9 +9,8 @@
   }
   
   /* Sidebar */
-  .sidebar {
-    width: 250px; 
-    background-color: #1f2937;
+  /* .sidebar {
+   
     
     color: #fff;
     padding: 20px;
@@ -20,9 +19,11 @@
   }
   .sidebar h2 {
     margin-bottom: 30px;
-  }
+  } */
   .sidebar div button {
     background: none;
+    width: 250px; 
+    background-color: #1a2533;
     border: none;
     width: 100%;
     color: #fff;
@@ -115,12 +116,12 @@ form input {
   
   header {
     display: flex;
-  
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin: 30px;
   }
   
+
   .user-avatar img {
     border-radius: 50%;
     width: 40px;
@@ -571,6 +572,13 @@ border-radius: 5px;
 display: none;
 }
 
+.options.show{
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  z-index: 20;
+}
+
     .cards{
         display: block;
     }
@@ -581,4 +589,13 @@ display: none;
     .sidebar{
       width: 150px;
     }
+
+    .main-content{
+      padding: 10px 20px ;
+    }
+
+      header {
+    margin: 70px 0px 30px 0px;
+  }
+  
   }
