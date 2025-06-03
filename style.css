@@ -14,7 +14,15 @@
     text-decoration: none;
   }
 
-  
+
+  /* this makes the mobile view narv invisible */
+  .nav{
+    
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -56,7 +64,28 @@
   .nav-item:hover {
     border-style: solid;
     border-color: #f8f3f3;
+    
   }
+
+/* togle mobile  */
+  .dropdown-toggle {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+.container{
+  display: none;
+}
+
+.icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+}
+
 
   /* this is the hero styling section */
   
@@ -93,6 +122,7 @@
   .hero-overlay h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+ 
   }
   
   .hero-overlay p {
@@ -325,11 +355,78 @@
 
   /* Mobile responsiveness */
   @media (max-width: 768px) {
-    .footer-content {
+   
+
+    .navbar{
+      display: none;
+    }
+
+.nav.show  {
+  opacity: 1;
+
+}
+.nav.show .icon {
+  transform: rotate(180deg);
+}
+
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px 0;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #1e3a8a;
+    color: #fff;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .container{
+      display: flex;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .nav {
+    flex-direction: column;
+    padding: 15px;
+    border-radius:0px 0px 0px 10px ;
+    gap: 15px;
+    position: absolute;
+    top: 60px;
+   right: 0px;
+    margin-top: 10px;
+    height: 200px;
+    background-color: #1e3a8a;
+  }
+
+  
+  .nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav a:hover,
+  .nav a.active {
+    background-color: #274bb6;
+    border-radius: 10px;
+  }
+
+/* begining of footer styling */
+      .footer-content {
       flex-direction: column;
       text-align: center;
     }
-  
+
     .footer-logo,
     .footer-links,
     .footer-contact,
@@ -350,6 +447,15 @@
     .footer-subscribe button {
       width: 100%;
       max-width: 300px;
+    }
+
+      .hero-overlay h1 {
+    font-size: 1.5rem;
+    white-space: normal;
+    }
+
+    .hero{
+      background-image: url('./assets/c.png'); /* Hero image mobile view path */
     }
   }
   

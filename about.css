@@ -12,46 +12,7 @@
     background-color: #f9f9f9;
   }
   
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px 0;
-  }
-  
-  /* Header */
-  .header {
-    background-color: #1e3a8a;
-    color: #fff;
-    padding: 20px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-  }
-  
-  .nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav a:hover,
-  .nav a.active {
-    background-color: #274bb6;
-    border-radius: 5px;
-  }
+
   
   /* Hero Section */
   .hero {

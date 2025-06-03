@@ -8,17 +8,33 @@
   <link rel="stylesheet" href="./about.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <h1 class="logo">e-connect</h1>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="courses.html">Courses</a>
-        <a href="about.html" class="active">About Us</a>
-        <a href="contact.html">Contact</a>
+
+    <nav class="navbar">
+        <span class="nav-logo">e-connect</span>
+
+        <div class="nav-links">
+          <span class="nav-item"><a href="./index.html">Home</a></span>
+          <span class="nav-item"><a href="./courses.html">Course</a></span>
+          <span class="nav-item" ><a href="./about.html">About us</a></span>
+          <span class="nav-item"><a href="./signin.html">Sign-up</a></span>
+        </div>
       </nav>
-    </div>
-  </header>
+
+ <!-- this is the mobile view nav -->
+      <header class="header">
+        <div class="container">
+          <h1 class="logo">e-connect</h1>
+           <div class="icon"><button class="dropdown-toggle" onclick="toggleDropdown()"> Menu 
+            <span  id="dropdownIcon">&#9662;</span> <!-- ▼ icon --></button>
+          </div>
+            <nav class="nav">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="about.html">About Us</a>
+            <a href="./signin.html">Sign-up</a>
+        </nav>
+        </div>
+      </header>
 
   <section class="hero">
     <div class="container">
@@ -86,6 +102,7 @@
       <h2>Join Our Learning Community</h2>
       <p>Embark on your educational journey with e-connect and unlock your potential.</p>
       <a href="signin.html" class="btn">Get Started</a>
+      <a href="contact.html" class="btn">Contact</a>
     </div>
   </section>
 
@@ -94,5 +111,9 @@
       <p>&copy; 2025 e-connect. All rights reserved.</p>
     </div>
   </footer>
+  
+  <script src="./script.js"></script>
+
+
 </body>
 </html>

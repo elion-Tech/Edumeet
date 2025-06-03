@@ -13,3 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const targets = document.querySelectorAll('.course-card');
     targets.forEach(target => observer.observe(target));
   });
+
+  function toggleDropdown() {
+  const dropdown = document.querySelector('.nav');
+  dropdown.classList.toggle('show');
+}
