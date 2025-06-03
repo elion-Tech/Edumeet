@@ -292,3 +292,18 @@ justify-content: center;
   .info-block:nth-child(3) {
     transition-delay: 0.4s;
   }
+
+
+   /* Mobile responsiveness */
+  @media (max-width: 768px) {
+
+.partners{
+flex-wrap: wrap;
+}
+
+.video-section{
+  width: 100%;
+}
+
+
+  }

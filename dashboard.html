@@ -9,7 +9,7 @@
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="./style.css">
  <link rel="stylesheet" href="./dash.css">
-    <title>econnect</title>
+    <title>eduMeet</title>
 
 </head>
 <body>
@@ -18,13 +18,15 @@
         <!-- Sidebar -->
         
             <div class="sidebar">
-                <h2>Dashboard</h2>
+                <h2><button onclick="toggleDropdown()">Dashboard</button></h2>
+              <div class="options">
                 <button onclick="route2()">Home</button>
                 <button onclick="showSection('courses')">My Courses</button>
                 <button onclick="showSection('assignments')">Assignments</button>
                 <button onclick="showSection('messages')">Messages</button>
                 <button onclick="showSection('settings')">Settings</button>
-                  <button onclick="route()">Logout</button>
+                <button onclick="route()">Logout</button>
+              </div>
             </div>
          
       
@@ -308,4 +310,11 @@ function route(){
 function route2(){
          window.location.href = './index.html';
 };
+
+
+
+  function toggleDropdown() {
+  const dropdown = document.querySelector('.options');
+  dropdown.classList.toggle('show');
+}
   </script>
