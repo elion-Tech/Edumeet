@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-connect Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="./admin.css" />
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <h2 class="logo">E-connect</h2>
+      <nav>
+          <div>  <button onclick="showSection('dashboard')">Dashboard</button></div>
+          <div>  <button onclick="showSection('courses')">Courses</button></div>
+          <div>  <button onclick="showSection('tutors')">Tutors</button></div>
+          <div><button onclick="showSection('students')">Students</button></div>
+          <div>  <button onclick="showSection('logout')">Logout</button></div>
+  
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <h1>Admin Dashboard</h1>
+      </header>
+
+      <section class="cards">
+        <div class="card">
+          <h3>Total Courses</h3>
+          <p>128</p>
+        </div>
+        <div class="card">
+          <h3>Total Tutors</h3>
+          <p>36</p>
+        </div>
+        <div class="card">
+          <h3>Total Students</h3>
+          <p>542</p>
+        </div>
+      </section>
+
+      <section class="management-section">
+        <h2>Quick Actions</h2>
+        <div class="actions">
+            <button onclick="showSection('dashboard')">Dashboard</button>
+            <button onclick="showSection('courses')">Courses</button>
+            <button onclick="showSection('tutors')">Tutors</button>
+            <button onclick="showSection('students')">Students</button>
+            <button onclick="showSection('logout')">Logout</button>
+        </div>
+      </section>
+
+
+
+
+          <!-- Courses CRUD Section -->
+    <section id="courses" class="section">
+      <h2>Create / Update Course</h2>
+     <a href="./admin-course.html"> <button>Advance Features</button></a>
+      <form>
+        <label>Course Title: <input type="text" name="title" required></label>
+        <label>Description: <textarea name="description" required></textarea></label>
+        <label>Category: <input type="text" name="category" required></label>
+        <label>Tutor:
+          <select name="tutor">
+            <option value="">Select Tutor</option>
+            <option value="tutor1">Tutor 1</option>
+            <option value="tutor2">Tutor 2</option>
+          </select>
+        </label>
+        <label>Price: <input type="number" name="price" required></label>
+        <label>Type:
+          <select name="type">
+            <option value="live">Live</option>
+            <option value="recorded">Pre-recorded</option>
+          </select>
+        </label>
+        <label>Start Date: <input type="date" name="startDate"></label>
+        <label>Thumbnail: <input type="file" name="thumbnail"></label>
+        <button type="submit">Save Course</button>   
+      </form>
+    </section>
+
+    <!-- Tutors CRUD Section -->
+    <section id="tutors" class="section">
+      <h2>Create / Update Tutor</h2>
+      <form>
+        <label>Full Name: <input type="text" name="fullName" required></label>
+        <label>Email: <input type="email" name="email" required></label>
+        <label>Password: <input type="password" name="password" required></label>
+        <label>Expertise: <input type="text" name="expertise"></label>
+        <label>Bio: <textarea name="bio"></textarea></label>
+        <label>Profile Photo: <input type="file" name="photo"></label>
+        <label>Availability:
+          <input type="text" name="availability" placeholder="e.g. Mon-Fri 9am-5pm">
+        </label>
+        <button type="submit">Save Tutor</button>
+      </form>
+    </section>
+
+    <!-- Students CRUD Section -->
+    <section id="students" class="section">
+      <h2>Create / Update Student</h2>
+      <form>
+        <label>Full Name: <input type="text" name="fullName" required></label>
+        <label>Email: <input type="email" name="email" required></label>
+        <label>Password: <input type="password" name="password" required></label>
+        <label>Enrolled Courses:
+          <select name="courses" multiple>
+            <option value="course1">Course 1</option>
+            <option value="course2">Course 2</option>
+          </select>
+        </label>
+        <label>Payment Status:
+          <select name="payment">
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+          </select>
+        </label>
+        <button type="submit">Save Student</button>
+      </form>
+    </section>
+
+    <!-- Logout (Non-CRUD) -->
+    <section id="logout" class="section">
+      <h2>Logout</h2>
+      <p>Click below to securely log out of the admin dashboard.</p>
+      <form action="./index.html" method="post">
+        <button type="submit">Logout</button>
+      </form>
+    </section>
+    </main>
+  </div>
+
+</body>
+</html>
+<script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    // Example routing (log out confirmation)
+document.getElementById('logout').addEventListener('submit', e => {
+  e.preventDefault();
+  alert('click OK to proceed (You are about to log out)');
+         window.location.href = './index.html';
+});
+  </script>

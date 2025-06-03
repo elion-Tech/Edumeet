@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- Font Awesome CDN -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ <link rel="stylesheet" href="/style.css">
+ <link rel="stylesheet" href="/signin.css">
+    <title>econnect</title>
+
+</head>
+<body>
+    <nav class="navbar">
+        <span class="nav-logo">e-connect</span>
+
+        <div class="nav-links">
+          <span class="nav-item"><a href="./index.html">Home</a></span>
+          <span class="nav-item"><a href="./courses.html">Course</a></span>
+          <span class="nav-item"><a href="./about.html">About us</a></span>
+          <span class="nav-item"><a href="./signin.html">Sign-up</a></span>
+        </div>
+    </nav>
+
+
+   
+
+
+
+      <!-- This section is for the course cards -->
+
+      <section class="courses">
+       
+
+        <div class="auth-container">
+          <div class="form-box" id="formBox">
+            <!-- Login Form -->
+            <form id="loginForm" class="form active">
+              <h2>Login</h2>
+              <input type="email" placeholder="Email" required />
+              <input type="password" placeholder="Password" required />
+              <button type="submit"><a href="./dashboard.html">Login</a></button>
+              <div class="separator">or</div>
+              <button class="google-btn">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" />
+                Sign in with Google
+              </button>
+              <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+            </form>
+      
+            <!-- Sign Up Form -->
+            <form id="signupForm" class="form">
+              <h2>Sign Up</h2>
+              <input type="text" placeholder="Full Name" required />
+              <input type="email" placeholder="Email" required />
+              <input type="password" placeholder="Password" required />
+              <input type="password" placeholder="Confirm Password" required />
+              <button type="submit"><a href="./tutor.html">Sign Up</a></button>
+              <div class="separator">or</div>
+              <button class="google-btn">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" />
+                Sign up with Google
+              </button>
+              <p>Already have an account? <a href="./dashboard.html" id="showLogin">Login</a></p>
+            </form>
+          </div>
+        </div>
+      
+     
+          <!-- The end of the course grid -->
+     
+      </section>
+
+
+      
+<!-- footer section -->
+
+<footer class="site-footer">
+    <div class="footer-content">
+      
+      <div class="footer-logo">
+        <h2>MyBrand</h2>
+        <p>Empowering learners with quality education and resources.</p>
+      </div>
+  
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Courses</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+  
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>Email: info@mybrand.com</p>
+        <p>Phone: +234 123 456 7890</p>
+      </div>
+  
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+  
+      <div class="footer-subscribe">
+        <h4>Subscribe</h4>
+        <form action="#">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+  
+    </div>
+  
+    <div class="footer-bottom">
+      <p>&copy; 2025 MyBrand. All rights reserved.</p>
+    </div>
+</footer>
+  
+  <script src="./script.js"></script>
+</body>
+
+
+</html>
+
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const showSignup = document.getElementById("showSignup");
+  const showLogin = document.getElementById("showLogin");
+
+  showSignup.addEventListener("click", () => {
+    loginForm.classList.remove("active");
+    signupForm.classList.add("active");
+  });
+
+  showLogin.addEventListener("click", () => {
+    signupForm.classList.remove("active");
+    loginForm.classList.add("active");
+  });
+</script>

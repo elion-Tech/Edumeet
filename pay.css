@@ -1,0 +1,162 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9fafb;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+
+}
+
+.payment-container {
+  background: white;
+  width: 420px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 25px;
+}
+
+.payment-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  margin: 0 5px;
+  background-color: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e3a8a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+
+.tab-btn.active {
+  background-color: #e7901e;
+  color: white;
+  box-shadow: 0 4px 10px rgba(30,58,138,0.4);
+}
+
+.payment-section {
+  display: none;
+  animation: fadeSlideIn 0.5s ease forwards;
+}
+
+.payment-section.active {
+  display: block;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #334155;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #1e3a8a;
+  outline: none;
+}
+
+.btn-pay {
+  margin-top: 25px;
+  padding: 12px 0;
+  background-color: #e7901e;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pay:hover {
+  background-color: #1341b2;
+}
+
+.ussd-code {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e3a8a;
+  background: #e0e7ff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+
+
+#bank-transfer {
+  padding: 20px;
+  background: #f0f4ff;
+  border-radius: 8px;
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+#receipt-upload {
+  display: block;
+  margin: 15px 0;
+}
+
+#upload-btn {
+  background-color: #1e40af;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#upload-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+#upload-status {
+  margin-top: 10px;
+  color: green;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- Font Awesome CDN -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="/style.css">
+ <link rel="stylesheet" href="/dash.css">
+    <title>econnect</title>
+
+</head>
+<body>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        
+            <div class="sidebar">
+                <h2>Dashboard</h2>
+                <button onclick="showSection('dashboard')">Home</button>
+                <button onclick="showSection('courses')">My Courses</button>
+                <button onclick="showSection('assignments')">Assignments</button>
+                <button onclick="showSection('messages')">Messages</button>
+                <button onclick="showSection('settings')">Settings</button>
+                  <button onclick="route()">Logout</button>
+            </div>
+         
+      
+    
+        <!-- Main Content -->
+        <main class="main-content">
+          <header>
+            <div class="welcome">
+              <h1>Welcome back, Jane 👋</h1>
+              <p>Here’s what’s happening with your learning today.</p>
+            </div>
+            <div class="user-avatar">
+              <img src="https://i.pravatar.cc/40" alt="Profile Picture">
+            </div>
+          </header>
+    
+          <!-- Cards -->
+          <section class="cards">
+            <div class="card">
+              <h3>Courses Enrolled</h3>
+              <p>3</p>
+            </div>
+            <div class="card">
+              <h3>Assignments Due</h3>
+              <p>2</p>
+            </div>
+            <div class="card">
+              <h3>Progress</h3>
+              <p>75%</p>
+            </div>
+          </section>
+
+
+<!-- the togle content -->
+
+
+<div class="main-content">
+    <div id="dashboard" class="section active">
+      <h1>Dashboard</h1>
+      <p>Welcome to your student dashboard. Here you can view your learning overview, progress, and updates.</p>
+    </div>
+
+    <!-- <section where contents would be toggled> -->
+
+    <div id="courses" class="section">
+        
+            <h1>My Courses</h1>
+            <p>Here is a list of your enrolled courses with progress tracking.</p>
+           
+            <div style="margin-top: 30px;">
+              
+               
+                <div class="course-grid">
+                  <div class="course-card-dash">
+                    <h3>UI/UX Design Basics</h3>
+                    <p>40% completed</p>
+                    <progress value="40" max="100"></progress>
+                    
+                  </div>
+                  <div class="course-card-dash">
+                    <h3>HTML & CSS Mastery</h3>
+                    <p>80% completed</p>
+                    <progress value="80" max="100"></progress>
+                   
+
+                  </div>
+                  <div class="course-card-dash">
+                    <h3>JavaScript Essentials</h3>
+                    <p>60% completed</p>
+                    <progress value="60" max="100"></progress>                
+
+                  </div>
+                </div>
+                <p>You are permitted a maximum of three courses at a time</p>
+            </div>
+    </div>
+  <!-- end of course section -->
+
+  <div id="assignments" class="section">
+    <h1>Assignments</h1>
+    <p>Track and submit your current assignments here:</p>
+    <div class="assignment-list">
+      <div class="assignment-card">
+        <h3>HTML Forms & Inputs</h3>
+        <p>Due: May 12, 2025</p>
+        <a href="#" class="submit-btn" onclick="showSection('assignmentssub'); return false;">Assignments</a>
+      </div>
+      <div class="assignment-card">
+        <h3>Responsive Layout Design</h3>
+        <p>Due: May 15, 2025</p>
+        <a href="#" class="submit-btn" onclick="showSection('assignmentssub'); return false;">Assignments</a>
+      </div>
+      <div class="assignment-card">
+        <h3>JavaScript DOM Basics</h3>
+        <p>Due: May 20, 2025</p>
+        <a href="#" class="submit-btn" onclick="showSection('assignmentssub'); return false;">Assignments</a>
+      </div>
+    </div>
+  </div>
+<!-- end of assignmnt -->
+
+
+<div id="messages" class="section">
+    <h1>Messages</h1>
+    <p>Recent messages from instructors and classmates:</p>
+    <div class="message-card">
+      <h4>Instructor Jane Doe</h4>
+      <p>Don't forget to review the updated materials before next week’s class.</p>
+      <span class="timestamp">2 hours ago</span>
+    </div>
+    <div class="message-card">
+      <h4>Class Rep - Samuel</h4>
+      <p>Team meeting scheduled for Wednesday. Join via Zoom.</p>
+      <span class="timestamp">Yesterday</span>
+    </div>
+    <div class="message-card">
+      <h4>System Notification</h4>
+      <p>Your UI/UX course has been updated with new modules.</p>
+      <span class="timestamp">3 days ago</span>
+    </div>
+  </div>
+    <!--end of message  -->
+
+
+    <div id="settings" class="section">
+        <h1>Settings</h1>
+        <p>Manage your account preferences:</p>
+        <form class="settings-form">
+          <label>Full Name</label>
+          <input type="text" placeholder="John Doe" />
+      
+          <label>Email Address</label>
+          <input type="email" placeholder="john@example.com" />
+      
+          <label>Change Password</label>
+          <input type="password" placeholder="New Password" />
+
+          <button onclick="showSection('profile')">Update Settings</button>
+
+          <!-- <button type="submit">Update Settings</button> -->
+        </form>
+      </div>
+
+    <!-- end of setting -->
+
+
+    <div id="profile" class="section">
+      <h1>My Profile</h1>
+      <div class="profile-container">
+        <div class="profile-display">
+          <img src="https://i.pravatar.cc/120?img=5" alt="User Avatar" class="profile-avatar" />
+          <h2>Jane Doe</h2>
+          
+        </div>
+        <div>
+          <p>Email: jane@example.com</p>
+          <p>Bio: Passionate learner, eager to grow and make an impact.</p>
+        </div>
+        <form class="profile-form">
+          <h3>Update Profile</h3>
+          <input type="text" placeholder="Full Name" />
+          <input type="email" placeholder="Email Address" />
+          <textarea placeholder="Bio" rows="4"></textarea>
+          <input type="file" accept="image/*" />
+          <div class="form-actions">
+            <button type="submit">Save Changes</button>
+            <button type="button" class="delete-btn">Delete Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- end of update form -->
+
+
+    <!-- start of submit assingment section -->
+    <div id="assignmentssub" class="section">
+      <h1>Assignments</h1>
+      <p class="section-description">Submit your assignments here. Be sure to meet the deadlines!</p>
+    
+      <div class="assignment-card">
+        <h3>Introduction to HTML</h3>
+        <p>Due: May 15, 2025</p>
+        <p>Status: <span class="status pending">Pending</span></p>
+        <form class="upload-form">
+          <input type="file" accept=".pdf,.doc,.docx" required />
+          <button type="submit">Submit Assignment</button>
+        </form>
+      </div>
+    
+      <div class="assignment-card">
+        <h3>CSS Styling Basics</h3>
+        <p>Due: May 20, 2025</p>
+        <p>Status: <span class="status submitted">Submitted</span></p>
+        <button class="view-btn">View Submission</button>
+      </div>
+    </div>
+
+
+
+
+    <!-- end of assignment crud section -->
+  </div>
+   
+</main>
+
+
+
+      </div>
+
+
+
+
+<!-- footer section stating -->
+      <footer class="site-footer">
+        <div class="footer-content">
+          
+          <div class="footer-logo">
+            <h2>MyBrand</h2>
+            <p>Empowering learners with quality education and resources.</p>
+          </div>
+      
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+      
+          <div class="footer-contact">
+            <h4>Contact</h4>
+            <p>Email: info@mybrand.com</p>
+            <p>Phone: +234 123 456 7890</p>
+          </div>
+      
+          <div class="footer-social">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+      
+          <div class="footer-subscribe">
+            <h4>Subscribe</h4>
+            <form action="#">
+              <input type="email" placeholder="Enter your email" required>
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
+      
+        </div>
+      
+        <div class="footer-bottom">
+          <p>&copy; 2025 MyBrand. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+</body>
+</html>
+<script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+// route to homepage  (logout)
+function route(){
+  alert('click OK to proceed (You are about to log out)');
+         window.location.href = './index.html';
+};
+
+  </script>

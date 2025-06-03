@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./admin_course.css">
+  <title>Course & Module Management - Admin</title>
+  
+</head>
+<body>
+
+     <section class="management-section">
+        <h2>Quick Actions</h2>
+        <div class="actions">
+            <button onclick="showSection('addc')">Add new Course</button>
+            <button onclick="showSection('asst')">Assign Tutor</button>
+            <button onclick="showSection('addm')">Add Course Module</button>
+            <button onclick="showSection('vm')">View  Course Module</button>
+            <button onclick="showSection('um')">Upadate module</button>
+             <button onclick="showSection('dm')">Delete module</button>
+        </div>
+      </section>
+
+  <!-- Add New Course -->
+  <section id="addc" class="section">
+    <h2>Add New Course</h2>
+    <form>
+      <label>Course Title:
+        <input type="text" name="courseTitle" required />
+      </label>
+      <label>Description:
+        <textarea name="courseDescription" required></textarea>
+      </label>
+      <label>Category:
+        <input type="text" name="category" required />
+      </label>
+      <label>Course Type:
+        <select name="courseType">
+          <option value="live">Live</option>
+          <option value="recorded">Pre-recorded</option>
+        </select>
+      </label>
+      <button type="submit">Add Course</button>
+    </form>
+  </section>
+
+  <!-- Assign Tutor to Course -->
+  <section id="asst" class="section">
+    <h2>Assign Tutor to Course</h2>
+    <form>
+      <label>Course ID:
+        <input type="text" name="courseId" required />
+      </label>
+      <label>Select Tutor:
+        <select name="tutor">
+          <option value="">Select a Tutor</option>
+          <option value="tutor1">Tutor 1</option>
+          <option value="tutor2">Tutor 2</option>
+        </select>
+      </label>
+      <button type="submit">Assign Tutor</button>
+    </form>
+  </section>
+
+  <!-- Add Module to Course -->
+  <section id="addm" class="section">
+    <h2>Add Module to Course</h2>
+    <form>
+      <label>Course ID:
+        <input type="text" name="courseId" placeholder="e.g. course123" required />
+      </label>
+      <label>Module Title:
+        <input type="text" name="moduleTitle" required />
+      </label>
+      <label>Module Description:
+        <textarea name="moduleDesc" required></textarea>
+      </label>
+      <label>YouTube Video Link:
+        <input type="url" name="videoLink" placeholder="https://youtube.com/..." required />
+      </label>
+      <button type="submit">Add Module</button>
+    </form>
+  </section>
+
+  <!-- View Modules in a Course -->
+  <section id="vm" class="section">
+    <h2>View Modules Under a Course</h2>
+    <form>
+      <label>Course ID:
+        <input type="text" name="courseId" required />
+      </label>
+      <button type="submit">Load Modules</button>
+    </form>
+    <div class="module-list">
+      <!-- Example Module Output -->
+      <div class="module-item">
+        <strong>Module 1:</strong> Introduction to JavaScript <br />
+        Video: <a href="https://youtube.com/example" target="_blank">Watch</a>
+      </div>
+      <div class="module-item">
+        <strong>Module 2:</strong> Advanced Topics<br />
+        Video: <a href="https://youtube.com/example2" target="_blank">Watch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Update Module -->
+  <section id="um" class="section">
+    <h2>Update Module</h2>
+    <form>
+      <label>Module ID:
+        <input type="text" name="moduleId" required />
+      </label>
+      <label>New Module Title:
+        <input type="text" name="moduleTitle" />
+      </label>
+      <label>New Description:
+        <textarea name="moduleDesc"></textarea>
+      </label>
+      <label>New Video Link:
+        <input type="url" name="videoLink" />
+      </label>
+      <button type="submit">Update Module</button>
+    </form>
+  </section>
+
+  <!-- Delete Module -->
+  <section id="dm" class="section">
+    <h2>Delete Module</h2>
+    <form>
+      <label>Module ID:
+        <input type="text" name="moduleId" required />
+      </label>
+      <button type="submit" style="background-color: #e74c3c;">Delete Module</button>
+    </form>
+  </section>
+
+</body>
+</html>
+<script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+  </script>

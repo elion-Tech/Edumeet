@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Onboarding</title>
+  <link rel="stylesheet" href="cstyle.css" />
+</head>
+<body>
+  <div class="onboarding-container">
+
+      <div class="video-preview slide-up-delay">
+      <h2>Course Preview</h2>
+      <iframe 
+        src="https://www.youtube.com/embed/j6Ule7GXaRs?si=9Tr26EYu0KLzfH3g?rel=0&modestbranding=1&controls=1&showinfo=0" 
+        title="Intro Video" 
+        allowfullscreen
+        class="preview-iframe">
+      </iframe>
+    </div>
+
+    <div class="action-buttons fade-in-delay">
+      <button class="register-btn">Pay & Register</button>
+    </div>
+
+
+    <div class="course-header fade-in">
+      <!-- <img src="./assets/elearn4.jpg" alt="Course Banner" class="course-image" /> -->
+      <div class="course-info">
+        <h1>Mastering Web Development</h1>
+        <p>Level up your coding skills in HTML, CSS, JavaScript, and beyond with our hands-on course!</p>
+        <span class="tag">Beginner to Advanced</span>
+        <span class="tag">Duration: 12 Weeks</span>
+      </div>
+    </div>
+
+    <div class="tutor-section slide-up">
+      <img src="./assets/elearn3.jpg" alt="Tutor Image" class="tutor-avatar" />
+      <div class="tutor-info">
+        <h3>Jane Doe</h3>
+        <p>Senior Frontend Engineer & Instructor</p>
+        <p>10+ years of experience mentoring developers globally.</p>
+      </div>
+    </div>
+
+    <div class="module-summary fade-in-delay">
+      <h2>Module Summary</h2>
+      <ul>
+        <li>Intro to Web & Internet</li>
+        <li>HTML/CSS Essentials</li>
+        <li>JavaScript Foundations</li>
+        <li>Responsive Design</li>
+        <li>Project: Build a Portfolio Website</li>
+      </ul>
+    </div>
+
+  
+  </div>
+
+  <script>
+        document.querySelector('.register-btn').addEventListener('click', () => {
+        alert('Redirecting to payment gateway...');
+  //actual redirect logic
+            window.location.href = './paymentgate.html';
+});
+  </script>
+</body>
+</html>

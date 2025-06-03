@@ -1,0 +1,100 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+.management-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.actions button {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.actions button:hover {
+  background: #357acb;
+}
+
+    .section {
+    display: none;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .section.active {
+    display: block;
+  }
+
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input, textarea, select, button {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .module-list {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    .module-item {
+      margin-bottom: 10px;
+      border-left: 4px solid #3498db;
+      padding-left: 10px;
+    }
+
+    @media (max-width: 600px) {
+      input, textarea, select, button {
+        font-size: 0.95rem;
+        padding: 8px;
+      }
+    }

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- Font Awesome CDN -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ <link rel="stylesheet" href="/style.css">
+ <link rel="stylesheet" href="course.css" />
+    <title>econnect</title>
+    
+</head>
+<body>
+  <nav class="navbar">
+    <span class="nav-logo">e-connect</span>
+
+
+             <!-- search bar -->
+    <div class="search-container">
+              <input type="text" placeholder="Search courses..." class="search-input" />
+              <button class="search-button">Search</button>
+    </div>
+
+    <div class="nav-links">
+        <span class="nav-item"><a href="./index.html">Home</a></span>
+        <span class="nav-item"><a href="./courses.html">Course</a></span>
+        <span class="nav-item"><a href="./about.html">About us</a></span>
+        <span class="nav-item"><a href="./signin.html">Sign-up</a></span>
+    </div>
+  </nav>
+
+  <!-- the vidoe watch section -->
+<div class="video-watch">
+  <section class="video-section">
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube.com/embed/j6Ule7GXaRs?si=9Tr26EYu0KLzfH3g?rel=0&modestbranding=1&controls=1&showinfo=0" 
+        
+        title="Module Video" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="btn-container">
+      <button class="done-btn">Done</button>
+    </div>
+  </section>
+</div>
+
+ 
+  <div class="course-container">
+    <header class="course-header">
+      <h1>Frontend Development Masterclass</h1>
+      <p>Master HTML, CSS, and JavaScript with hands-on projects and real-world examples.</p>
+    </header>
+
+    <section class="course-progress">
+      <h3>Progress</h3>
+      <div class="progress-bar">
+        <div class="progress" style="width: 65%">65%</div>
+      </div>
+    </section>
+
+    <section class="course-modules">
+      <h2>Course Modules</h2>
+      <div class="scroll-wrapper">
+        <button class="scroll-btn left" onclick="scrollModules(-1)">&#8592;</button>
+        <div class="module-scroll" id="moduleScroll">
+          <!-- Repeatable Module Card -->
+          <div class="module-card">
+            <img src="./assets/g.jpg" alt="HTML Basics" />
+            <div class="module-content">
+              <h4>HTML Basics</h4>
+              <p>Learn how to build the structure of web pages.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=dD2EISBDjWM" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card">
+            <img src="./assets/elearn4.jpg" alt="CSS Fundamentals" />
+            <div class="module-content">
+              <h4>CSS Fundamentals</h4>
+              <p>Master styling, layout, and responsiveness.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card live">
+            <img src="./assets/elearn1.jpg" alt="CSS Fundamentals" />
+            <div class="module-content">
+              <h4>Live Class: Project Review</h4>
+              <p>Join our live session on final project feedback.</p>
+              <div class="btn-group">
+                <button class="watch-btn">Join Live</button>
+    
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card">
+            <img src="./assets/elearn2.jpg" alt="HTML Basics" />
+            <div class="module-content">
+              <h4>HTML Basics</h4>
+              <p>Learn how to build the structure of web pages.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=dD2EISBDjWM" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card">
+            <img src="./assets/elearn3.jpg" alt="CSS Fundamentals" />
+            <div class="module-content">
+              <h4>CSS Fundamentals</h4>
+              <p>Master styling, layout, and responsiveness.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card live">
+            <img src="./assets/f.png" alt="HTML Basics" />
+            <div class="module-content">
+              <h4>Live Class: Project Review</h4>
+              <p>Join our live session on final project feedback.</p>
+              <div class="btn-group">
+                <button class="watch-btn">Join Live</button>
+      
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card live">
+            <img src="./assets/elearn4.jpg" alt="CSS Fundamentals" />
+            <div class="module-content">
+              <h4>Live Class: Project Review</h4>
+              <p>Join our live session on final project feedback.</p>
+              <div class="btn-group">
+                <button class="watch-btn">Join Live</button>
+          
+              </div>
+            </div>
+          </div>
+        
+          <div class="module-card">
+            <img src="./assets/elearn2.jpg" alt="HTML Basics" />
+            <div class="module-content">
+              <h4>HTML Basics</h4>
+              <p>Learn how to build the structure of web pages.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=dD2EISBDjWM" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+        
+          <div class="module-card">
+            <img src="./assets/b.jpeg" alt="CSS Fundamentals" />
+            <div class="module-content">
+              <h4>CSS Fundamentals</h4>
+              <p>Master styling, layout, and responsiveness.</p>
+              <div class="btn-group">
+                <a href="https://www.youtube.com/watch?v=1Rs2ND1ryYc" target="_blank" class="watch-btn">Watch</a>
+                <button class="done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+        
+
+
+        </div>
+        <button class="scroll-btn right" onclick="scrollModules(1)">&#8594;</button>
+      </div>
+    </section>
+  </div>
+<!-- end of course line -->
+ 
+<section class="course-info-section">
+  <!-- About the Course -->
+  <div class="info-block">
+    <h2>About This Course</h2>
+    <p>
+      This course is designed to equip you with foundational and advanced knowledge in the field. With real-world examples, interactive modules, and hands-on projects, you'll gain skills that prepare you for success.
+    </p>
+    <img src="./assets/ab.jpg" alt="Course Overview" />
+  </div>
+
+  <!-- Meet the Tutors -->
+  <div class="info-block">
+    <h2>Meet Your Tutors</h2>
+    <div class="tutor-grid">
+      <div class="tutor-card">
+        <img src="./assets/tutors/aj.jpg" alt="Tutor 1" />
+        <h4>Jane Doe</h4>
+        <p>Senior Instructor, 10+ years in Software Engineering</p>
+      </div>
+      <div class="tutor-card">
+        <img src="./assets/tutors/ah.jpg" alt="Tutor 2" />
+        <h4>John Smith</h4>
+        <p>Data Analyst & Mentor, Coursera Certified</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Partner Platforms -->
+  <div class="info-block">
+    <h2>In Partnership With</h2>
+    <div class="partners">
+      <img src="./assets/power-plant.png" alt="Coursera" />
+      <img src="./assets/university-building.png" alt="Udemy" />
+      <img src="./assets/power-plant.png" alt="edX" />
+      <img src="./assets/university-building.png" alt="Udemy" />
+      <img src="./assets/power-plant.png" alt="edX" />
+
+    </div>
+  </div>
+</section>
+  
+      
+<!-- footer section -->
+
+<footer class="site-footer">
+    <div class="footer-content">
+      
+      <div class="footer-logo">
+        <h2>MyBrand</h2>
+        <p>Empowering learners with quality education and resources.</p>
+      </div>
+  
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Courses</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+  
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>Email: info@mybrand.com</p>
+        <p>Phone: +234 123 456 7890</p>
+      </div>
+  
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+  
+      <div class="footer-subscribe">
+        <h4>Subscribe</h4>
+        <form action="#">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+  
+    </div>
+  
+    <div class="footer-bottom">
+      <p>&copy; 2025 MyBrand. All rights reserved.</p>
+    </div>
+</footer>
+  
+  <script src="./script.js"></script>
+
+  <script>
+    function scrollModules(direction) {
+      const container = document.getElementById('moduleScroll');
+      const scrollAmount = container.offsetWidth * 0.8;
+      container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+  </script>
+
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+        observer.unobserve(entry.target); // Trigger only once
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.info-block').forEach(block => {
+    observer.observe(block);
+  });
+</script>
+</body>
+</html>

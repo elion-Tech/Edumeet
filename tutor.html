@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutor Dashboard</title>
+  <!-- <link rel="stylesheet" href="./tutor.css" /> -->
+    <link rel="stylesheet" href="./dash.css" />
+</head>
+<body>
+<div class="dashboard">
+  <div class="sidebar">
+    <h2>Tutor Panel</h2>
+      <button onclick="showSection('dashboard')">Dashboard</button>
+      <button onclick="showSection('manage-courses')">Manage Courses</button>
+      <button onclick="showSection('students')">Enrolled Students</button>
+      <button onclick="showSection('live-classes')">Live Classes</button>
+      <button onclick="showSection('assignments')">Assignments</button>
+  </div>
+ <!-- <header>
+
+            <div class="welcome">
+                <h1>Welcome back, Jane 👋</h1>
+                <p>Here’s what’s happening with your learning today.</p>
+            </div>
+            <div class="user-avatar">
+              <img src="https://i.pravatar.cc/40" alt="Profile Picture">
+            </div>
+</header> -->
+
+
+  <div class="main-content">
+    <!-- Dashboard -->
+    <section id="dashboard" class="section active">
+      <h1>Welcome, Tutor!</h1>
+      <p>Manage your teaching activities and stay on top of your course modules.</p>
+    </section>
+
+    
+
+    <!-- Manage Courses -->
+    <section id="manage-courses" class="section">
+      <h2>My Courses (Max: 3)</h2>
+      <div class="courses" id="course-list"></div>
+      <button id="add-course-btn">+ Add New Course</button>
+    </section>
+
+    <!-- Enrolled Students -->
+    <section id="students" class="section">
+      <h2>Students Enrolled</h2>
+      <p>View number of students per course</p>
+      <ul id="student-list"></ul>
+    </section>
+
+    <!-- Live Classes -->
+    <section id="live-classes" class="section">
+      <h2>Schedule Live Class</h2>
+      <form id="live-class-form">
+        <input type="text" placeholder="Course Title" required />
+        <input type="datetime-local" required />
+        <button type="submit">Schedule</button>
+      </form>
+      <ul id="live-class-list"></ul>
+    </section>
+
+    <!-- Assignments -->
+    <section id="assignments" class="section">
+      <h2>Assignment Submissions</h2><br>
+      <ul id="assignment-submissions">
+        <!-- JS will populate -->
+      </ul>
+    </section>
+  </div>
+</div>
+<script>
+    function showSection(id) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Courses
+const courseList = document.getElementById('course-list');
+const addCourseBtn = document.getElementById('add-course-btn');
+let courses = [];
+
+function renderCourses() {
+  courseList.innerHTML = '';
+  courses.forEach((course, index) => {
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <h3>${course}</h3>
+      <button onclick="editCourse(${index})">Edit</button>
+      <button onclick="deleteCourse(${index})">Delete</button>
+    `;
+    courseList.appendChild(card);
+  });
+}
+
+addCourseBtn.onclick = () => {
+  if (courses.length >= 3) {
+    alert('You can only manage 3 courses.');
+    return;
+  }
+  const title = prompt('Enter course title');
+  if (title) {
+    courses.push(title);
+    renderCourses();
+  }
+};
+
+function editCourse(index) {
+  const newTitle = prompt('Edit course title', courses[index]);
+  if (newTitle) {
+    courses[index] = newTitle;
+    renderCourses();
+  }
+}
+
+function deleteCourse(index) {
+  courses.splice(index, 1);
+  renderCourses();
+}
+
+// Students (Dummy)
+const studentList = document.getElementById('student-list');
+const dummyStudents = ['Web Dev (23)', 'UI/UX (18)', 'Python (30)'];
+studentList.innerHTML = dummyStudents.map(s => `<li>${s}</li>`).join('');
+
+// Live Classes
+const liveForm = document.getElementById('live-class-form');
+const liveList = document.getElementById('live-class-list');
+
+liveForm.onsubmit = e => {
+  e.preventDefault();
+  const [titleInput, dateInput] = liveForm.querySelectorAll('input');
+  const li = document.createElement('li');
+  li.textContent = `Live class for ${titleInput.value} scheduled on ${new Date(dateInput.value).toLocaleString()}`;
+  liveList.appendChild(li);
+  titleInput.value = '';
+  dateInput.value = '';
+};
+
+// Assignments (Dummy Approve/Reject)
+const assignmentList = document.getElementById('assignment-submissions');
+const submissions = ['Student A - Web Dev', 'Student B - UI/UX'];
+
+submissions.forEach(sub => {
+  const li = document.createElement('li');  
+  li.innerHTML = `
+     ${sub}
+    <br>
+    <button onclick="alert('Approved')">Approve</button>
+    <button onclick="alert('Rejected')">Reject</button>
+     <br> <br> <br>
+  `;
+  assignmentList.appendChild(li);
+});
+
+</script>
+
+</body>
+</html>
+

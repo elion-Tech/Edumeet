@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paystack Payment Gateway</title>
+  <link rel="stylesheet" href="pay.css" />
+</head>
+<body>
+  <div class="payment-container">
+    <h1>Complete Your Payment</h1>
+    <div class="payment-tabs">
+      <button class="tab-btn active" data-target="card">Card</button>
+      <button class="tab-btn" data-target="ussd">USSD</button>
+      <button class="tab-btn" data-target="bank-transfer">Bank Transfer</button>
+    </div>
+
+    <div class="payment-sections">
+      <!-- Card Payment Section -->
+      <section id="card" class="payment-section active">
+        <h2>Pay with Card</h2>
+        <form id="card-form">
+          <label for="card-number">Card Number</label>
+          <input type="text" id="card-number" name="card-number" placeholder="4242 4242 4242 4242" required />
+
+          <label for="expiry">Expiry Date (MM/YY)</label>
+          <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required />
+
+          <label for="cvv">CVV</label>
+          <input type="password" id="cvv" name="cvv" placeholder="123" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+          <button type="submit" class="btn-pay">Pay Now</button>
+        </form>
+      </section>
+
+      <!-- USSD Payment Section -->
+      <section id="ussd" class="payment-section">
+        <h2>Pay with USSD</h2>
+        <p>Dial the USSD code below from your mobile phone to complete the payment:</p>
+        <div class="ussd-code">*342*123456789#</div>
+        <p>After dialing, follow the prompts to complete your payment.</p>
+        </section>
+
+      <!-- Bank Transfer Section -->
+      <section id="bank-transfer" class="payment-section">
+  <h2>Bank Transfer</h2>
+  <p>Please upload your bank transfer receipt below:</p>
+  <input type="file" id="receipt-upload" accept="image/*,application/pdf" />
+  <button id="upload-btn" disabled>Upload Receipt</button>
+  <p id="upload-status"></p>
+</section>
+    </div>
+  </div>
+
+  <script>
+const tabButtons = document.querySelectorAll('.tab-btn');
+const paymentSections = document.querySelectorAll('.payment-section');
+
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-target');
+
+    // Remove active classes
+    tabButtons.forEach(b => b.classList.remove('active'));
+    paymentSections.forEach(section => section.classList.remove('active'));
+
+    // Add active to clicked button and corresponding section
+    btn.classList.add('active');
+    document.getElementById(target).classList.add('active');
+  });
+});
+
+// Example form submission handler for card payment (can be linked to Paystack SDK)
+document.getElementById('card-form').addEventListener('submit', e => {
+  e.preventDefault();
+  alert('Payment process triggered (integration with Paystack SDK required)');
+         window.location.href = './coursed.html';
+});
+
+
+
+
+// for the reciept section
+const receiptInput = document.getElementById('receipt-upload');
+const uploadBtn = document.getElementById('upload-btn');
+const uploadStatus = document.getElementById('upload-status');
+
+receiptInput.addEventListener('change', () => {
+  uploadBtn.disabled = !receiptInput.files.length;
+  uploadStatus.textContent = '';
+});
+
+uploadBtn.addEventListener('click', () => {
+  if (!receiptInput.files.length) return;
+
+  uploadBtn.textContent = 'Uploading...';
+  uploadBtn.disabled = true;
+
+  // Simulate upload delay
+  setTimeout(() => {
+    uploadBtn.textContent = 'Upload Receipt';
+    uploadStatus.textContent = 'Receipt uploaded successfully!';
+    receiptInput.value = '';
+    uploadBtn.disabled = true;
+  }, 2000);
+
+       window.location.href = './coursed.html';
+});
+
+  </script>
+</body>
+</html>
