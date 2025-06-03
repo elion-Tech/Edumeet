@@ -11,11 +11,13 @@
 <div class="dashboard">
   <div class="sidebar">
     <h2>Tutor Panel</h2>
+      <button onclick="route2()">Home</button>
       <button onclick="showSection('dashboard')">Dashboard</button>
       <button onclick="showSection('manage-courses')">Manage Courses</button>
       <button onclick="showSection('students')">Enrolled Students</button>
       <button onclick="showSection('live-classes')">Live Classes</button>
       <button onclick="showSection('assignments')">Assignments</button>
+       <button onclick="route()">Logout</button>
   </div>
  <!-- <header>
 
@@ -157,6 +159,14 @@ submissions.forEach(sub => {
   assignmentList.appendChild(li);
 });
 
+function route(){
+  alert('click OK to proceed (You are about to log out)');
+         window.location.href = './index.html';
+};
+
+function route2(){
+         window.location.href = './index.html';
+};
 </script>
 
 </body>
