@@ -23,7 +23,7 @@
   .sidebar div button {
     background: none;
     width: 250px; 
-    background-color: #1a2533;
+    background-color: #1e3a8a;
     border: none;
     width: 100%;
     color: #fff;
@@ -33,6 +33,14 @@
     font-size: 16px;
     transition: background 0.3s;
   }
+
+
+  .sidebar{
+  max-width: 150px;
+/* background-color: #1a2533; */
+height: fit-content;
+  }
+
   .sidebar button:hover {
     background:#435875;
   }
@@ -77,7 +85,7 @@ button {
   color: #fff;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .courses {
