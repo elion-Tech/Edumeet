@@ -66,14 +66,14 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
 
   return (
    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-6 bg-[#f8fafc] font-sans selection:bg-orange-100 selection:text-orange-600">
-      <div className="w-full max-w-[1400px] bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 overflow-hidden flex min-h-[800px] relative ring-1 ring-slate-100">
+      <div className="w-full max-w-[1400px] bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 overflow-hidden flex min-h-[800px] relative ring-1 ring-slate-100 animate-in fade-in zoom-in duration-500">
         
         {/* Left Panel - Brand Visual */}
         <div className="hidden lg:flex w-[55%] bg-gradient-to-br from-slate-900 via-[#0f172a] to-black relative flex-col justify-between p-16 text-white overflow-hidden">
             {/* Ambient Light */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none animate-pulse duration-[3000ms]"></div>
             
-            <div className="relative z-10">
+            <div className="relative z-10 animate-in slide-in-from-left-10 fade-in duration-700">
                 <div className="flex items-center gap-3 mb-12">
                     <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
                         <Sparkles size={20} className="text-orange-400" />
@@ -95,7 +95,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
 
             {/* Abstract Visual / Mockup */}
             <div className="relative z-10 mt-auto translate-y-12 translate-x-12">
-                <div className="relative w-[380px] h-[600px] bg-slate-800 rounded-[48px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden">
+                <div className="relative w-[380px] h-[600px] bg-slate-800 rounded-[48px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-1000 hover:rotate-6 hover:-translate-y-4 transition-all ease-out">
                     <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900">
                         <div className="p-6 space-y-6 opacity-50">
                             <div className="w-full h-48 bg-white/5 rounded-3xl"></div>
@@ -115,7 +115,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
 
         {/* Right Panel - Login Form */}
         <div className="w-full lg:w-[45%] bg-white p-8 md:p-16 flex flex-col justify-center relative">
-            <div className="max-w-md mx-auto w-full">
+            <div className="max-w-md mx-auto w-full animate-in slide-in-from-right-8 fade-in duration-700">
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-10">
                     <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -205,7 +205,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                         <button 
                             disabled={loading}
                             onClick={() => startDemo(UserRole.ADMIN)} 
-                            className="flex items-center gap-2 px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full text-xs font-bold transition-all"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95"
                         >
                             {loading ? <Loader2 size={14} className="animate-spin"/> : <ShieldCheck size={16}/>}
                             <span>Admin Demo</span>
