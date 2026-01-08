@@ -9,9 +9,10 @@ interface LayoutProps {
   onLogout: () => void;
   onNavigate: (path: string) => void;
   children: React.ReactNode;
+  fullWidth?: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, children }) => {
+export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, children, fullWidth = false }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifs, setShowNotifs] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -222,8 +223,8 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
           )}
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
-          <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
+        <main className={`flex-1 overflow-y-auto custom-scrollbar ${fullWidth ? 'p-0' : 'p-4 md:p-6'}`}>
+          <div className={`${fullWidth ? 'w-full' : 'max-w-7xl mx-auto'} animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out`}>
             {children}
           </div>
         </main>
