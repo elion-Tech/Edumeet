@@ -56,6 +56,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       if (!mounted) return;
       if (!cRes.data) { onNavigate('#/'); return; }
       const courseData = cRes.data;
+      // Defensive check: Remove any null modules to prevent crashes and index mismatches
+      if (courseData.modules) courseData.modules = courseData.modules.filter(Boolean);
+      
       setCourse(courseData);
       const pRes = await api.progress.get(user._id, courseId);
       if (!mounted) return;
@@ -284,26 +287,25 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Mastery Verified ✓' : 'Execute Completion'}
                             </button>
                         </div>
+                        <div className="flex justify-between items-center">
+                            <button 
+                                disabled={activeModuleIdx === 0}
+                                onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
+                                className="px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
+                            >
+                                <ChevronLeft size={18}/> Previous Segment
+                            </button>
+                            <button 
+                                disabled={activeModuleIdx === modules.length - 1 || (!progress.completedModuleIds.includes(activeModule._id) && !isPreview) || (activeModuleIdx === 4 && !midTermPassed && !isPreview)}
+                                onClick={() => setActiveModuleIdx(activeModuleIdx + 1)}
+                                className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
+                            >
+                                Next Section <ChevronRight size={18}/>
+                            </button>
+                        </div>
                         <div className="bg-slate-50/50 backdrop-blur-xl p-8 rounded-2xl border border-slate-200/60 text-slate-700 text-lg leading-relaxed whitespace-pre-wrap font-medium shadow-sm border-t-white">
                             {activeModule.lessonContent}
                         </div>
-                    </div>
-
-                    <div className="flex justify-between items-center pt-16 border-t border-slate-100">
-                        <button 
-                            disabled={activeModuleIdx === 0}
-                            onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                            className="px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
-                        >
-                            <ChevronLeft size={18}/> Previous Segment
-                        </button>
-                        <button 
-                            disabled={activeModuleIdx === modules.length - 1 || (!progress.completedModuleIds.includes(activeModule._id) && !isPreview) || (activeModuleIdx === 4 && !midTermPassed && !isPreview)}
-                            onClick={() => setActiveModuleIdx(activeModuleIdx + 1)}
-                            className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
-                        >
-                            Next Section <ChevronRight size={18}/>
-                        </button>
                     </div>
 
                     {activeModuleIdx === 4 && !midTermPassed && !isPreview && (
