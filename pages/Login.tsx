@@ -171,10 +171,8 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
 
           {view !== 'forgot' && <div className="mt-10 pt-8 border-t border-slate-100">
               <p className="text-[10px] font-black text-slate-300 uppercase text-center mb-6 tracking-[0.4em]">One-Tap Simulation</p>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                   {[
-                    { role: UserRole.STUDENT, icon: <UserIcon size={18}/> },
-                    { role: UserRole.TUTOR, icon: <Sparkles size={18}/> },
                     { role: UserRole.ADMIN, icon: <ShieldCheck size={18}/> }
                   ].map(demo => (
                     <button 
