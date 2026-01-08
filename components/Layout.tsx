@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { User, UserRole, Notification } from '../types';
-import { LogOut, LayoutDashboard, PlusCircle, Shield, Compass, BookOpen, Bell, Check, ChevronRight, UserCircle, Sparkles, Globe, Database } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Shield, Compass, BookOpen, Bell, Check, ChevronRight, UserCircle, Sparkles, Globe, Database, Menu, X } from 'lucide-react';
 import { api } from '../services/apiService';
 
 interface LayoutProps {
@@ -14,6 +14,7 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifs, setShowNotifs] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (user?._id) {
@@ -45,7 +46,10 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
 
   const NavItem = ({ icon: Icon, label, path, active }: any) => (
     <button 
-      onClick={() => onNavigate(path)} 
+      onClick={() => {
+        onNavigate(path);
+        setIsMobileMenuOpen(false);
+      }} 
       className={`w-full flex items-center justify-between px-5 py-4 rounded-[1.25rem] transition-all duration-500 group relative overflow-hidden active:scale-95 ${active ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white hover:text-indigo-600 hover:shadow-lg'}`}
     >
       <div className="flex items-center gap-4 relative z-10">
@@ -62,13 +66,21 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
     <div className="min-h-screen flex flex-col md:flex-row p-4 gap-4">
       <nav className="glass-dark w-full md:w-64 flex-shrink-0 flex flex-col z-50 rounded-2xl shadow-2xl relative overflow-hidden animate-in slide-in-from-left-8 duration-700">
         <div className="p-6 border-b border-white/5">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg rotate-6 animate-float">
-              <Sparkles size={16} className="text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg rotate-6 animate-float">
+                <Sparkles size={16} className="text-white" />
+              </div>
+              <h1 className="text-xl font-black tracking-tighter text-white">
+                edu<span className="text-indigo-400">meet</span>
+              </h1>
             </div>
-            <h1 className="text-xl font-black tracking-tighter text-white">
-              edu<span className="text-indigo-400">meet</span>
-            </h1>
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
           
           {user && (
@@ -85,7 +97,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
         </div>
 
         {user && (
-          <div className="flex-1 py-10 px-6 space-y-3 hidden md:block">
+          <div className={`flex-1 py-10 px-6 space-y-3 ${isMobileMenuOpen ? 'block' : 'hidden'} md:block`}>
             {user.role === UserRole.STUDENT && (
               <>
                 <NavItem icon={Compass} label="Discovery" path="#/" active={window.location.hash === '#/' || window.location.hash === ''} />
@@ -108,7 +120,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
         )}
 
         {user && (
-          <div className="p-6 border-t border-white/5 hidden md:block">
+          <div className={`p-6 border-t border-white/5 ${isMobileMenuOpen ? 'block' : 'hidden'} md:block`}>
             <button 
               onClick={onLogout}
               className="flex items-center gap-3 text-slate-400 hover:text-rose-400 transition-all duration-300 w-full px-4 py-3 rounded-xl hover:bg-rose-400/10 font-black text-xs uppercase tracking-widest"
