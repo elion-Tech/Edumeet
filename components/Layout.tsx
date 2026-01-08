@@ -41,7 +41,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
     loadNotifs();
   };
 
-  const safeNotifications = Array.isArray(notifications) ? notifications : [];
+  const safeNotifications = Array.isArray(notifications) ? notifications.filter(Boolean) : [];
   const unreadCount = safeNotifications.filter(n => !n.read).length;
 
   const NavItem = ({ icon: Icon, label, path, active }: any) => (
@@ -103,11 +103,11 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
           {user && (
             <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/5 flex items-center gap-4 backdrop-blur-sm">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-inner">
-                <span className="font-bold text-sm">{user.name.charAt(0)}</span>
+                <span className="font-bold text-sm">{user?.name?.charAt(0)}</span>
               </div>
               <div className="overflow-hidden">
-                <p className="text-sm font-semibold text-white truncate tracking-wide">{user.name}</p>
-                <p className="text-[11px] font-medium text-indigo-300/80 uppercase tracking-wider">{user.role}</p>
+                <p className="text-sm font-semibold text-white truncate tracking-wide">{user?.name}</p>
+                <p className="text-[11px] font-medium text-indigo-300/80 uppercase tracking-wider">{user?.role}</p>
               </div>
             </div>
           )}
