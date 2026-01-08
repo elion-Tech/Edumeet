@@ -1,0 +1,7 @@
+{
+  "name": "final edumeet",
+  "description": "A comprehensive Edutech platform with role-based access, course management, and a grounded AI Tutor powered by Gemini 3 Pro.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
