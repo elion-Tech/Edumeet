@@ -153,9 +153,9 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
         )}
       </nav>
 
-      <div className="flex-1 flex flex-col h-screen overflow-hidden relative pt-20 md:pt-0">
-        <header className="h-20 mx-6 mt-4 mb-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex items-center justify-between px-8 z-40 transition-all hover:shadow-md sticky top-4">
-          <div className="flex items-center gap-6">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header className="h-20 mx-4 md:mx-6 mt-4 mb-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex items-center justify-between px-4 md:px-8 z-30 transition-all hover:shadow-md sticky top-4">
+          <div className="flex items-center gap-4 md:gap-6">
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
               className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
@@ -164,7 +164,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
             </button>
             <div>
               <p className="text-slate-500 text-xs font-medium mb-0.5">Welcome back,</p>
-              <p className="text-slate-900 font-bold text-lg tracking-tight leading-none">{user?.name}</p>
+              <p className="text-slate-900 font-bold text-lg tracking-tight leading-none max-w-[120px] md:max-w-none truncate">{user?.name}</p>
             </div>
             <div className="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50/80 text-emerald-700 border border-emerald-100/50 shadow-sm">
@@ -222,7 +222,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
           )}
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
             {children}
           </div>
