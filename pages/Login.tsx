@@ -65,130 +65,158 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden bg-[#0f172a]">
-      {/* Background Decor */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '3s' }}></div>
-      </div>
-
-      <div className="w-full max-w-xl relative z-10 animate-in fade-in zoom-in duration-700">
-        <div className="bg-white/95 backdrop-blur-3xl rounded-2xl shadow-2xl p-8 md:p-10 border border-white/20 min-h-[700px] flex flex-col justify-center">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/40 mb-6 rotate-3 animate-float">
-                <Sparkles size={32} />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">
-              {view === 'forgot' ? 'Recover Access' : view === 'login' ? 'Welcome Back' : 'Get Started'}
-            </h2>
-            <p className="text-slate-500 font-medium text-lg">
-              {view === 'forgot' ? 'Enter your email to receive a reset link.' : view === 'login' ? 'Access your personalized learning portal' : 'Join a community of modern scholars'}
-            </p>
-          </div>
-
-          <form onSubmit={view === 'forgot' ? handleRequestReset : handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-rose-50 text-rose-700 p-4 rounded-xl flex items-start gap-3 text-sm border border-rose-100 animate-in slide-in-from-top-4">
-                  <AlertTriangle size={24} className="shrink-0" />
-                  <span className="font-bold leading-relaxed">{error.message}</span>
-              </div>
-            )}
-
-            {view === 'register' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Full Name</label>
-                  <div className="relative group">
-                    <UserIcon className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                    <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full pl-12 pr-6 py-3 bg-slate-50 border border-transparent rounded-xl focus:bg-white focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 outline-none transition-all font-bold text-slate-700" />
-                  </div>
+   <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-6 bg-[#f8fafc] font-sans selection:bg-orange-100 selection:text-orange-600">
+      <div className="w-full max-w-[1400px] bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 overflow-hidden flex min-h-[800px] relative ring-1 ring-slate-100">
+        
+        {/* Left Panel - Brand Visual */}
+        <div className="hidden lg:flex w-[55%] bg-gradient-to-br from-slate-900 via-[#0f172a] to-black relative flex-col justify-between p-16 text-white overflow-hidden">
+            {/* Ambient Light */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+            
+            <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-12">
+                    <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
+                        <Sparkles size={20} className="text-orange-400" />
+                    </div>
+                    <span className="text-xl font-bold tracking-tight text-white">edumeet</span>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Phone</label>
-                  <div className="relative group">
-                    <Phone className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                    <input type="tel" required value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} placeholder="+234..." className="w-full pl-12 pr-6 py-3 bg-slate-50 border border-transparent rounded-xl focus:bg-white focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 outline-none transition-all font-bold text-slate-700" />
-                  </div>
+                
+                <div className="space-y-6 max-w-lg">
+                    <p className="text-orange-400 font-semibold uppercase tracking-widest text-xs">Educational Platform</p>
+                    <h1 className="text-6xl font-bold leading-tight tracking-tight">
+                        Master your <br/>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-500">potential.</span>
+                    </h1>
+                    <p className="text-slate-400 text-lg leading-relaxed font-medium">
+                        Join a community of modern scholars. Experience the future of online learning with our premium platform.
+                    </p>
                 </div>
-              </div>
-            )}
-
-            <div className="space-y-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Email Address</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="jane@edumeet.com" className="w-full pl-12 pr-6 py-3 bg-slate-50 border border-transparent rounded-xl focus:bg-white focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 outline-none transition-all font-bold text-slate-700" />
-              </div>
             </div>
 
-            {view !== 'forgot' && (
-              <div className="space-y-1">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">{view === 'register' ? 'Create Password' : 'Secure Password'}</label>
-                <div className="relative group">
-                  <Key className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                  <input type="password" required={view !== 'forgot'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-12 pr-6 py-3 bg-slate-50 border border-transparent rounded-xl focus:bg-white focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 outline-none transition-all font-bold text-slate-700" />
+            {/* Abstract Visual / Mockup */}
+            <div className="relative z-10 mt-auto translate-y-12 translate-x-12">
+                <div className="relative w-[380px] h-[600px] bg-slate-800 rounded-[48px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900">
+                        <div className="p-6 space-y-6 opacity-50">
+                            <div className="w-full h-48 bg-white/5 rounded-3xl"></div>
+                            <div className="space-y-3">
+                                <div className="w-3/4 h-4 bg-white/5 rounded-full"></div>
+                                <div className="w-1/2 h-4 bg-white/5 rounded-full"></div>
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="w-1/2 h-32 bg-white/5 rounded-3xl"></div>
+                                <div className="w-1/2 h-32 bg-white/5 rounded-3xl"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            )}
-
-            {view === 'register' && (
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-xl border-2 transition-all duration-500 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-4 ring-indigo-600/5' : 'border-slate-100 text-slate-400'}`}>
-                  <GraduationCap size={24} /> <span className="text-[10px] font-black uppercase tracking-widest">Scholar</span>
-                </button>
-                <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-xl border-2 transition-all duration-500 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-4 ring-indigo-600/5' : 'border-slate-100 text-slate-400'}`}>
-                  <Sparkles size={24} /> <span className="text-[10px] font-black uppercase tracking-widest">Instructor</span>
-                </button>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black py-3.5 rounded-xl transition-all duration-500 shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-3 mt-6 active:scale-95 disabled:opacity-50 group"
-            >
-              {loading ? (
-                <Loader2 className="animate-spin" size={20} />
-              ) : (
-                <>
-                  <span className="uppercase tracking-[0.2em] text-sm font-black">{view === 'forgot' ? 'Send Reset Link' : view === 'login' ? 'Enter Portal' : 'Register Account'}</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform duration-500" />
-                </>
-              )}
-            </button>
-
-            <div className="text-center">
-              <button type="button" onClick={() => { setView(view === 'forgot' ? 'login' : view === 'login' ? 'register' : 'login'); setError(null); }} className="text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-all mt-6 uppercase tracking-[0.3em]">
-                {view === 'forgot' ? "← Back to Login" : view === 'login' ? "New here? Create profile →" : "Already registered? Login"}
-              </button>
-              {view === 'login' && (
-                <button type="button" onClick={() => { setView('forgot'); setError(null); }} className="w-full text-center text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-all mt-4 uppercase tracking-[0.3em]">
-                  Forgot Password?
-                </button>
-              )}
             </div>
-          </form>
+        </div>
 
-          {view !== 'forgot' && <div className="mt-10 pt-8 border-t border-slate-100">
-              <p className="text-[10px] font-black text-slate-300 uppercase text-center mb-6 tracking-[0.4em]">One-Tap Simulation</p>
-              <div className="grid grid-cols-1 gap-4">
-                  {[
-                    { role: UserRole.ADMIN, icon: <ShieldCheck size={18}/> }
-                  ].map(demo => (
-                    <button 
-                      key={demo.role} 
-                      disabled={loading}
-                      onClick={() => startDemo(demo.role)} 
-                      className="group flex flex-col items-center justify-center p-4 bg-slate-50 hover:bg-indigo-600 rounded-xl transition-all duration-500 border border-slate-100 hover:shadow-lg hover:shadow-indigo-600/20 active:scale-90 disabled:opacity-50"
+        {/* Right Panel - Login Form */}
+        <div className="w-full lg:w-[45%] bg-white p-8 md:p-16 flex flex-col justify-center relative">
+            <div className="max-w-md mx-auto w-full">
+                {/* Mobile Logo */}
+                <div className="lg:hidden flex items-center gap-2 mb-10">
+                    <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                        <Sparkles size={16} className="text-white" />
+                    </div>
+                    <span className="text-xl font-bold text-slate-900">edumeet</span>
+                </div>
+
+                <div className="mb-10">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">
+                        {view === 'forgot' ? 'Recover Account' : view === 'login' ? 'Sign In' : 'Create Account'}
+                    </h2>
+                    <p className="text-slate-500 font-medium">
+                        {view === 'forgot' ? 'Enter email to reset password' : view === 'login' ? 'Welcome back to Edumeet' : 'Start your learning journey'}
+                    </p>
+                </div>
+
+                <form onSubmit={view === 'forgot' ? handleRequestReset : handleSubmit} className="space-y-5">
+                    {error && (
+                        <div className="bg-rose-50 text-rose-600 px-4 py-3 rounded-2xl flex items-start gap-3 text-sm border border-rose-100 animate-in slide-in-from-top-2">
+                            <AlertTriangle size={18} className="shrink-0 mt-0.5" />
+                            <span className="font-medium">{error.message}</span>
+                        </div>
+                    )}
+
+                    {view === 'register' && (
+                        <>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Full Name</label>
+                                <input type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Phone</label>
+                                <input type="tel" required value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} placeholder="+234..." className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                            </div>
+                        </>
+                    )}
+
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Email Address</label>
+                        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                    </div>
+
+                    {view !== 'forgot' && (
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Password</label>
+                            <input type="password" required={view !== 'forgot'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                        </div>
+                    )}
+
+                    {view === 'register' && (
+                        <div className="grid grid-cols-2 gap-4 pt-2">
+                            <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                <GraduationCap size={24} /> <span className="text-xs font-bold">Scholar</span>
+                            </button>
+                            <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                <Sparkles size={24} /> <span className="text-xs font-bold">Instructor</span>
+                            </button>
+                        </div>
+                    )}
+
+                    {view === 'login' && (
+                        <div className="flex justify-end">
+                            <button type="button" onClick={() => { setView('forgot'); setError(null); }} className="text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">
+                                Forgot password?
+                            </button>
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white font-bold py-4 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 mt-6"
                     >
-                      <div className="text-slate-400 group-hover:text-white transition-colors mb-3">
-                        {loading ? <Loader2 size={18} className="animate-spin"/> : demo.icon}
-                      </div>
-                      <span className="text-[9px] font-black text-slate-500 group-hover:text-white uppercase tracking-widest transition-colors">{demo.role}</span>
+                        {loading ? <Loader2 className="animate-spin mx-auto" size={24} /> : (view === 'forgot' ? 'Send Reset Link' : view === 'login' ? 'Sign In' : 'Create Account')}
                     </button>
-                  ))}
-              </div>
-          </div>}
+
+                    <div className="text-center pt-6">
+                        <button type="button" onClick={() => { setView(view === 'forgot' ? 'login' : view === 'login' ? 'register' : 'login'); setError(null); }} className="text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+                            {view === 'forgot' ? "Back to Login" : view === 'login' ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                        </button>
+                    </div>
+                </form>
+
+                {view !== 'forgot' && (
+                    <div className="mt-12 pt-8 border-t border-slate-100 flex justify-center">
+                        <button 
+                            disabled={loading}
+                            onClick={() => startDemo(UserRole.ADMIN)} 
+                            className="flex items-center gap-2 px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full text-xs font-bold transition-all"
+                        >
+                            {loading ? <Loader2 size={14} className="animate-spin"/> : <ShieldCheck size={16}/>}
+                            <span>Admin Demo</span>
+                        </button>
+                    </div>
+                )}
+                
+                <div className="mt-8 text-center">
+                    <p className="text-xs text-slate-300 font-medium">© 2024 Edumeet Inc. • Privacy • Terms</p>
+                </div>
+            </div>
         </div>
       </div>
     </div>
