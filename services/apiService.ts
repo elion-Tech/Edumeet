@@ -38,13 +38,13 @@ const request = async <T>(path: string, options: RequestInit = {}): Promise<ApiR
         if (!response.ok) return { status: response.status, error: data.error || data.message || `Request failed with status ${response.status}` };
         return { status: response.status, data: data as T };
     } catch (e) {
-        if (!response.ok) return { status: response.status, error: `Infrastructure error: ${response.status}. The server returned a non-JSON response.` };
-        return { status: response.status, error: "Received malformed signal from central repository." };
+        if (!response.ok) return { status: response.status, error: `Server Error: ${response.status}.` };
+        return { status: response.status, error: "Invalid response from server." };
     }
   } catch (error: any) {
     clearTimeout(timeoutId);
-    if (error.name === 'AbortError') return { status: 408, error: 'Connection timed out. Remote server is likely warming up (Render cold start). Please wait 30 seconds and try again.' };
-    return { status: 500, error: 'Database Connection Lost. Ensure you have an active internet connection and that the server is online.' };
+    if (error.name === 'AbortError') return { status: 408, error: 'Request timed out. The server might be waking up. Please try again in a moment.' };
+    return { status: 500, error: 'Connection failed. Please check your internet connection.' };
   }
 };
 
