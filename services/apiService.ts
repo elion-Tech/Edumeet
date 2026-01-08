@@ -6,7 +6,7 @@ export interface ApiResponse<T> {
   status: number;
 }
 
-const REMOTE_URL = 'https://edumeet-microservice.onrender.com';
+const REMOTE_URL = import.meta.env.VITE_API_URL;
 
 const request = async <T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> => {
   const controller = new AbortController();
