@@ -133,6 +133,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
               <>
                 <div className="px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">System</div>
                 <NavItem icon={LayoutDashboard} label="Overview" path="#/" active={window.location.hash === '#/' || window.location.hash === ''} />
+                <NavItem icon={Database} label="Manage Users" path="#/users" active={window.location.hash === '#/users'} />
                 <NavItem icon={Shield} label="Admin Panel" path="#/admin" active={window.location.hash === '#/admin'} />
               </>
             )}
@@ -155,6 +156,12 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative pt-20 md:pt-0">
         <header className="h-20 mx-6 mt-4 mb-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm flex items-center justify-between px-8 z-40 transition-all hover:shadow-md sticky top-4">
           <div className="flex items-center gap-6">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <Menu size={24} />
+            </button>
             <div>
               <p className="text-slate-500 text-xs font-medium mb-0.5">Welcome back,</p>
               <p className="text-slate-900 font-bold text-lg tracking-tight leading-none">{user?.name}</p>
