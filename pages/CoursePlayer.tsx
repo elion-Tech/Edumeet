@@ -183,14 +183,8 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     recognition.start();
   };
 
-  if (loading || !course || !progress) return <div className="p-20 text-center flex flex-col items-center gap-6"><div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center shadow-inner"><Loader2 className="animate-spin text-orange-600" size={32} /></div><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Operational Workspace</p></div>;
-
-  const modules = course.modules ?? [];
+  const modules = course?.modules ?? [];
   const activeModule = modules[activeModuleIdx];
-  const isMidTermReady = activeModuleIdx >= 4;
-  const isFinalReady = activeModuleIdx === 9;
-  const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
-
   const videoId = activeModule ? extractVideoId(activeModule.videoUrl) : null;
   const playerContainerRef = useYouTubePlayer({ 
     videoId,
@@ -199,6 +193,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         // event.data === 1 (PLAYING), 2 (PAUSED), 0 (ENDED)
     }
   });
+
+  if (loading || !course || !progress) return <div className="p-20 text-center flex flex-col items-center gap-6"><div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center shadow-inner"><Loader2 className="animate-spin text-orange-600" size={32} /></div><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Operational Workspace</p></div>;
+
+  const isMidTermReady = activeModuleIdx >= 4;
+  const isFinalReady = activeModuleIdx === 9;
+  const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
 
   return (
     <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-[32px] shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
