@@ -65,11 +65,11 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
   };
 
   return (
-   <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-6 bg-[#f8fafc] font-sans selection:bg-orange-100 selection:text-orange-600">
-      <div className="w-full max-w-[1400px] bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 overflow-hidden flex min-h-[800px] relative ring-1 ring-slate-100 animate-in fade-in zoom-in duration-500">
+   <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[#f8fafc] font-sans selection:bg-orange-100 selection:text-orange-600">
+      <div className="w-full max-w-[1200px] bg-white rounded-[32px] shadow-2xl shadow-slate-200/50 overflow-hidden flex min-h-[600px] lg:h-[85vh] lg:max-h-[800px] relative ring-1 ring-slate-100 animate-in fade-in zoom-in duration-500">
         
         {/* Left Panel - Brand Visual */}
-        <div className="hidden lg:flex w-[55%] bg-gradient-to-br from-slate-900 via-[#0f172a] to-black relative flex-col justify-between p-16 text-white overflow-hidden">
+        <div className="hidden lg:flex w-[50%] bg-gradient-to-br from-slate-900 via-[#0f172a] to-black relative flex-col justify-between p-12 text-white overflow-hidden">
             {/* Ambient Light */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none animate-pulse duration-[3000ms]"></div>
             
@@ -83,7 +83,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                 
                 <div className="space-y-6 max-w-lg">
                     <p className="text-orange-400 font-semibold uppercase tracking-widest text-xs">Educational Platform</p>
-                    <h1 className="text-6xl font-bold leading-tight tracking-tight">
+                    <h1 className="text-5xl font-bold leading-tight tracking-tight">
                         Master your <br/>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-500">potential.</span>
                     </h1>
@@ -95,14 +95,14 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
 
             {/* Abstract Visual / Mockup */}
             <div className="relative z-10 mt-auto translate-y-12 translate-x-12">
-                <div className="relative w-[380px] h-[600px] bg-slate-800 rounded-[48px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-1000 hover:rotate-6 hover:-translate-y-4 transition-all ease-out">
+                <div className="relative w-[320px] h-[480px] bg-slate-800 rounded-[40px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-1000 hover:rotate-6 hover:-translate-y-4 transition-all ease-out">
                     <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity" alt="App preview" />
                 </div>
             </div>
         </div>
 
         {/* Right Panel - Login Form */}
-        <div className="w-full lg:w-[45%] bg-white p-8 md:p-16 flex flex-col justify-center relative">
+        <div className="w-full lg:w-[50%] bg-white p-8 lg:p-12 flex flex-col justify-center relative overflow-y-auto custom-scrollbar">
             <div className="max-w-md mx-auto w-full animate-in slide-in-from-right-8 fade-in duration-700">
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-10">
@@ -112,7 +112,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                     <span className="text-xl font-bold text-slate-900">edumeet</span>
                 </div>
 
-                <div className="mb-10">
+                <div className="mb-8">
                     <h2 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">
                         {view === 'forgot' ? 'Recover Account' : view === 'login' ? 'Sign In' : 'Create Account'}
                     </h2>
