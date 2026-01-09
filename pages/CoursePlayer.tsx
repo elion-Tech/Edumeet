@@ -64,10 +64,24 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       setCourse(courseData);
       const pRes = await api.progress.get(user._id, courseId);
       if (!mounted) return;
-      setProgress(pRes.data || null);
-      if (pRes.data && pRes.data.completedModuleIds.length > 0) {
-          const lastIdx = pRes.data.completedModuleIds.length;
-          setActiveModuleIdx(Math.min(lastIdx, (courseData.modules?.length ?? 1) - 1));
+      
+      if (pRes.data) {
+        setProgress(pRes.data);
+        if (pRes.data.completedModuleIds.length > 0) {
+            const lastIdx = pRes.data.completedModuleIds.length;
+            setActiveModuleIdx(Math.min(lastIdx, (courseData.modules?.length ?? 1) - 1));
+        }
+      } else if (isPreview) {
+        setProgress({
+            _id: 'preview',
+            userId: user._id,
+            courseId: courseId,
+            completedModuleIds: [],
+            quizResults: [],
+            capstoneStatus: 'pending'
+        } as any);
+      } else {
+        setProgress(null);
       }
       setLoading(false);
     };
