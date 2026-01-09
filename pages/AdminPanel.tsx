@@ -65,7 +65,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
     
     const res = await api.users.save(newUser);
     if (res.status === 201 || res.status === 200) {
-        alert(`${newUserRole.toUpperCase()} Account Provisioned.`);
+        alert(`${newUserRole.toUpperCase()} Account Created.`);
         setCreateUserModal(false);
         setNewUserName('');
         setNewUserEmail('');
@@ -129,7 +129,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
   if (loading) return (
     <div className="p-20 text-center flex flex-col items-center gap-4">
         <Loader2 className="animate-spin text-orange-600" size={32} />
-        <p className="font-bold text-xs uppercase tracking-widest text-slate-400">Synchronizing Central Repository...</p>
+        <p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Admin Panel...</p>
     </div>
   );
 
@@ -137,13 +137,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
     <div className="space-y-6 pb-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">Infrastructure Control</h2>
-          <p className="text-slate-500 text-sm font-medium">Real-time management of centralized educational assets</p>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Admin Dashboard</h2>
+          <p className="text-slate-500 text-sm font-medium">Manage users, courses, and system settings</p>
         </div>
         <div className="flex flex-wrap gap-3">
-            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>User Directory</button>
-            <button onClick={() => setActiveTab('courses')} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'courses' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>Curriculum</button>
-            <button onClick={() => setActiveTab('server')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'server' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400'}`}>System Hub</button>
+            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>Users</button>
+            <button onClick={() => setActiveTab('courses')} className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'courses' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>Courses</button>
+            <button onClick={() => setActiveTab('server')} className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'server' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400'}`}>System</button>
         </div>
       </div>
 
@@ -151,29 +151,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Scholars', val: users.length, icon: Users, color: 'orange' },
-                    { label: 'Network', val: 'PRODUCTION', icon: Globe, color: 'blue' },
-                    { label: 'Curricula', val: courses.length, icon: BookOpen, color: 'purple' },
+                    { label: 'Total Students', val: users.length, icon: Users, color: 'orange' },
+                    { label: 'Status', val: 'ONLINE', icon: Globe, color: 'blue' },
+                    { label: 'Courses', val: courses.length, icon: BookOpen, color: 'purple' },
                     { label: 'Database', val: 'MongoDB Atlas', icon: Database, color: 'emerald' }
                 ].map((stat, i) => (
-                    <div key={i} className="bg-white/70 backdrop-blur-xl p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
-                        <div className={`p-3 bg-${stat.color}-50 text-${stat.color}-600 rounded-xl`}><stat.icon size={20}/></div>
+                    <div key={i} className="bg-white/70 backdrop-blur-xl p-6 rounded-[32px] shadow-sm border border-slate-200 flex items-center gap-4">
+                        <div className={`p-3 bg-${stat.color}-50 text-${stat.color}-600 rounded-2xl`}><stat.icon size={20}/></div>
                         <div>
-                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">{stat.label}</p>
-                            <h3 className="text-xl font-black text-slate-900">{stat.val}</h3>
+                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-1">{stat.label}</p>
+                            <h3 className="text-xl font-bold text-slate-900">{stat.val}</h3>
                         </div>
                     </div>
                 ))}
             </div>
 
             <div className="flex justify-between items-center gap-4">
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><Users size={16} className="text-orange-600"/> Identity Records</h3>
-                <button onClick={() => setCreateUserModal(true)} className="bg-emerald-600 text-white px-5 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-emerald-100 active:scale-95 transition-all"><UserPlus size={16}/> Provision Scholar</button>
+                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2"><Users size={16} className="text-orange-600"/> User Management</h3>
+                <button onClick={() => setCreateUserModal(true)} className="bg-emerald-600 text-white px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-emerald-100 active:scale-95 transition-all"><UserPlus size={16}/> Add User</button>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] border border-slate-200 overflow-hidden shadow-sm">
                 <div className="p-6 border-b flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h3 className="font-black text-slate-800 text-xs uppercase tracking-widest">Global Identity Vector</h3>
+                    <h3 className="font-bold text-slate-800 text-xs uppercase tracking-widest">Search Users</h3>
                     <div className="relative w-full md:w-80">
                         <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
                         <input placeholder="Filter by name/email..." className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border rounded-full text-sm font-bold outline-none focus:ring-4 focus:ring-orange-50 transition-all" value={userSearch} onChange={e => setUserSearch(e.target.value)} />
@@ -181,29 +181,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-[10px] uppercase font-black text-slate-400 tracking-[0.2em]">
-                            <tr><th className="px-6 py-4">Operational Profile</th><th className="px-6 py-4">Group</th><th className="px-6 py-4">Vector Status</th><th className="px-6 py-4 text-right">Actions</th></tr>
+                        <thead className="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
+                            <tr><th className="px-6 py-4">User Details</th><th className="px-6 py-4">Role</th><th className="px-6 py-4">Status</th><th className="px-6 py-4 text-right">Actions</th></tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredUsers.map(u => (
                                 <tr key={u._id} className="hover:bg-orange-50/30 transition-colors">
                                     <td className="px-6 py-4">
-                                        <div className="font-black text-slate-900 text-sm mb-1">{u.name}</div>
-                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{u.email}</div>
+                                        <div className="font-bold text-slate-900 text-sm mb-1">{u.name}</div>
+                                        <div className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">{u.email}</div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`text-[9px] font-black uppercase px-4 py-1.5 rounded-full border ${u.role === UserRole.ADMIN ? 'bg-slate-900 text-white border-slate-900' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>{u.role}</span>
+                                        <span className={`text-[9px] font-bold uppercase px-4 py-1.5 rounded-full border ${u.role === UserRole.ADMIN ? 'bg-slate-900 text-white border-slate-900' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>{u.role}</span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className={`flex items-center gap-3 text-[10px] font-black uppercase tracking-widest ${u.isSuspended ? 'text-rose-600' : 'text-emerald-600'}`}>
+                                        <div className={`flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest ${u.isSuspended ? 'text-rose-600' : 'text-emerald-600'}`}>
                                             <div className={`w-2 h-2 rounded-full ${u.isSuspended ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}`}></div>
-                                            {u.isSuspended ? 'Administratively Offline' : 'Operational'}
+                                            {u.isSuspended ? 'Suspended' : 'Active'}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-right flex justify-end gap-2">
-                                        <button onClick={() => handleToggleSuspend(u)} className={`p-2 rounded-lg transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-50 text-slate-400 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={16}/> : <Ban size={16}/>}</button>
-                                        <button onClick={() => handleDeleteUser(u._id)} className="p-2 bg-slate-50 text-slate-300 hover:text-rose-600 rounded-lg transition-all"><UserMinus size={16}/></button>
-                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2 bg-slate-50 text-slate-300 hover:text-orange-600 rounded-lg transition-all"><Mail size={16}/></button>
+                                        <button onClick={() => handleToggleSuspend(u)} className={`p-2 rounded-full transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-50 text-slate-400 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={16}/> : <Ban size={16}/>}</button>
+                                        <button onClick={() => handleDeleteUser(u._id)} className="p-2 bg-slate-50 text-slate-300 hover:text-rose-600 rounded-full transition-all"><UserMinus size={16}/></button>
+                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2 bg-slate-50 text-slate-300 hover:text-orange-600 rounded-full transition-all"><Mail size={16}/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -217,41 +217,41 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       {activeTab === 'courses' && (
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
             <div className="flex justify-between items-center gap-4">
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><BookOpen size={16} className="text-orange-600"/> Curriculum Registry</h3>
+                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2"><BookOpen size={16} className="text-orange-600"/> Course Management</h3>
                 <div className="relative w-80">
                     <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
                     <input placeholder="Search courses..." className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-full text-sm font-bold outline-none focus:ring-4 focus:ring-orange-500/10 transition-all" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
                 </div>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] border border-slate-200 overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-[10px] uppercase font-black text-slate-400 tracking-[0.2em]">
-                            <tr><th className="px-6 py-4">Course Identity</th><th className="px-6 py-4">Instructor</th><th className="px-6 py-4">Access Fee</th><th className="px-6 py-4">Status</th><th className="px-6 py-4 text-right">Operational Actions</th></tr>
+                        <thead className="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
+                            <tr><th className="px-6 py-4">Course Title</th><th className="px-6 py-4">Instructor</th><th className="px-6 py-4">Price</th><th className="px-6 py-4">Status</th><th className="px-6 py-4 text-right">Actions</th></tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredCourses.map(c => (
                                 <tr key={c._id} className="hover:bg-orange-50/30 transition-colors">
                                     <td className="px-6 py-4">
-                                        <div className="font-black text-slate-900 text-sm mb-1">{c.title}</div>
-                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{c.modules.length} Segments</div>
+                                        <div className="font-bold text-slate-900 text-sm mb-1">{c.title}</div>
+                                        <div className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">{c.modules.length} Segments</div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="font-bold text-slate-600">{c.tutorName}</span>
+                                        <span className="font-medium text-slate-600">{c.tutorName}</span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="font-black text-orange-600 text-sm">₦{c.price.toLocaleString()}</span>
+                                        <span className="font-bold text-orange-600 text-sm">₦{c.price.toLocaleString()}</span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className={`flex items-center gap-3 text-[10px] font-black uppercase tracking-widest ${c.published ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                        <div className={`flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest ${c.published ? 'text-emerald-600' : 'text-slate-400'}`}>
                                             <div className={`w-2 h-2 rounded-full ${c.published ? 'bg-emerald-500 shadow-lg shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
-                                            {c.published ? 'Publicized' : 'Encrypted'}
+                                            {c.published ? 'Published' : 'Draft'}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-right flex justify-end gap-2">
-                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-all"><Edit size={16} className="text-slate-600"/></button>
-                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2 bg-white border border-slate-200 text-slate-300 hover:text-rose-600 rounded-lg transition-all"><Trash2 size={16}/></button>
+                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all"><Edit size={16} className="text-slate-600"/></button>
+                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2 bg-white border border-slate-200 text-slate-300 hover:text-rose-600 rounded-full transition-all"><Trash2 size={16}/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -268,44 +268,44 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                 <div className="absolute top-0 right-0 p-8 opacity-5 scale-150 group-hover:rotate-12 transition-transform duration-[2000ms]"><Zap size={120} /></div>
                 <div className="relative z-10 space-y-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/40 animate-float"><ShieldCheck size={20}/></div>
-                        <h3 className="text-2xl font-black tracking-tight">Core Infrastructure</h3>
+                        <div className="w-10 h-10 bg-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/40 animate-float"><ShieldCheck size={20}/></div>
+                        <h3 className="text-2xl font-bold tracking-tight">System Status</h3>
                     </div>
                     <div className="space-y-2">
-                        <p className="text-slate-400 text-xs font-black uppercase tracking-[0.3em]">Operational Environment</p>
-                        <p className="text-xl font-bold">Authenticated // Render Cloud Node 01</p>
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Environment</p>
+                        <p className="text-xl font-bold">Production Server</p>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div className="p-4 bg-orange-50/50 border border-orange-100 rounded-xl">
-                    <div className="flex items-center gap-2 text-orange-800 font-black text-xs uppercase tracking-widest mb-2">
-                        <Zap size={16} className="text-orange-600" /> Synchronization Matrix
+            <div className="bg-white/70 backdrop-blur-xl p-6 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+                <div className="p-4 bg-orange-50/50 border border-orange-100 rounded-2xl">
+                    <div className="flex items-center gap-2 text-orange-800 font-bold text-xs uppercase tracking-widest mb-2">
+                        <Zap size={16} className="text-orange-600" /> Database Connection
                     </div>
-                    <p className="text-sm text-slate-600 font-medium leading-relaxed">System state is bridged with the Node.js operational layer and MongoDB Atlas cluster. Administrative oversight is finalized via this hub.</p>
+                    <p className="text-sm text-slate-600 font-medium leading-relaxed">Connected to MongoDB Atlas and Node.js backend.</p>
                 </div>
 
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Central Repository URI</label>
-                    <div className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl font-mono text-sm text-orange-400 shadow-inner overflow-hidden truncate">
-                        https://edumeetserver-1.onrender.com
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">API Endpoint</label>
+                    <div className="w-full p-3 bg-slate-900 border border-slate-800 rounded-2xl font-mono text-sm text-orange-400 shadow-inner overflow-hidden truncate">
+                        https://edumeetserver.onrender.com
                     </div>
                 </div>
 
                 <div className="flex gap-4 pt-4 border-t border-slate-100">
-                    <button onClick={handleCheckHealth} disabled={actionLoading === 'health'} className="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black flex items-center justify-center gap-2 shadow-lg shadow-slate-200 active:scale-95 transition-all">
+                    <button onClick={handleCheckHealth} disabled={actionLoading === 'health'} className="flex-1 bg-slate-900 text-white py-3 rounded-full font-bold text-[10px] uppercase tracking-widest hover:bg-black flex items-center justify-center gap-2 shadow-lg shadow-slate-200 active:scale-95 transition-all">
                         {actionLoading === 'health' ? <Loader2 size={16} className="animate-spin" /> : <Activity size={16} />}
-                        Execute Health Diagnostics
+                        Check System Health
                     </button>
                 </div>
 
                 {serverHealth && (
-                    <div className={`p-4 rounded-xl border-2 animate-in slide-in-from-top-4 flex items-center gap-4 ${serverHealth.ok ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
+                    <div className={`p-4 rounded-2xl border-2 animate-in slide-in-from-top-4 flex items-center gap-4 ${serverHealth.ok ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
                         <div className={`w-4 h-4 rounded-full ${serverHealth.ok ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-amber-500 animate-pulse'}`}></div>
                         <div>
-                            <p className="font-black text-[10px] uppercase tracking-[0.2em] mb-1">Signal Protocol: {serverHealth.status}</p>
-                            <p className="text-sm font-bold opacity-80">{serverHealth.ok ? 'Core Logic is stable and performing within parameters.' : 'Target not responding. Node may be initializing cold start.'}</p>
+                            <p className="font-bold text-[10px] uppercase tracking-widest mb-1">Status: {serverHealth.status}</p>
+                            <p className="text-sm font-bold opacity-80">{serverHealth.ok ? 'System is running normally.' : 'System might be down.'}</p>
                         </div>
                     </div>
                 )}
@@ -315,36 +315,36 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
       {createUserModal && (
           <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-2xl z-[100] flex items-center justify-center p-8">
-              <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl border border-white/20 animate-in zoom-in duration-500">
+              <div className="bg-white rounded-[32px] w-full max-w-lg p-8 shadow-2xl border border-white/20 animate-in zoom-in duration-500">
                   <div className="flex justify-between items-center mb-6">
                       <div>
-                        <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.3em] mb-2">Registry Injection</p>
-                        <h3 className="text-2xl font-black tracking-tight">Provision Identity</h3>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-2">Create Account</p>
+                        <h3 className="text-2xl font-bold tracking-tight">Add New User</h3>
                       </div>
-                      <button onClick={() => setCreateUserModal(false)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all active:scale-90"><X size={18}/></button>
+                      <button onClick={() => setCreateUserModal(false)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all active:scale-90"><X size={18}/></button>
                   </div>
                   <form onSubmit={handleCreateUser} className="space-y-4">
                       <div className="space-y-1">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Full Identity Name</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-6">Full Name</label>
                           <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserName} onChange={e => setNewUserName(e.target.value)} placeholder="Professor John Doe" />
                       </div>
                       <div className="space-y-1">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Access Email</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-6">Email Address</label>
                           <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} placeholder="dean@edumeet.com" />
                       </div>
                       <div className="space-y-1">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Initial Security Cipher</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-6">Password</label>
                           <input required type="password" className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserPassword} onChange={e => setNewUserPassword(e.target.value)} placeholder="••••••••" />
                       </div>
                       <div className="space-y-1">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Operational Clearance</label>
-                          <select className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-black text-[10px] uppercase tracking-[0.2em] outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserRole} onChange={e => setNewUserRole(e.target.value as UserRole)}>
-                              <option value={UserRole.STUDENT}>Scholar Tier</option>
-                              <option value={UserRole.TUTOR}>Instructor Tier</option>
-                              <option value={UserRole.ADMIN}>Administrator Tier</option>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-6">Role</label>
+                          <select className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold text-[10px] uppercase tracking-widest outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserRole} onChange={e => setNewUserRole(e.target.value as UserRole)}>
+                              <option value={UserRole.STUDENT}>Student</option>
+                              <option value={UserRole.TUTOR}>Tutor</option>
+                              <option value={UserRole.ADMIN}>Admin</option>
                           </select>
                       </div>
-                      <button className="w-full bg-orange-600 text-white py-3 rounded-full font-black uppercase text-xs tracking-[0.4em] shadow-lg shadow-orange-600/30 mt-6 active:scale-95 transition-all hover:bg-orange-700">Authorize Provisioning</button>
+                      <button className="w-full bg-orange-600 text-white py-3 rounded-full font-bold uppercase text-xs tracking-widest shadow-lg shadow-orange-600/30 mt-6 active:scale-95 transition-all hover:bg-orange-700">Create User</button>
                   </form>
               </div>
           </div>
@@ -352,18 +352,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
       {userMsgModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
-            <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
+            <div className="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
                 <div className="flex justify-between items-center mb-6">
                     <div>
-                        <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">Direct Communication</p>
-                        <h3 className="text-xl font-black text-slate-900">Message {userMsgModal.userName}</h3>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Message User</p>
+                        <h3 className="text-xl font-bold text-slate-900">Message {userMsgModal.userName}</h3>
                     </div>
-                    <button onClick={() => setUserMsgModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all"><X size={18}/></button>
+                    <button onClick={() => setUserMsgModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
                 </div>
                 <div className="space-y-4">
-                    <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all min-h-[120px] resize-none" placeholder="Type your administrative message here..." value={adminMessage} onChange={e => setAdminMessage(e.target.value)} />
-                    <button onClick={handleSendMessage} disabled={!!actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-black uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
-                        {actionLoading ? <Loader2 className="animate-spin"/> : <Send size={18}/>} Dispatch Message
+                    <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all min-h-[120px] resize-none" placeholder="Type your message..." value={adminMessage} onChange={e => setAdminMessage(e.target.value)} />
+                    <button onClick={handleSendMessage} disabled={!!actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Send size={18}/>} Send Message
                     </button>
                 </div>
             </div>
