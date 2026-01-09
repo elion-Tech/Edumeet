@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Course, Progress, User, ChatMessage, UserRole, Quiz, Question, QuizResult, CapstoneType } from '../types';
 import { api } from '../services/apiService';
 import { askAiTutorStream, speakText } from '../services/geminiService';
-import { CheckCircle, MessageSquare, Send, BookOpen, Lock, Award, Loader2, Video, ArrowLeft, Mic, Volume2, X, Trophy, AlertCircle, Sparkles, ChevronRight, ChevronLeft, MicOff } from 'lucide-react';
+import { CheckCircle, MessageSquare, Send, BookOpen, Lock, Award, Loader2, Video, ArrowLeft, Mic, Volume2, X, Trophy, AlertCircle, Sparkles, ChevronRight, ChevronLeft, MicOff, Menu, Sidebar } from 'lucide-react';
 import { extractVideoId } from './youtube';
 import { useYouTubePlayer } from './useYouTubePlayer';
 
@@ -40,6 +40,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const [capstoneText, setCapstoneText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [thinking, setThinking] = useState(false);
@@ -217,6 +218,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             </div>
           </div>
         </div>
+        <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className={`p-2 rounded-full transition-all mr-4 ${sidebarOpen ? 'bg-orange-100 text-orange-600' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+        >
+            {sidebarOpen ? <X size={20}/> : <Sidebar size={20}/>}
+        </button>
         <div className="flex items-center gap-4">
             <button 
                 onClick={() => setChatOpen(!chatOpen)} 
@@ -230,7 +237,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
       <div className="flex flex-1 overflow-hidden">
         {/* Spatial Navigation Sidebar */}
-        <div className="w-72 bg-slate-50/70 border-r overflow-y-auto p-6 space-y-8 hidden xl:block custom-scrollbar">
+        {sidebarOpen && <div className="w-72 bg-slate-50/70 border-r overflow-y-auto p-6 space-y-8 hidden xl:block custom-scrollbar animate-in slide-in-from-left-10 duration-300">
             <div>
               <p className="text-[10px] font-bold uppercase text-slate-400 mb-6 tracking-widest flex items-center gap-3">
                 <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,1)]"></div>
@@ -291,7 +298,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                       </button>
                     )}
                 </div>
-            </div>
+            </div>}
         </div>
 
         {/* Liquid Workspace */}
