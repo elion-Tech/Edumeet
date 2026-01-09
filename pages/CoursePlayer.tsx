@@ -138,10 +138,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     setMessages(prev => [...prev, { role: 'user', text: finalInput, timestamp: Date.now() }]);
     setInput('');
     setThinking(true);
-    const currentTranscript = course.modules[activeModuleIdx]?.transcript || "No transcript available.";
     try {
       let accumulatedText = "";
-      const stream = askAiTutorStream(finalInput, currentTranscript, course.title);
+      const stream = askAiTutorStream(finalInput, course);
       setMessages(prev => [...prev, { role: 'model', text: "", timestamp: Date.now() }]);
       setThinking(false);
       for await (const chunk of stream) {

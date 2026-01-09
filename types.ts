@@ -71,6 +71,7 @@ export interface Course {
   createdAt: string;
   published: boolean;
   liveSession?: LiveSession;
+  geminiCacheName?: string;
 }
 
 export interface QuizResult {
