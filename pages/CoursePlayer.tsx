@@ -238,7 +238,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Spatial Navigation Sidebar */}
-        {sidebarOpen && <div className="w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute z-40 h-full shadow-2xl">
+        {sidebarOpen && <div className="w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none shrink-0">
             <div>
               <p className="text-[10px] font-bold uppercase text-slate-400 mb-6 tracking-widest flex items-center gap-3">
                 <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,1)]"></div>
