@@ -15,7 +15,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
   const testimonials = [
     { name: "Amara Okafor", role: "Computer Science Student, Lagos", text: "The AI assistant clarified complex algorithms instantly. It's like having a study partner available 24/7 to answer my specific questions." },
-    { name: "Kwame Mensah", role: "Data Analyst, Accra", text: "The blend of live expert classes and the real-time AI assistant helped me master Python in record time." },
+    { name: "Kwame Mensah", role: "Business Analyst, Accra", text: "The finance modules combined with AI insights helped me understand global markets seamlessly." },
     { name: "Zainab Abdi", role: "Lifelong Learner, Nairobi", text: "The platform adapts to my pace. Finally, an education platform that feels truly personalized and intelligent." }
   ];
 
@@ -63,7 +63,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed max-w-md font-medium">
-                   Experience the perfect blend of live expert classes and personalized AI assistance. Built for the continent, designed for your success.
+                   Master Management, Leadership, and Finance with seamless AI integration. Promoting African innovation for global adoption.
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -129,8 +129,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           <div className="max-w-7xl mx-auto">
              <div className="flex justify-between items-end mb-12">
                 <div>
-                   <h2 className="text-3xl font-black text-slate-900 mb-4">Live Classes & Curriculums</h2>
-                   <p className="text-slate-500 max-w-md">Expert-led live classes enhanced with 24/7 AI assistance.</p>
+                   <h2 className="text-3xl font-black text-slate-900 mb-4">Diverse Curriculums</h2>
+                   <p className="text-slate-500 max-w-md">Management, Finance, and Tech courses enhanced with AI.</p>
                 </div>
                 <button className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors">
                    View All <ArrowRight size={16}/>
@@ -148,10 +148,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       </div>
                       <div className="px-2 pb-2">
                          <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">{i === 1 ? 'Computer Science' : i === 2 ? 'Data Science' : 'Engineering'}</span>
+                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">{i === 1 ? 'Leadership' : i === 2 ? 'Finance' : 'Technology'}</span>
                             <span className="text-xs font-bold text-slate-400">2h 15m</span>
                          </div>
-                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{i === 1 ? 'Advanced AI Integration' : i === 2 ? 'Data Science Fundamentals' : 'Full-Stack Architecture'}</h3>
+                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{i === 1 ? 'AI-Driven Strategic Management' : i === 2 ? 'Global Finance & Fintech' : 'Applied AI for Business'}</h3>
                          <div className="flex items-center gap-2 text-sm text-slate-500">
                             <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
                             <span className="font-medium">By {i === 1 ? 'Dr. Tunde Bakare' : i === 2 ? 'Chioma Eze' : 'David Osei'}</span>
