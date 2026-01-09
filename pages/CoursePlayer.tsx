@@ -46,6 +46,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const [thinking, setThinking] = useState(false);
   const [isReading, setIsReading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(false);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -151,7 +152,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             return last;
         });
       }
-      playAiVoice(accumulatedText);
+      if (autoSpeak) playAiVoice(accumulatedText);
     } catch (err) {
       setMessages(prev => [...prev, { role: 'model', text: "AI Grounding Error.", timestamp: Date.now() }]);
       setThinking(false);
@@ -474,6 +475,13 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             className={`p-4 rounded-xl transition-all duration-700 active:scale-90 ${isListening ? 'bg-rose-500 text-white animate-pulse shadow-lg shadow-rose-500/40 ring-4 ring-rose-500/10' : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-rose-500'}`}
                         >
                             {isListening ? <Mic size={20}/> : <MicOff size={20}/>}
+                        </button>
+                        <button 
+                            onClick={() => setAutoSpeak(!autoSpeak)}
+                            className={`p-4 rounded-xl transition-all duration-300 active:scale-90 ${autoSpeak ? 'bg-orange-100 text-orange-600' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
+                            title={autoSpeak ? "Disable Auto-Speech" : "Enable Auto-Speech"}
+                        >
+                            <Volume2 size={20} className={autoSpeak ? "" : "opacity-50"}/>
                         </button>
                         <form onSubmit={handleSendMessage} className="flex-1 flex gap-3">
                             <input 
