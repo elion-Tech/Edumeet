@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, Users, Play, Award, CheckCircle, Zap, Shield, Layout as LayoutIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LandingPageProps {
   onNavigate: (path: string) => void;
@@ -33,7 +33,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <a href="#" className="hover:text-yellow-600 transition-colors">Mentors</a>
                 <a href="#" className="hover:text-yellow-600 transition-colors">Community</a>
              </div>
-             <button onClick={() => onNavigate('login')} className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-yellow-400 hover:text-slate-900 transition-all">
+             <button onClick={() => onNavigate('#/login')} className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-yellow-400 hover:text-slate-900 transition-all">
                 Sign In
              </button>
           </div>
@@ -65,7 +65,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 </p>
 
                 <div className="flex items-center gap-4">
-                   <button onClick={() => onNavigate('register')} className="px-8 py-4 bg-yellow-400 text-slate-900 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-yellow-400/30 hover:shadow-yellow-400/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
+                   <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-yellow-400 text-slate-900 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-yellow-400/30 hover:shadow-yellow-400/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
                       Start Creating <ArrowRight size={18}/>
                    </button>
                    <button className="px-8 py-4 bg-white text-slate-600 border border-slate-200 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2">
