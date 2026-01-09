@@ -14,9 +14,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   }, []);
 
   const testimonials = [
-    { name: "Sarah Jenkins", role: "Digital Artist", text: "Edumeet transformed my creative process. The courses are bite-sized but packed with value." },
-    { name: "Marcus Chen", role: "UX Designer", text: "The community here is unmatched. I found my co-founder in the design thinking workshop." },
-    { name: "Elara Vane", role: "Content Creator", text: "Finally, a platform that understands creators. The studio vibe makes learning feel like play." }
+    { name: "Amara Okafor", role: "Computer Science Student, Lagos", text: "The AI tutor clarified complex algorithms instantly. It's like having a professor available 24/7 to answer my specific questions." },
+    { name: "Kwame Mensah", role: "Data Analyst, Accra", text: "Edumeet's interactive modules and real-time AI feedback loop helped me master Python in record time." },
+    { name: "Zainab Abdi", role: "Lifelong Learner, Nairobi", text: "The platform adapts to my pace. Finally, an education platform that feels truly personalized and intelligent." }
   ];
 
   return (
@@ -51,19 +51,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 shadow-sm">
                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
-                   New Season Live
+                   AI Tutor 2.0 Live
                 </div>
                 
                 <div className="relative">
                    <div className="absolute -inset-4 bg-white/40 backdrop-blur-xl rounded-[32px] -z-10 border border-white/50 shadow-xl shadow-slate-200/50"></div>
                    <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-900">
-                      Creative Studio <br/>
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-500">for beginners.</span>
+                      Africa's Learning <br/>
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-500">Revolution.</span>
                    </h1>
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed max-w-md font-medium">
-                   Master the art of design, code, and storytelling. Join a community where your potential meets opportunity.
+                   Experience personalized education built for the continent. Master global skills with our grounded AI tutor and adaptive curriculums.
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -91,7 +91,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       </div>
                       <div>
                          <p className="text-xs font-bold text-slate-900">12k+ Creators</p>
-                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Joined this week</p>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Learning now</p>
                       </div>
                    </div>
                 </div>
@@ -109,8 +109,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div className="grid md:grid-cols-3 gap-8">
                 {[
                    { label: "Active Learners", value: "24,000+", icon: Users },
-                   { label: "Course Satisfaction", value: "4.9/5.0", icon: Star },
-                   { label: "Premium Courses", value: "150+", icon: Award }
+                   { label: "AI Interactions", value: "1.2M+", icon: Sparkles },
+                   { label: "Completion Rate", value: "94%", icon: Award }
                 ].map((stat, i) => (
                    <div key={i} className="group p-8 rounded-[32px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all hover:-translate-y-1">
                       <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -129,8 +129,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           <div className="max-w-7xl mx-auto">
              <div className="flex justify-between items-end mb-12">
                 <div>
-                   <h2 className="text-3xl font-black text-slate-900 mb-4">Trending Workshops</h2>
-                   <p className="text-slate-500 max-w-md">Curated curriculums designed by industry leaders.</p>
+                   <h2 className="text-3xl font-black text-slate-900 mb-4">Popular Curriculums</h2>
+                   <p className="text-slate-500 max-w-md">Industry-standard courses enhanced with AI support.</p>
                 </div>
                 <button className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors">
                    View All <ArrowRight size={16}/>
@@ -148,13 +148,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       </div>
                       <div className="px-2 pb-2">
                          <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">Design</span>
+                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">{i === 1 ? 'Computer Science' : i === 2 ? 'Data Science' : 'Engineering'}</span>
                             <span className="text-xs font-bold text-slate-400">2h 15m</span>
                          </div>
-                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">Digital Product Masterclass</h3>
+                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{i === 1 ? 'Advanced AI Integration' : i === 2 ? 'Data Science Fundamentals' : 'Full-Stack Architecture'}</h3>
                          <div className="flex items-center gap-2 text-sm text-slate-500">
                             <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
-                            <span className="font-medium">By Alex Rivera</span>
+                            <span className="font-medium">By {i === 1 ? 'Dr. Tunde Bakare' : i === 2 ? 'Chioma Eze' : 'David Osei'}</span>
                          </div>
                       </div>
                    </div>
@@ -167,8 +167,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
        <section className="py-20 px-6 overflow-hidden">
           <div className="max-w-7xl mx-auto">
              <div className="text-center mb-16">
-                <h2 className="text-3xl font-black text-slate-900 mb-4">Creator Stories</h2>
-                <p className="text-slate-500">Hear from the community shaping the future.</p>
+                <h2 className="text-3xl font-black text-slate-900 mb-4">Student Success</h2>
+                <p className="text-slate-500">Hear how AI-assisted learning is changing careers.</p>
              </div>
 
              <div className="relative max-w-4xl mx-auto">
@@ -218,7 +218,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                    <span className="font-bold text-xl tracking-tight text-white">edu<span className="text-orange-500">meet</span></span>
                 </div>
                 <p className="text-slate-400 max-w-sm leading-relaxed mb-8">
-                   Empowering the next generation of digital creators through accessible, high-quality education.
+                   Empowering Africa's next generation of learners through accessible, AI-enhanced education.
                 </p>
                 <div className="flex gap-4">
                    {[1,2,3,4].map(i => (
