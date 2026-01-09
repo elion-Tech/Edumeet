@@ -144,7 +144,8 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
             filtered.map(course => {
                 const isEnrolled = (user.enrolledCourseIds ?? []).includes(course._id);
                 const isProcessing = enrollingId === course._id;
-                let finalThumb = course.thumbnailUrl || (course.modules?.[0] ? `https://img.youtube.com/vi/${getYoutubeId(course.modules[0].videoUrl)}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800');
+                const ytId = course.modules?.[0]?.videoUrl ? getYoutubeId(course.modules[0].videoUrl) : null;
+                let finalThumb = course.thumbnailUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800');
 
                 return (
                 <div key={course._id} className="group bg-white rounded-[32px] shadow-lg border border-slate-200/60 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative">
