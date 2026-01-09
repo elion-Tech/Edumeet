@@ -128,7 +128,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
   if (loading) return (
     <div className="p-20 text-center flex flex-col items-center gap-4">
-        <Loader2 className="animate-spin text-indigo-600" size={32} />
+        <Loader2 className="animate-spin text-orange-600" size={32} />
         <p className="font-bold text-xs uppercase tracking-widest text-slate-400">Synchronizing Central Repository...</p>
     </div>
   );
@@ -141,8 +141,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
           <p className="text-slate-500 text-sm font-medium">Real-time management of centralized educational assets</p>
         </div>
         <div className="flex flex-wrap gap-3">
-            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-200'}`}>User Directory</button>
-            <button onClick={() => setActiveTab('courses')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'courses' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-indigo-200'}`}>Curriculum</button>
+            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>User Directory</button>
+            <button onClick={() => setActiveTab('courses')} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'courses' ? 'bg-orange-600 text-white shadow-lg shadow-orange-100' : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-200'}`}>Curriculum</button>
             <button onClick={() => setActiveTab('server')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'server' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-400'}`}>System Hub</button>
         </div>
       </div>
@@ -151,7 +151,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Scholars', val: users.length, icon: Users, color: 'indigo' },
+                    { label: 'Total Scholars', val: users.length, icon: Users, color: 'orange' },
                     { label: 'Network', val: 'PRODUCTION', icon: Globe, color: 'blue' },
                     { label: 'Curricula', val: courses.length, icon: BookOpen, color: 'purple' },
                     { label: 'Database', val: 'MongoDB Atlas', icon: Database, color: 'emerald' }
@@ -167,8 +167,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
             </div>
 
             <div className="flex justify-between items-center gap-4">
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><Users size={16} className="text-indigo-600"/> Identity Records</h3>
-                <button onClick={() => setCreateUserModal(true)} className="bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-emerald-100 active:scale-95 transition-all"><UserPlus size={16}/> Provision Scholar</button>
+                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><Users size={16} className="text-orange-600"/> Identity Records</h3>
+                <button onClick={() => setCreateUserModal(true)} className="bg-emerald-600 text-white px-5 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-emerald-100 active:scale-95 transition-all"><UserPlus size={16}/> Provision Scholar</button>
             </div>
 
             <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
@@ -176,7 +176,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                     <h3 className="font-black text-slate-800 text-xs uppercase tracking-widest">Global Identity Vector</h3>
                     <div className="relative w-full md:w-80">
                         <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
-                        <input placeholder="Filter by name/email..." className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-indigo-50 transition-all" value={userSearch} onChange={e => setUserSearch(e.target.value)} />
+                        <input placeholder="Filter by name/email..." className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border rounded-full text-sm font-bold outline-none focus:ring-4 focus:ring-orange-50 transition-all" value={userSearch} onChange={e => setUserSearch(e.target.value)} />
                     </div>
                 </div>
                 <div className="overflow-x-auto">
@@ -186,7 +186,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredUsers.map(u => (
-                                <tr key={u._id} className="hover:bg-indigo-50/30 transition-colors">
+                                <tr key={u._id} className="hover:bg-orange-50/30 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="font-black text-slate-900 text-sm mb-1">{u.name}</div>
                                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{u.email}</div>
@@ -203,7 +203,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                     <td className="px-6 py-4 text-right flex justify-end gap-2">
                                         <button onClick={() => handleToggleSuspend(u)} className={`p-2 rounded-lg transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-50 text-slate-400 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={16}/> : <Ban size={16}/>}</button>
                                         <button onClick={() => handleDeleteUser(u._id)} className="p-2 bg-slate-50 text-slate-300 hover:text-rose-600 rounded-lg transition-all"><UserMinus size={16}/></button>
-                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2 bg-slate-50 text-slate-300 hover:text-indigo-600 rounded-lg transition-all"><Mail size={16}/></button>
+                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2 bg-slate-50 text-slate-300 hover:text-orange-600 rounded-lg transition-all"><Mail size={16}/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -217,10 +217,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       {activeTab === 'courses' && (
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
             <div className="flex justify-between items-center gap-4">
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><BookOpen size={16} className="text-indigo-600"/> Curriculum Registry</h3>
+                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2"><BookOpen size={16} className="text-orange-600"/> Curriculum Registry</h3>
                 <div className="relative w-80">
                     <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
-                    <input placeholder="Search courses..." className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-4 focus:ring-indigo-50 transition-all" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
+                    <input placeholder="Search courses..." className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-full text-sm font-bold outline-none focus:ring-4 focus:ring-orange-500/10 transition-all" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
                 </div>
             </div>
 
@@ -232,7 +232,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredCourses.map(c => (
-                                <tr key={c._id} className="hover:bg-indigo-50/30 transition-colors">
+                                <tr key={c._id} className="hover:bg-orange-50/30 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="font-black text-slate-900 text-sm mb-1">{c.title}</div>
                                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{c.modules.length} Segments</div>
@@ -241,7 +241,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         <span className="font-bold text-slate-600">{c.tutorName}</span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="font-black text-indigo-600 text-sm">₦{c.price.toLocaleString()}</span>
+                                        <span className="font-black text-orange-600 text-sm">₦{c.price.toLocaleString()}</span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className={`flex items-center gap-3 text-[10px] font-black uppercase tracking-widest ${c.published ? 'text-emerald-600' : 'text-slate-400'}`}>
@@ -268,7 +268,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                 <div className="absolute top-0 right-0 p-8 opacity-5 scale-150 group-hover:rotate-12 transition-transform duration-[2000ms]"><Zap size={120} /></div>
                 <div className="relative z-10 space-y-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/40 animate-float"><ShieldCheck size={20}/></div>
+                        <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/40 animate-float"><ShieldCheck size={20}/></div>
                         <h3 className="text-2xl font-black tracking-tight">Core Infrastructure</h3>
                     </div>
                     <div className="space-y-2">
@@ -279,16 +279,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
             </div>
 
             <div className="bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl">
-                    <div className="flex items-center gap-2 text-indigo-800 font-black text-xs uppercase tracking-widest mb-2">
-                        <Zap size={16} className="text-indigo-600" /> Synchronization Matrix
+                <div className="p-4 bg-orange-50/50 border border-orange-100 rounded-xl">
+                    <div className="flex items-center gap-2 text-orange-800 font-black text-xs uppercase tracking-widest mb-2">
+                        <Zap size={16} className="text-orange-600" /> Synchronization Matrix
                     </div>
                     <p className="text-sm text-slate-600 font-medium leading-relaxed">System state is bridged with the Node.js operational layer and MongoDB Atlas cluster. Administrative oversight is finalized via this hub.</p>
                 </div>
 
                 <div className="space-y-3">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Central Repository URI</label>
-                    <div className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl font-mono text-sm text-indigo-400 shadow-inner overflow-hidden truncate">
+                    <div className="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl font-mono text-sm text-orange-400 shadow-inner overflow-hidden truncate">
                         https://edumeetserver-1.onrender.com
                     </div>
                 </div>
@@ -318,7 +318,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
               <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl border border-white/20 animate-in zoom-in duration-500">
                   <div className="flex justify-between items-center mb-6">
                       <div>
-                        <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Registry Injection</p>
+                        <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.3em] mb-2">Registry Injection</p>
                         <h3 className="text-2xl font-black tracking-tight">Provision Identity</h3>
                       </div>
                       <button onClick={() => setCreateUserModal(false)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all active:scale-90"><X size={18}/></button>
@@ -326,25 +326,25 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                   <form onSubmit={handleCreateUser} className="space-y-4">
                       <div className="space-y-1">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Full Identity Name</label>
-                          <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-xl font-bold outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 transition-all shadow-inner" value={newUserName} onChange={e => setNewUserName(e.target.value)} placeholder="Professor John Doe" />
+                          <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserName} onChange={e => setNewUserName(e.target.value)} placeholder="Professor John Doe" />
                       </div>
                       <div className="space-y-1">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Access Email</label>
-                          <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-xl font-bold outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 transition-all shadow-inner" value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} placeholder="dean@edumeet.com" />
+                          <input required className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} placeholder="dean@edumeet.com" />
                       </div>
                       <div className="space-y-1">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Initial Security Cipher</label>
-                          <input required type="password" className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-xl font-bold outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 transition-all shadow-inner" value={newUserPassword} onChange={e => setNewUserPassword(e.target.value)} placeholder="••••••••" />
+                          <input required type="password" className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-bold outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserPassword} onChange={e => setNewUserPassword(e.target.value)} placeholder="••••••••" />
                       </div>
                       <div className="space-y-1">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-6">Operational Clearance</label>
-                          <select className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-xl font-black text-[10px] uppercase tracking-[0.2em] outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 transition-all shadow-inner" value={newUserRole} onChange={e => setNewUserRole(e.target.value as UserRole)}>
+                          <select className="w-full px-4 py-3 bg-slate-50 border border-transparent rounded-full font-black text-[10px] uppercase tracking-[0.2em] outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 transition-all shadow-inner" value={newUserRole} onChange={e => setNewUserRole(e.target.value as UserRole)}>
                               <option value={UserRole.STUDENT}>Scholar Tier</option>
                               <option value={UserRole.TUTOR}>Instructor Tier</option>
                               <option value={UserRole.ADMIN}>Administrator Tier</option>
                           </select>
                       </div>
-                      <button className="w-full bg-indigo-600 text-white py-3 rounded-xl font-black uppercase text-xs tracking-[0.4em] shadow-lg shadow-indigo-600/30 mt-6 active:scale-95 transition-all hover:bg-indigo-700">Authorize Provisioning</button>
+                      <button className="w-full bg-orange-600 text-white py-3 rounded-full font-black uppercase text-xs tracking-[0.4em] shadow-lg shadow-orange-600/30 mt-6 active:scale-95 transition-all hover:bg-orange-700">Authorize Provisioning</button>
                   </form>
               </div>
           </div>
@@ -355,14 +355,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
             <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
                 <div className="flex justify-between items-center mb-6">
                     <div>
-                        <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-1">Direct Communication</p>
+                        <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">Direct Communication</p>
                         <h3 className="text-xl font-black text-slate-900">Message {userMsgModal.userName}</h3>
                     </div>
                     <button onClick={() => setUserMsgModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all"><X size={18}/></button>
                 </div>
                 <div className="space-y-4">
-                    <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-indigo-50 transition-all min-h-[120px] resize-none" placeholder="Type your administrative message here..." value={adminMessage} onChange={e => setAdminMessage(e.target.value)} />
-                    <button onClick={handleSendMessage} disabled={!!actionLoading} className="w-full py-3 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest mt-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-95">
+                    <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all min-h-[120px] resize-none" placeholder="Type your administrative message here..." value={adminMessage} onChange={e => setAdminMessage(e.target.value)} />
+                    <button onClick={handleSendMessage} disabled={!!actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-black uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
                         {actionLoading ? <Loader2 className="animate-spin"/> : <Send size={18}/>} Dispatch Message
                     </button>
                 </div>
