@@ -198,7 +198,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg ring-4 ring-orange-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
-                {chatOpen ? 'Hide Instructor' : 'Ground AI Tutor'}
+                {chatOpen ? 'Hide Assistant' : 'Open AI Assistant'}
             </button>
         </div>
       </div>
@@ -398,7 +398,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                         <div>
                             <p className="text-[10px] font-bold uppercase tracking-widest text-orange-300/80 mb-0.5">Grounded Assistant</p>
-                            <h3 className="text-lg font-black tracking-tight">AI Instructor</h3>
+                            <h3 className="text-lg font-black tracking-tight">AI Assistant</h3>
                         </div>
                     </div>
                     <button onClick={() => setChatOpen(false)} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all relative z-10 active:scale-90"><X size={18}/></button>
@@ -406,7 +406,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white/10 custom-scrollbar">
                     <div className="bg-gradient-to-br from-orange-600 to-rose-600 text-white p-4 rounded-2xl rounded-tl-none text-xs font-bold leading-relaxed shadow-lg shadow-orange-600/30 border border-white/10 uppercase tracking-wider">
-                        Analyzing operational segment: <br/><strong>"{activeModule?.title}"</strong>. <br/><br/>Query the tutor for conceptual expansion or synthesis.
+                        Analyzing operational segment: <br/><strong>"{activeModule?.title}"</strong>. <br/><br/>Query the assistant for conceptual expansion or synthesis.
                     </div>
                     {messages.map((m, i) => (
                         <div key={i} className={`p-4 rounded-2xl text-sm shadow-lg transition-all animate-in fade-in slide-in-from-bottom-6 ${m.role === 'user' ? 'bg-[#1e293b] text-white ml-10 rounded-br-none shadow-black/20' : 'glass border border-slate-200/80 text-slate-700 mr-10 rounded-bl-none leading-relaxed font-medium shadow-slate-200/50'}`}>

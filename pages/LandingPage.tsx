@@ -14,8 +14,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   }, []);
 
   const testimonials = [
-    { name: "Amara Okafor", role: "Computer Science Student, Lagos", text: "The AI tutor clarified complex algorithms instantly. It's like having a professor available 24/7 to answer my specific questions." },
-    { name: "Kwame Mensah", role: "Data Analyst, Accra", text: "Edumeet's interactive modules and real-time AI feedback loop helped me master Python in record time." },
+    { name: "Amara Okafor", role: "Computer Science Student, Lagos", text: "The AI assistant clarified complex algorithms instantly. It's like having a study partner available 24/7 to answer my specific questions." },
+    { name: "Kwame Mensah", role: "Data Analyst, Accra", text: "The blend of live expert classes and the real-time AI assistant helped me master Python in record time." },
     { name: "Zainab Abdi", role: "Lifelong Learner, Nairobi", text: "The platform adapts to my pace. Finally, an education platform that feels truly personalized and intelligent." }
   ];
 
@@ -51,7 +51,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 shadow-sm">
                    <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
-                   AI Tutor 2.0 Live
+                   Live Classes + AI Assistant
                 </div>
                 
                 <div className="relative">
@@ -63,7 +63,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed max-w-md font-medium">
-                   Experience personalized education built for the continent. Master global skills with our grounded AI tutor and adaptive curriculums.
+                   Experience the perfect blend of live expert classes and personalized AI assistance. Built for the continent, designed for your success.
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -109,7 +109,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div className="grid md:grid-cols-3 gap-8">
                 {[
                    { label: "Active Learners", value: "24,000+", icon: Users },
-                   { label: "AI Interactions", value: "1.2M+", icon: Sparkles },
+                   { label: "AI Assists", value: "1.2M+", icon: Sparkles },
                    { label: "Completion Rate", value: "94%", icon: Award }
                 ].map((stat, i) => (
                    <div key={i} className="group p-8 rounded-[32px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all hover:-translate-y-1">
@@ -129,8 +129,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           <div className="max-w-7xl mx-auto">
              <div className="flex justify-between items-end mb-12">
                 <div>
-                   <h2 className="text-3xl font-black text-slate-900 mb-4">Popular Curriculums</h2>
-                   <p className="text-slate-500 max-w-md">Industry-standard courses enhanced with AI support.</p>
+                   <h2 className="text-3xl font-black text-slate-900 mb-4">Live Classes & Curriculums</h2>
+                   <p className="text-slate-500 max-w-md">Expert-led live classes enhanced with 24/7 AI assistance.</p>
                 </div>
                 <button className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors">
                    View All <ArrowRight size={16}/>
