@@ -167,7 +167,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     recognition.start();
   };
 
-  if (loading || !course || !progress) return <div className="p-20 text-center flex flex-col items-center gap-6"><div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center shadow-inner"><Loader2 className="animate-spin text-indigo-600" size={32} /></div><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Operational Workspace</p></div>;
+  if (loading || !course || !progress) return <div className="p-20 text-center flex flex-col items-center gap-6"><div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center shadow-inner"><Loader2 className="animate-spin text-orange-600" size={32} /></div><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Operational Workspace</p></div>;
 
   const modules = course.modules ?? [];
   const activeModule = modules[activeModuleIdx];
@@ -176,15 +176,15 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-2xl shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
+    <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-[32px] shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
       {/* Immersive Header */}
       <div className="px-6 py-4 border-b bg-white/70 backdrop-blur-3xl flex justify-between items-center z-20">
         <div className="flex items-center gap-8">
-          <button onClick={() => onNavigate('#/')} className="p-3 bg-slate-50 hover:bg-indigo-600 hover:text-white rounded-xl transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
+          <button onClick={() => onNavigate('#/')} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
           <div>
             <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1">{course.title}</h2>
             <div className="flex items-center gap-3">
-                <span className="text-[9px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100 shadow-sm">Segment {activeModuleIdx + 1} // {modules.length}</span>
+                <span className="text-[9px] font-bold text-orange-600 uppercase tracking-widest bg-orange-50 px-3 py-1 rounded-full border border-orange-100 shadow-sm">Segment {activeModuleIdx + 1} // {modules.length}</span>
                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-2">
                   <div className={`w-2 h-2 rounded-full ${midTermPassed ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
                   Mid-Term Clearance
@@ -195,7 +195,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         <div className="flex items-center gap-4">
             <button 
                 onClick={() => setChatOpen(!chatOpen)} 
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-indigo-600 text-white shadow-lg ring-4 ring-indigo-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg ring-4 ring-orange-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
                 {chatOpen ? 'Hide Instructor' : 'Ground AI Tutor'}
@@ -208,7 +208,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         <div className="w-72 bg-slate-50/70 border-r overflow-y-auto p-6 space-y-8 hidden xl:block custom-scrollbar">
             <div>
               <p className="text-[10px] font-bold uppercase text-slate-400 mb-6 tracking-widest flex items-center gap-3">
-                <div className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(99,102,241,1)]"></div>
+                <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,1)]"></div>
                 Knowledge Tree
               </p>
               <div className="space-y-4">
@@ -223,7 +223,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             key={m._id}
                             disabled={isLocked && !isPreview}
                             onClick={() => { setViewMode('module'); setActiveModuleIdx(idx); }}
-                            className={`w-full text-left p-3 rounded-xl transition-all duration-500 flex items-center gap-3 group relative overflow-hidden ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 translate-x-2' : isLocked && !isPreview ? 'opacity-30 grayscale cursor-not-allowed scale-95' : 'hover:bg-white hover:shadow-sm hover:translate-x-1 text-slate-500'}`}
+                            className={`w-full text-left p-3 rounded-2xl transition-all duration-500 flex items-center gap-3 group relative overflow-hidden ${isActive ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/30 translate-x-2' : isLocked && !isPreview ? 'opacity-30 grayscale cursor-not-allowed scale-95' : 'hover:bg-white hover:shadow-sm hover:translate-x-1 text-slate-500'}`}
                         >
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-500 ${isActive ? 'bg-white/20' : isCompleted ? 'bg-emerald-100 text-emerald-600' : 'bg-white shadow-sm border border-slate-200'}`}>
                                 {isCompleted ? <CheckCircle size={16}/> : isLocked && !isPreview ? <Lock size={14}/> : <span className="text-[10px] font-bold">{idx+1}</span>}
@@ -252,7 +252,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     <button 
                         disabled={!isFinalReady && !isPreview}
                         onClick={() => { setViewMode('quiz'); setActiveQuizIdx(1); }}
-                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 1 ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-400'}`}
+                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 1 ? 'bg-orange-600 text-white border-orange-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'}`}
                     >
                         Final Exam {!isFinalReady && <Lock size={14}/>}
                     </button>
@@ -282,7 +282,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             <h1 className="text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
                             <button 
                                 onClick={markModuleComplete}
-                                className={`px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-indigo-600/30'}`}
+                                className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
                             >
                                 {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Mastery Verified ✓' : 'Execute Completion'}
                             </button>
@@ -291,7 +291,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             <button 
                                 disabled={activeModuleIdx === 0}
                                 onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                                className="px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
+                                className="px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
                             >
                                 <ChevronLeft size={18}/> Previous Segment
                             </button>
@@ -331,14 +331,14 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     {course.quizzes[activeQuizIdx].questions.map((q, qIdx) => (
                         <div key={q.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                             <h3 className="text-lg font-bold text-slate-900 mb-4 flex gap-4">
-                                <span className="text-indigo-600">0{qIdx + 1}.</span> {q.text}
+                                <span className="text-orange-600">0{qIdx + 1}.</span> {q.text}
                             </h3>
                             <div className="space-y-3">
                                 {q.options.map((opt, oIdx) => (
                                     <button
                                         key={oIdx}
                                         onClick={() => setQuizAnswers({...quizAnswers, [q.id]: oIdx})}
-                                        className={`w-full text-left p-3 rounded-xl font-medium transition-all flex items-center gap-4 ${quizAnswers[q.id] === oIdx ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+                                        className={`w-full text-left p-3 rounded-xl font-medium transition-all flex items-center gap-4 ${quizAnswers[q.id] === oIdx ? 'bg-orange-600 text-white shadow-lg shadow-orange-200' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
                                     >
                                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${quizAnswers[q.id] === oIdx ? 'border-white' : 'border-slate-300'}`}>
                                             {quizAnswers[q.id] === oIdx && <div className="w-3 h-3 bg-white rounded-full" />}
@@ -350,7 +350,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     ))}
                 </div>
-                <button onClick={handleQuizSubmit} className="mt-8 bg-indigo-600 text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest shadow-lg shadow-indigo-600/30 active:scale-95 hover:translate-y-[-2px] transition-all">Execute Submission</button>
+                <button onClick={handleQuizSubmit} className="mt-8 bg-orange-600 text-white px-8 py-3 rounded-full font-black uppercase tracking-widest shadow-lg shadow-orange-600/30 active:scale-95 hover:translate-y-[-2px] transition-all">Execute Submission</button>
               </div>
             )}
 
@@ -375,7 +375,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         <p className="text-indigo-800 leading-relaxed font-medium">{course.capstone.instructions}</p>
                     </div>
                     <textarea 
-                        className="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-50 transition-all font-medium text-slate-700 resize-none mb-6"
+                        className="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-orange-50 transition-all font-medium text-slate-700 resize-none mb-6"
                         placeholder="Enter your project submission or link here..."
                         value={capstoneText}
                         onChange={e => setCapstoneText(e.target.value)}
@@ -393,11 +393,11 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 <div className="p-6 border-b bg-[#0f172a] text-white flex items-center justify-between relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-12 opacity-5 rotate-12 scale-150"><MessageSquare size={120}/></div>
                     <div className="flex items-center gap-5 relative z-10">
-                        <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/50 animate-pulse">
+                        <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-rose-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/50 animate-pulse">
                             <Sparkles size={20}/>
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-300/80 mb-0.5">Grounded Assistant</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-orange-300/80 mb-0.5">Grounded Assistant</p>
                             <h3 className="text-lg font-black tracking-tight">AI Instructor</h3>
                         </div>
                     </div>
@@ -405,14 +405,14 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white/10 custom-scrollbar">
-                    <div className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white p-4 rounded-2xl rounded-tl-none text-xs font-bold leading-relaxed shadow-lg shadow-indigo-600/30 border border-white/10 uppercase tracking-wider">
+                    <div className="bg-gradient-to-br from-orange-600 to-rose-600 text-white p-4 rounded-2xl rounded-tl-none text-xs font-bold leading-relaxed shadow-lg shadow-orange-600/30 border border-white/10 uppercase tracking-wider">
                         Analyzing operational segment: <br/><strong>"{activeModule?.title}"</strong>. <br/><br/>Query the tutor for conceptual expansion or synthesis.
                     </div>
                     {messages.map((m, i) => (
                         <div key={i} className={`p-4 rounded-2xl text-sm shadow-lg transition-all animate-in fade-in slide-in-from-bottom-6 ${m.role === 'user' ? 'bg-[#1e293b] text-white ml-10 rounded-br-none shadow-black/20' : 'glass border border-slate-200/80 text-slate-700 mr-10 rounded-bl-none leading-relaxed font-medium shadow-slate-200/50'}`}>
                             {m.text}
                             {m.role === 'model' && (
-                                <button onClick={() => playAiVoice(m.text)} className="mt-3 text-indigo-600 hover:text-indigo-800 transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                                <button onClick={() => playAiVoice(m.text)} className="mt-3 text-orange-600 hover:text-orange-800 transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-100">
                                     <Volume2 size={16}/> Voice Synthesis
                                 </button>
                             )}
@@ -420,9 +420,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     ))}
                     {thinking && (
                         <div className="flex gap-2 p-4 ml-2">
-                            <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce shadow-lg shadow-indigo-500/50"></div>
-                            <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce delay-200 shadow-lg shadow-indigo-500/50"></div>
-                            <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-bounce delay-400 shadow-lg shadow-indigo-500/50"></div>
+                            <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce shadow-lg shadow-orange-500/50"></div>
+                            <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce delay-200 shadow-lg shadow-orange-500/50"></div>
+                            <div className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce delay-400 shadow-lg shadow-orange-500/50"></div>
                         </div>
                     )}
                     <div ref={chatEndRef}/>
@@ -438,12 +438,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </button>
                         <form onSubmit={handleSendMessage} className="flex-1 flex gap-3">
                             <input 
-                                className="w-full bg-slate-50 px-4 py-3 rounded-xl text-sm outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600 focus:bg-white transition-all font-bold text-slate-800 shadow-inner"
+                                className="w-full bg-slate-50 px-4 py-3 rounded-full text-sm outline-none focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 focus:bg-white transition-all font-bold text-slate-800 shadow-inner"
                                 placeholder={isListening ? "Vocal processing..." : "Enter query..."}
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                             />
-                            <button type="submit" disabled={!input.trim()} className="p-4 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-600/40 hover:bg-indigo-700 hover:translate-y-[-2px] active:scale-90 transition-all disabled:opacity-30">
+                            <button type="submit" disabled={!input.trim()} className="p-4 bg-orange-600 text-white rounded-full shadow-lg shadow-orange-600/40 hover:bg-orange-700 hover:translate-y-[-2px] active:scale-90 transition-all disabled:opacity-30">
                                 <Send size={20}/>
                             </button>
                         </form>
