@@ -88,7 +88,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                          ))}
                       </div>
                       <div>
-                         <p className="text-xs font-bold text-slate-900">12k+ Creators</p>
+                         <p className="text-xs font-bold text-slate-900">12k+ Students</p>
                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Learning now</p>
                       </div>
                    </div>
