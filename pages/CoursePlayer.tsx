@@ -4,6 +4,8 @@ import { Course, Progress, User, ChatMessage, UserRole, Quiz, Question, QuizResu
 import { api } from '../services/apiService';
 import { askAiTutorStream, speakText } from '../services/geminiService';
 import { CheckCircle, MessageSquare, Send, BookOpen, Lock, Award, Loader2, Video, ArrowLeft, Mic, Volume2, X, Trophy, AlertCircle, Sparkles, ChevronRight, ChevronLeft, MicOff } from 'lucide-react';
+import { extractVideoId } from '../utils/youtube';
+import { useYouTubePlayer } from '../hooks/useYouTubePlayer';
 
 function decode(base64: string) {
   const binaryString = atob(base64);
@@ -175,6 +177,15 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const isFinalReady = activeModuleIdx === 9;
   const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
 
+  const videoId = activeModule ? extractVideoId(activeModule.videoUrl) : null;
+  const playerContainerRef = useYouTubePlayer({ 
+    videoId,
+    onStateChange: (event) => {
+        // Placeholder for future progress tracking integration
+        // event.data === 1 (PLAYING), 2 (PAUSED), 0 (ENDED)
+    }
+  });
+
   return (
     <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-[32px] shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
       {/* Immersive Header */}
@@ -274,7 +285,14 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             {viewMode === 'module' && activeModule && (
                 <div className="max-w-6xl mx-auto space-y-16 pb-40">
                     <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
-                        <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${activeModule.videoUrl.split('v=')[1] || activeModule.videoUrl.split('/').pop()}`} frameBorder="0" allowFullScreen></iframe>
+                        {videoId ? (
+                            <div ref={playerContainerRef} className="w-full h-full" />
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-100">
+                                <Video size={48} className="mb-4 opacity-50" />
+                                <p className="font-medium">Video content unavailable</p>
+                            </div>
+                        )}
                     </div>
 
                     <div className="space-y-10">
