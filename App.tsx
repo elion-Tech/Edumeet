@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { BrowseCourses } from './pages/BrowseCourses';
+import { LandingPage } from './pages/LandingPage';
 import { MyCourses } from './pages/MyCourses';
 import { CourseEditor } from './pages/CourseEditor';
 import { CoursePlayer } from './pages/CoursePlayer';
@@ -51,16 +52,20 @@ const App: React.FC = () => {
     window.location.hash = path.startsWith('#') ? path.slice(1) : path;
   };
 
+  const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
+
   if (!user) {
-    return (
-      <div className="bg-slate-50 min-h-screen p-4 flex items-center justify-center">
-        <Login onLogin={handleLogin} />
-      </div>
-    );
+    if (normalizedRoute === '/login') {
+      return (
+        <div className="bg-slate-50 min-h-screen p-4 flex items-center justify-center">
+          <Login onLogin={handleLogin} />
+        </div>
+      );
+    }
+    return <LandingPage onNavigate={navigate} />;
   }
 
   let content;
-  const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
 
   if (normalizedRoute === '/' || normalizedRoute === '') {
       content = user.role === UserRole.STUDENT ? (
