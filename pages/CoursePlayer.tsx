@@ -4,8 +4,8 @@ import { Course, Progress, User, ChatMessage, UserRole, Quiz, Question, QuizResu
 import { api } from '../services/apiService';
 import { askAiTutorStream, speakText } from '../services/geminiService';
 import { CheckCircle, MessageSquare, Send, BookOpen, Lock, Award, Loader2, Video, ArrowLeft, Mic, Volume2, X, Trophy, AlertCircle, Sparkles, ChevronRight, ChevronLeft, MicOff } from 'lucide-react';
-import { extractVideoId } from '../utils/youtube';
-import { useYouTubePlayer } from '../hooks/useYouTubePlayer';
+import { extractVideoId } from './youtube';
+import { useYouTubePlayer } from './useYouTubePlayer';
 
 function decode(base64: string) {
   const binaryString = atob(base64);

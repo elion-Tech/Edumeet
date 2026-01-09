@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { loadYouTubeAPI } from '../utils/youtube';
+import { loadYouTubeAPI } from './youtube';
 
 interface UseYouTubePlayerProps {
   videoId: string | null;
