@@ -60,7 +60,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({ onNavigate }) => {
         {error && <p className="text-rose-600 bg-rose-50 p-3 rounded-lg">{error}</p>}
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New Password" required className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800" />
         <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm New Password" required className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800" />
-        <button type="submit" disabled={loading || !token} className="w-full py-3 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50">
+        <button type="submit" disabled={loading || !token} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20">
           {loading ? <Loader2 className="animate-spin" /> : 'Reset Password'}
         </button>
       </form>
