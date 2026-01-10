@@ -28,12 +28,15 @@ export const useYouTubePlayer = ({ videoId, onStateChange }: UseYouTubePlayerPro
 
       playerRef.current = new window.YT.Player(playerTarget, {
         videoId,
+        host: 'https://www.youtube-nocookie.com', // Use privacy-enhanced mode
         width: '100%',
         height: '100%',
         playerVars: {
           modestbranding: 1,
           rel: 0,
           autoplay: 0,
+          origin: window.location.origin, // Explicitly set origin
+          enablejsapi: 1,
         },
         events: {
           onStateChange: (event: any) => {
