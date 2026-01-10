@@ -500,4 +500,3 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       </div>
     </div>
   );
-};
