@@ -138,9 +138,10 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     setMessages(prev => [...prev, { role: 'user', text: finalInput, timestamp: Date.now() }]);
     setInput('');
     setThinking(true);
+    const currentTranscript = course.modules[activeModuleIdx]?.transcript || "No transcript available.";
     try {
       let accumulatedText = "";
-      const stream = askAiTutorStream(finalInput, course);
+      const stream = askAiTutorStream(finalInput, currentTranscript, course.title);
       setMessages(prev => [...prev, { role: 'model', text: "", timestamp: Date.now() }]);
       setThinking(false);
       for await (const chunk of stream) {
@@ -237,7 +238,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Spatial Navigation Sidebar */}
-        {sidebarOpen && <div className="w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none shrink-0">
+        {sidebarOpen && <div className="w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none">
             <div>
               <p className="text-[10px] font-bold uppercase text-slate-400 mb-6 tracking-widest flex items-center gap-3">
                 <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,1)]"></div>
@@ -409,9 +410,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             {viewMode === 'capstone' && course.capstone && (
                 <div className="max-w-4xl mx-auto py-20 animate-in slide-in-from-bottom-12">
                     <h2 className="text-2xl font-black text-slate-900 mb-6">Final Capstone Project</h2>
-                    <div className="bg-orange-50 p-6 rounded-[32px] border border-orange-100 mb-6">
-                        <h3 className="text-orange-900 font-bold mb-4 uppercase tracking-widest text-xs">Directives</h3>
-                        <p className="text-orange-800 leading-relaxed font-medium">{course.capstone.instructions}</p>
+                    <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-6">
+                        <h3 className="text-indigo-900 font-bold mb-4 uppercase tracking-widest text-xs">Directives</h3>
+                        <p className="text-indigo-800 leading-relaxed font-medium">{course.capstone.instructions}</p>
                     </div>
                     <textarea 
                         className="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-orange-50 transition-all font-medium text-slate-700 resize-none mb-6"
@@ -500,3 +501,4 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       </div>
     </div>
   );
+};
