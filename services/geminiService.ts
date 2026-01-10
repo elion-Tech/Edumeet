@@ -1,5 +1,4 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { GoogleAIFileManager, FileState } from "@google/generative-ai/server";
 
 const API_KEY = 'AIzaSyB4UDXMtuGXXBDLC8w-od-EaELA6k-zsXg';
 
