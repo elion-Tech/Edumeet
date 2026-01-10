@@ -298,8 +298,8 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                       </button>
                     )}
                 </div>
-            </div>}
-        </div>
+            </div>
+        </div>}
 
         {/* Liquid Workspace */}
         <div className="flex-1 overflow-y-auto bg-white p-8 lg:p-12 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
