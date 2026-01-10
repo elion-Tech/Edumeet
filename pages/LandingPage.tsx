@@ -241,8 +241,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <h4 className="font-bold text-lg mb-6">Company</h4>
                 <ul className="space-y-4 text-slate-400">
                    <li><a href="#" className="hover:text-orange-400 transition-colors">About Us</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Careers</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Blog</a></li>
                    <li><a href="#" className="hover:text-orange-400 transition-colors">Contact</a></li>
                 </ul>
              </div>

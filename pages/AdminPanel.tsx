@@ -152,8 +152,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
                     { label: 'Total Students', val: users.length, icon: Users, color: 'orange' },
-                    { label: 'Status', val: 'ONLINE', icon: Globe, color: 'blue' },
-                    { label: 'Courses', val: courses.length, icon: BookOpen, color: 'purple' },
+                    { label: 'Status', val: 'ONLINE', icon: Globe, color: 'slate' },
+                    { label: 'Courses', val: courses.length, icon: BookOpen, color: 'rose' },
                     { label: 'Database', val: 'MongoDB Atlas', icon: Database, color: 'emerald' }
                 ].map((stat, i) => (
                     <div key={i} className="bg-white/70 backdrop-blur-xl p-6 rounded-[32px] shadow-sm border border-slate-200 flex items-center gap-4">

@@ -37,7 +37,7 @@ async function getOrCreateCache(course: any, fullTranscript: string): Promise<st
     }
 
     console.log("Creating new Gemini Context Cache for course:", course.title);
-    const cacheManager = new GoogleGenAI({ apiKey: API_KEY }).cachedContents;
+    const cacheManager = (new GoogleGenAI({ apiKey: API_KEY }) as any).cachedContents;
 
     const cache = await cacheManager.create({
       model: 'models/gemini-1.5-flash-001', // Flash is cheaper/faster for caching

@@ -90,7 +90,7 @@ const App: React.FC = () => {
         <div className="p-20 text-center flex flex-col items-center justify-center space-y-4">
             <div className="text-slate-400 text-6xl font-bold">404</div>
             <p className="text-slate-500">The requested learning path does not exist.</p>
-            <button onClick={() => navigate('/')} className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold">Go Home</button>
+            <button onClick={() => navigate('/')} className="bg-orange-600 text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-orange-600/20 hover:bg-orange-700 transition-all">Go Home</button>
         </div>
       );
   }

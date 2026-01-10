@@ -409,9 +409,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             {viewMode === 'capstone' && course.capstone && (
                 <div className="max-w-4xl mx-auto py-20 animate-in slide-in-from-bottom-12">
                     <h2 className="text-2xl font-black text-slate-900 mb-6">Final Capstone Project</h2>
-                    <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-6">
-                        <h3 className="text-indigo-900 font-bold mb-4 uppercase tracking-widest text-xs">Directives</h3>
-                        <p className="text-indigo-800 leading-relaxed font-medium">{course.capstone.instructions}</p>
+                    <div className="bg-orange-50 p-6 rounded-[32px] border border-orange-100 mb-6">
+                        <h3 className="text-orange-900 font-bold mb-4 uppercase tracking-widest text-xs">Directives</h3>
+                        <p className="text-orange-800 leading-relaxed font-medium">{course.capstone.instructions}</p>
                     </div>
                     <textarea 
                         className="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-orange-50 transition-all font-medium text-slate-700 resize-none mb-6"
