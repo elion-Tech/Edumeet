@@ -60,7 +60,7 @@ const App: React.FC = () => {
     if (normalizedRoute === '/login') {
       return (
         <div className="bg-slate-50 min-h-screen p-4 flex items-center justify-center">
-          <Login onLogin={handleLogin} />
+          <Login onLogin={handleLogin} onNavigate={navigate} />
         </div>
       );
     }

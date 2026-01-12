@@ -6,9 +6,10 @@ import { Lock, Mail, AlertTriangle, User as UserIcon, GraduationCap, ArrowRight,
 
 interface AuthProps {
   onLogin: (user: User) => void;
+  onNavigate: (path: string) => void;
 }
 
-export const Login: React.FC<AuthProps> = ({ onLogin }) => {
+export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   const [view, setView] = useState<'login' | 'register' | 'forgot'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<{message: string, code?: string} | null>(null);
@@ -69,7 +70,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-6 bg-[#f8fafc] font-sans selection:bg-orange-100 selection:text-orange-600">
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[40] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
        )}
 
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-white/20">

@@ -12,7 +12,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 selection:bg-orange-100 selection:text-orange-600">
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[40] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
        )}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-white/20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">

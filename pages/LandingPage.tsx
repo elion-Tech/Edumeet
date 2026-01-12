@@ -24,7 +24,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-x-hidden selection:bg-orange-100 selection:text-orange-600">
        {/* Mobile Overlay */}
        {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[40] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
        )}
 
        {/* Navbar Placeholder (Visual only) */}
