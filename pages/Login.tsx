@@ -75,10 +75,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
             
             <div className="relative z-10 animate-in slide-in-from-left-10 fade-in duration-700">
                 <div className="flex items-center gap-3 mb-12">
-                    <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
-                        <Sparkles size={20} className="text-orange-400" />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight text-white">edumeet</span>
+                    <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-10 w-auto" />
                 </div>
                 
                 <div className="space-y-6 max-w-lg">
@@ -106,10 +103,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
             <div className="max-w-md mx-auto w-full animate-in slide-in-from-right-8 fade-in duration-700">
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-10">
-                    <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                        <Sparkles size={16} className="text-white" />
-                    </div>
-                    <span className="text-xl font-bold text-slate-900">edumeet</span>
+                    <img src="/Images/edumeet-logo.png" alt="Edumeet Logo" className="h-8 w-auto" />
                 </div>
 
                 <div className="mb-10">

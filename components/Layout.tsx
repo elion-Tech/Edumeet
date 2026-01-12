@@ -85,12 +85,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
         <div className="relative z-10 p-6 md:p-8 border-b border-white/5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                <Sparkles size={16} className="text-white" />
-              </div>
-              <h1 className="text-xl font-bold tracking-tight text-white">
-                edu<span className="text-orange-500">meet</span>
-              </h1>
+              <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
             </div>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
