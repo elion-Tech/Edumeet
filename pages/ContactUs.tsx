@@ -23,7 +23,8 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onNavigate }) => {
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-white/20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate('/')}>
-            <img src="/Images/edumeet-logo.png" alt="Edumeet Logo" className="h-9 w-auto" />
+            <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
+            <span className="font-bold text-xl tracking-tight text-slate-900">edu<span className="text-orange-500">meet</span></span>
           </div>
           <button onClick={() => onNavigate('/')} className="p-2 text-slate-500 hover:text-orange-600 transition-colors">
             <ArrowLeft size={24} />

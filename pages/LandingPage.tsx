@@ -25,7 +25,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
        <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-white/20">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
              <div className="flex items-center gap-3">
-                <img src="/Images/edumeet-logo.png" alt="Edumeet Logo" className="h-9 w-auto" />
+                <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
+                <span className="font-bold text-xl tracking-tight text-slate-900">edu<span className="text-orange-500">meet</span></span>
              </div>
              <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
                 <button onClick={() => onNavigate('#/about')} className="hover:text-orange-600 transition-colors">About Us</button>
@@ -209,6 +210,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
              <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
+                   <span className="font-bold text-xl tracking-tight text-white">edu<span className="text-orange-500">meet</span></span>
                    <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
                 </div>
                 <p className="text-slate-400 max-w-sm leading-relaxed mb-8">
