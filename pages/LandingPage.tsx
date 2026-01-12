@@ -31,9 +31,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <span className="font-bold text-xl tracking-tight text-slate-900">edu<span className="text-orange-500">meet</span></span>
              </div>
              <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="#" className="hover:text-orange-600 transition-colors">Courses</a>
-                <a href="#" className="hover:text-orange-600 transition-colors">Mentors</a>
-                <a href="#" className="hover:text-orange-600 transition-colors">Community</a>
+                <button onClick={() => onNavigate('#/about')} className="hover:text-orange-600 transition-colors">About Us</button>
+                <button onClick={() => onNavigate('#/contact')} className="hover:text-orange-600 transition-colors">Contact Us</button>
+                <button onClick={() => onNavigate('#/login')} className="hover:text-orange-600 transition-colors">Courses</button>
              </div>
              <button onClick={() => onNavigate('#/login')} className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-orange-500 transition-all">
                 Sign In
@@ -232,10 +232,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div>
                 <h4 className="font-bold text-lg mb-6">Platform</h4>
                 <ul className="space-y-4 text-slate-400">
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Browse Courses</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Mentorship</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Pricing</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">For Business</a></li>
+                   <li><button onClick={() => onNavigate('#/login')} className="hover:text-orange-400 transition-colors">Browse Courses</button></li>
+                   <li><button onClick={() => onNavigate('#/about')} className="hover:text-orange-400 transition-colors">About Us</button></li>
+                   <li><button onClick={() => onNavigate('#/contact')} className="hover:text-orange-400 transition-colors">Contact Us</button></li>
                 </ul>
              </div>
 
@@ -243,8 +242,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <h4 className="font-bold text-lg mb-6">Company</h4>
                 <ul className="space-y-4 text-slate-400">
                    <li><button onClick={() => onNavigate('#/about')} className="hover:text-orange-400 transition-colors">About Us</button></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Careers</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Blog</a></li>
                    <li><button onClick={() => onNavigate('#/contact')} className="hover:text-orange-400 transition-colors">Contact</button></li>
                 </ul>
              </div>
