@@ -145,7 +145,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                 const isEnrolled = (user.enrolledCourseIds ?? []).includes(course._id);
                 const isProcessing = enrollingId === course._id;
                 const ytId = course.modules?.[0]?.videoUrl ? getYoutubeId(course.modules[0].videoUrl) : null;
-                let finalThumb = course.thumbnailUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800');
+                let finalThumb = course.thumbnailUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800');
 
                 return (
                 <div key={course._id} className="group bg-white rounded-[32px] shadow-lg border border-slate-200/60 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative">
@@ -156,7 +156,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                                 const target = e.currentTarget;
                                 const ytId = course.modules?.[0]?.videoUrl ? getYoutubeId(course.modules[0].videoUrl) : null;
                                 const ytThumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null;
-                                const defaultFallback = 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800';
+                                const defaultFallback = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800';
 
                                 if (!target.dataset.triedYoutube && ytThumb && finalThumb !== ytThumb) {
                                     target.src = ytThumb;

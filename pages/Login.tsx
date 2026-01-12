@@ -96,7 +96,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
             {/* Abstract Visual / Mockup */}
             <div className="relative z-10 mt-auto translate-y-12 translate-x-12">
                 <div className="relative w-[380px] h-[600px] bg-slate-800 rounded-[48px] border-[8px] border-slate-700 shadow-2xl transform rotate-12 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-1000 hover:rotate-6 hover:-translate-y-4 transition-all ease-out">
-                    <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity" alt="App preview" />
+                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity" alt="App preview" />
                 </div>
             </div>
         </div>
