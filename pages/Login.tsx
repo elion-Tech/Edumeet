@@ -76,6 +76,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
             <div className="relative z-10 animate-in slide-in-from-left-10 fade-in duration-700">
                 <div className="flex items-center gap-3 mb-12">
                     <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-10 w-auto" />
+                    <span className="text-xl font-bold tracking-tight text-white">edu<span className="text-orange-500">meet</span></span>
                 </div>
                 
                 <div className="space-y-6 max-w-lg">
@@ -104,6 +105,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                 {/* Mobile Logo */}
                 <div className="lg:hidden flex items-center gap-2 mb-10">
                     <img src="/Images/edumeet-logo.png" alt="Edumeet Logo" className="h-8 w-auto" />
+                    <span className="text-xl font-bold text-slate-900">edu<span className="text-orange-500">meet</span></span>
                 </div>
 
                 <div className="mb-10">
