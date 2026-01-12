@@ -188,7 +188,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                     </div>
                 </form>
 
-                {view !== 'forgot' && (
+                {/* {view !== 'forgot' && (
                     <div className="mt-12 pt-8 border-t border-slate-100 flex justify-center">
                         <button 
                             disabled={loading}
@@ -198,8 +198,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin }) => {
                             {loading ? <Loader2 size={14} className="animate-spin"/> : <ShieldCheck size={16}/>}
                             <span>Admin Demo</span>
                         </button>
-                    </div>
-                )}
+                    </div>} */}
                 
                 <div className="mt-8 text-center">
                     <p className="text-xs text-slate-300 font-medium">© 2024 Edumeet Inc. • Privacy • Terms</p>
