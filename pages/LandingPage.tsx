@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X } from 'lucide-react';
 
 interface LandingPageProps {
   onNavigate: (path: string) => void;
@@ -8,6 +8,7 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -21,6 +22,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-x-hidden selection:bg-orange-100 selection:text-orange-600">
+       {/* Mobile Overlay */}
+       {isMobileMenuOpen && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] md:hidden animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)} />
+       )}
+
        {/* Navbar Placeholder (Visual only) */}
        <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-md border-b border-white/20">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -33,10 +39,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <button onClick={() => onNavigate('#/contact')} className="hover:text-orange-600 transition-colors">Contact Us</button>
                 <button onClick={() => onNavigate('#/login')} className="hover:text-orange-600 transition-colors">Courses</button>
              </div>
-             <button onClick={() => onNavigate('#/login')} className="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-orange-500 transition-all">
-                Sign In
-             </button>
+             <div className="flex items-center gap-4">
+                <button onClick={() => onNavigate('#/login')} className="hidden md:block px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-orange-500 transition-all">
+                    Sign In
+                </button>
+                <button 
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+             </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+             <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-100 p-6 md:hidden shadow-xl animate-in slide-in-from-top-5 duration-300 flex flex-col gap-4">
+                <button onClick={() => onNavigate('#/about')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">About Us</button>
+                <button onClick={() => onNavigate('#/contact')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">Contact Us</button>
+                <button onClick={() => onNavigate('#/login')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">Courses</button>
+                <button onClick={() => onNavigate('#/login')} className="w-full px-5 py-3 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-orange-500 transition-all mt-2">
+                    Sign In
+                </button>
+             </div>
+          )}
        </nav>
 
        {/* Hero Section */}
