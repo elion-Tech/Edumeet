@@ -85,6 +85,9 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
         <div className="relative z-10 p-6 md:p-8 border-b border-white/5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <h1 className="text-xl font-bold tracking-tight text-white">
+                edu<span className="text-orange-500">meet</span>
+              </h1>
               <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
             </div>
             <button 
