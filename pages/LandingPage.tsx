@@ -141,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 {[1, 2, 3].map((i) => (
                    <div key={i} className="group bg-white/60 backdrop-blur-md border border-white/60 rounded-[32px] p-4 hover:bg-white transition-all hover:shadow-xl hover:shadow-slate-200/50 cursor-pointer">
                       <div className="aspect-[4/3] bg-slate-200 rounded-[24px] mb-6 overflow-hidden relative">
-                         <img src={`/Images/course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
+                         <img src={`/Images/Course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
                          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-900">
                             Premium
                          </div>
