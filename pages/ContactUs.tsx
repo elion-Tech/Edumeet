@@ -32,6 +32,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onNavigate }) => {
             <span className="font-bold text-xl tracking-tight text-slate-900">edu<span className="text-orange-500">meet</span></span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+            <button onClick={() => onNavigate('#/')} className="hover:text-orange-600 transition-colors">Home</button>
             <button onClick={() => onNavigate('#/about')} className="hover:text-orange-600 transition-colors">About Us</button>
             <button onClick={() => onNavigate('#/contact')} className="hover:text-orange-600 transition-colors">Contact Us</button>
             <button onClick={() => onNavigate('#/login')} className="hover:text-orange-600 transition-colors">Courses</button>
@@ -50,6 +51,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ onNavigate }) => {
         </div>
         {isMobileMenuOpen && (
             <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-100 p-6 md:hidden shadow-xl animate-in slide-in-from-top-5 duration-300 flex flex-col gap-4">
+              <button onClick={() => onNavigate('#/')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">Home</button>
               <button onClick={() => onNavigate('#/about')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">About Us</button>
               <button onClick={() => onNavigate('#/contact')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">Contact Us</button>
               <button onClick={() => onNavigate('#/login')} className="text-left font-bold text-slate-600 hover:text-orange-600 py-2">Courses</button>
