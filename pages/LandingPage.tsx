@@ -63,14 +63,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed max-w-md font-medium">
-                   Master Management, Leadership, Finance and Tech with seamless AI integration. Promoting African innovation for global adoption.
+                   Master Management, Leadership, and Finance with seamless AI integration. Promoting African innovation for global adoption.
                 </p>
 
                 <div className="flex items-center gap-4">
                    <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
-                      Start Learning <ArrowRight size={18}/>
+                      Start Creating <ArrowRight size={18}/>
                    </button>
-            
+                   <button className="px-8 py-4 bg-white text-slate-600 border border-slate-200 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2">
+                      <Play size={18} className="fill-current"/> Demo Reel
+                   </button>
                 </div>
              </div>
 
@@ -88,7 +90,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                          ))}
                       </div>
                       <div>
-                         <p className="text-xs font-bold text-slate-900">12k+ Students</p>
+                         <p className="text-xs font-bold text-slate-900">12k+ Creators</p>
                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Learning now</p>
                       </div>
                    </div>
@@ -240,8 +242,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              <div>
                 <h4 className="font-bold text-lg mb-6">Company</h4>
                 <ul className="space-y-4 text-slate-400">
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">About Us</a></li>
-                   <li><a href="#" className="hover:text-orange-400 transition-colors">Contact</a></li>
+                   <li><button onClick={() => onNavigate('#/about')} className="hover:text-orange-400 transition-colors">About Us</button></li>
+                   <li><a href="#" className="hover:text-orange-400 transition-colors">Careers</a></li>
+                   <li><a href="#" className="hover:text-orange-400 transition-colors">Blog</a></li>
+                   <li><button onClick={() => onNavigate('#/contact')} className="hover:text-orange-400 transition-colors">Contact</button></li>
                 </ul>
              </div>
           </div>

@@ -10,6 +10,8 @@ import { CourseEditor } from './pages/CourseEditor';
 import { CoursePlayer } from './pages/CoursePlayer';
 import { ResetPassword } from './pages/ResetPassword';
 import { AdminPanel } from './pages/AdminPanel';
+import { AboutUs } from './pages/AboutUs';
+import { ContactUs } from './pages/ContactUs';
 import { User, UserRole } from './types';
 import { getCurrentUser, logout, SESSION_KEY } from './services/authService';
 
@@ -62,6 +64,8 @@ const App: React.FC = () => {
         </div>
       );
     }
+    if (normalizedRoute === '/about') return <AboutUs onNavigate={navigate} />;
+    if (normalizedRoute === '/contact') return <ContactUs onNavigate={navigate} />;
     return <LandingPage onNavigate={navigate} />;
   }
 
@@ -85,6 +89,10 @@ const App: React.FC = () => {
       content = <ResetPassword onNavigate={navigate} />;
   } else if (normalizedRoute === '/admin') {
       content = <AdminPanel user={user} onNavigate={navigate} />;
+  } else if (normalizedRoute === '/about') {
+      content = <AboutUs onNavigate={navigate} />;
+  } else if (normalizedRoute === '/contact') {
+      content = <ContactUs onNavigate={navigate} />;
   } else {
       content = (
         <div className="p-20 text-center flex flex-col items-center justify-center space-y-4">
