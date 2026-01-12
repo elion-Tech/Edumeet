@@ -70,9 +70,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                    <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
                       Start Creating <ArrowRight size={18}/>
                    </button>
-                   <button className="px-8 py-4 bg-white text-slate-600 border border-slate-200 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2">
-                      <Play size={18} className="fill-current"/> Demo Reel
-                   </button>
+                  
                 </div>
              </div>
 
