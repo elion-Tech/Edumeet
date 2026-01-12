@@ -68,9 +68,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
                 <div className="flex items-center gap-4">
                    <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
-                      Start Creating <ArrowRight size={18}/>
+                      Start Tutoring <ArrowRight size={18}/>
                    </button>
-                  
+                   <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
+                      Start learning <ArrowRight size={18}/>
+                   </button>
                 </div>
              </div>
 
