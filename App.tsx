@@ -41,7 +41,7 @@ const App: React.FC = () => {
   const handleLogout = () => {
     logout();
     setUser(null);
-    window.location.hash = '/login';
+    window.location.hash = '/';
   };
 
   const handleEnrollSuccess = (updatedUser: User) => {
