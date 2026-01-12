@@ -78,7 +78,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
              <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                 <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl shadow-slate-900/10 border-[8px] border-white rotate-2 hover:rotate-0 transition-transform duration-700">
-                   <img src="/images/landing-hero.jpg" alt="Students collaborating" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
+                   <img src="/landing-hero.jpg" alt="Students collaborating" className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700" />
                    
                    {/* Floating Badge */}
                    <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg flex items-center gap-4 animate-bounce duration-[3000ms]">
@@ -141,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 {[1, 2, 3].map((i) => (
                    <div key={i} className="group bg-white/60 backdrop-blur-md border border-white/60 rounded-[32px] p-4 hover:bg-white transition-all hover:shadow-xl hover:shadow-slate-200/50 cursor-pointer">
                       <div className="aspect-[4/3] bg-slate-200 rounded-[24px] mb-6 overflow-hidden relative">
-                         <img src={`/images/course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
+                         <img src={`/course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
                          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-900">
                             Premium
                          </div>
