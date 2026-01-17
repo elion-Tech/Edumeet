@@ -46,7 +46,7 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
 
   const NavItem = ({ icon: Icon, label, path, active }: any) => (
     <button 
-      onClick={() => {
+      onClick={(e) => {
         onNavigate(path);
         setIsMobileMenuOpen(false);
       }} 

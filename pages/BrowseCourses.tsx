@@ -175,6 +175,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                             <div className="absolute bottom-4 right-4 bg-gradient-to-r from-orange-500 to-rose-600 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg ring-2 ring-orange-600/10">
                                 <Sparkles size={14} className="text-white" />
                                 <span className="text-[10px] font-bold text-white uppercase tracking-widest">AI Enhanced</span>
+
                             </div>
                         )}
                     </div>
@@ -182,10 +183,11 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                       <div className="flex items-center gap-3 mb-4">
                           <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 shadow-sm transition-transform duration-500 group-hover:rotate-12">
                               <UserIcon size={16} />
+
                           </div>
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{course.tutorName}</span>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-2 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors duration-500">{course.title}</h3>
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors duration-500">{course.title}</h3>
                       <p className="text-slate-500 text-sm mb-6 line-clamp-3 flex-1 font-medium leading-relaxed">{course.description}</p>
                       
                       {isEnrolled ? (
