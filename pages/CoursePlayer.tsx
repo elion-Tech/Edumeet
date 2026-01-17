@@ -205,10 +205,16 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-[32px] shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
       {/* Immersive Header */}
       <div className="px-6 py-4 border-b bg-white/70 backdrop-blur-3xl flex justify-between items-center z-20">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 md:gap-8">
+          <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className={`p-2 rounded-full transition-all md:mr-4 ${sidebarOpen ? 'bg-orange-100 text-orange-600' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+          >
+              {sidebarOpen ? <X size={20}/> : <Sidebar size={20}/>}
+          </button>
           <button onClick={() => onNavigate('#/')} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
           <div>
-            <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1">{course.title}</h2>
+            <h2 className="text-sm md:text-xl font-black text-slate-900 tracking-tight leading-none mb-1 truncate max-w-[150px] md:max-w-none">{course.title}</h2>
             <div className="flex items-center gap-3">
                 <span className="text-[9px] font-bold text-orange-600 uppercase tracking-widest bg-orange-50 px-3 py-1 rounded-full border border-orange-100 shadow-sm">Segment {activeModuleIdx + 1} // {modules.length}</span>
                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-2">
@@ -218,26 +224,20 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             </div>
           </div>
         </div>
-        <button 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className={`p-2 rounded-full transition-all mr-4 ${sidebarOpen ? 'bg-orange-100 text-orange-600' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
-        >
-            {sidebarOpen ? <X size={20}/> : <Sidebar size={20}/>}
-        </button>
         <div className="flex items-center gap-4">
             <button 
                 onClick={() => setChatOpen(!chatOpen)} 
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg ring-4 ring-orange-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
+                className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg ring-4 ring-orange-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
-                {chatOpen ? 'Hide Assistant' : 'Open AI Assistant'}
+                <span className="hidden md:inline">{chatOpen ? 'Hide Assistant' : 'Open AI Assistant'}</span>
             </button>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Spatial Navigation Sidebar */}
-        {sidebarOpen && <div className="w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none">
+        {sidebarOpen && <div className="w-full md:w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none">
             <div>
               <p className="text-[10px] font-bold uppercase text-slate-400 mb-6 tracking-widest flex items-center gap-3">
                 <div className="w-2 h-2 bg-orange-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,1)]"></div>
@@ -302,7 +302,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         </div>}
 
         {/* Liquid Workspace */}
-        <div className="flex-1 overflow-y-auto bg-white p-8 lg:p-12 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
+        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-12 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
             {viewMode === 'module' && activeModule && (
                 <div className="max-w-6xl mx-auto space-y-16 pb-40">
                     <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
@@ -317,8 +317,8 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     </div>
 
                     <div className="space-y-10">
-                        <div className="flex flex-col xxl:flex-row justify-between items-start gap-8">
-                            <h1 className="text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8">
+                            <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
                             <button 
                                 onClick={markModuleComplete}
                                 className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
@@ -342,7 +342,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 Next Section <ChevronRight size={18}/>
                             </button>
                         </div>
-                        <div className="bg-slate-50/50 backdrop-blur-xl p-8 rounded-2xl border border-slate-200/60 text-slate-700 text-lg leading-relaxed whitespace-pre-wrap font-medium shadow-sm border-t-white">
+                        <div className="bg-slate-50/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border border-slate-200/60 text-slate-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap font-medium shadow-sm border-t-white">
                             {activeModule.lessonContent}
                         </div>
                     </div>
@@ -428,7 +428,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
         {/* Elevated Glass AI Instructor */}
         {chatOpen && (
-            <div className="w-[400px] border-l bg-white/80 backdrop-blur-3xl flex flex-col animate-in slide-in-from-right-full duration-[800ms] z-[60] shadow-[-32px_0_128px_rgba(0,0,0,0.15)] relative">
+            <div className="w-full md:w-[400px] border-l bg-white/95 md:bg-white/80 backdrop-blur-3xl flex flex-col animate-in slide-in-from-right-full duration-[800ms] z-[60] shadow-[-32px_0_128px_rgba(0,0,0,0.15)] absolute md:relative h-full right-0 top-0">
                 <div className="p-6 border-b bg-[#0f172a] text-white flex items-center justify-between relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-12 opacity-5 rotate-12 scale-150"><MessageSquare size={120}/></div>
                     <div className="flex items-center gap-5 relative z-10">
