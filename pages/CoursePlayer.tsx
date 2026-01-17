@@ -212,7 +212,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
           >
               {sidebarOpen ? <X size={20}/> : <Sidebar size={20}/>}
           </button>
-          <button onClick={() => onNavigate('#/')} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
+          <button onClick={() => window.history.back()} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
           <div>
             <h2 className="text-sm md:text-xl font-black text-slate-900 tracking-tight leading-none mb-1 truncate max-w-[150px] md:max-w-none">{course.title}</h2>
             <div className="flex items-center gap-3">
