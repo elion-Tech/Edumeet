@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Course, User } from '../types';
 import { api } from '../services/apiService';
-import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen } from 'lucide-react';
+import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen, Eye } from 'lucide-react';
 
 interface BrowseCoursesProps {
   user: User;
@@ -196,14 +196,22 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                               <div className="absolute top-0 right-0 w-32 h-full bg-white/5 blur-xl"></div>
                           </button>
                       ) : (
-                          <button 
-                              onClick={() => handleEnrollClick(course)}
-                              disabled={isProcessing}
-                              className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
-                          >
-                              {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
-                              {isProcessing ? 'Processing...' : 'Enroll Now'}
-                          </button>
+                          <div className="flex gap-3">
+                              <button 
+                                  onClick={() => onNavigate(`#/preview-course/${course._id}`)}
+                                  className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-full font-bold hover:bg-slate-200 flex items-center justify-center gap-2 uppercase text-[10px] tracking-widest transition-all active:scale-95"
+                              >
+                                  <Eye size={16} /> Preview
+                              </button>
+                              <button 
+                                  onClick={() => handleEnrollClick(course)}
+                                  disabled={isProcessing}
+                                  className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
+                              >
+                                  {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
+                                  {isProcessing ? 'Processing...' : 'Enroll'}
+                              </button>
+                          </div>
                       )}
                     </div>
                 </div>

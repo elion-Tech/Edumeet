@@ -85,6 +85,8 @@ const App: React.FC = () => {
       content = <CourseEditor user={user} onNavigate={navigate} editCourseId={normalizedRoute.split('/')[2]} />;
   } else if (normalizedRoute.startsWith('/course/')) {
       content = <CoursePlayer user={user} courseId={normalizedRoute.split('/')[2]} onNavigate={navigate} />;
+  } else if (normalizedRoute.startsWith('/preview-course/')) {
+      content = <CoursePlayer user={user} courseId={normalizedRoute.split('/')[2]} onNavigate={navigate} previewMode={true} />;
   } else if (normalizedRoute.startsWith('/reset-password')) {
       content = <ResetPassword onNavigate={navigate} />;
   } else if (normalizedRoute === '/admin') {

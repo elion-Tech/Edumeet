@@ -26,9 +26,9 @@ async function decodeAudioData(data: Uint8Array, ctx: AudioContext, sampleRate: 
   return buffer;
 }
 
-interface CoursePlayerProps { user: User; courseId: string; onNavigate: (path: string) => void; }
+interface CoursePlayerProps { user: User; courseId: string; onNavigate: (path: string) => void; previewMode?: boolean; }
 
-export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNavigate }) => {
+export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNavigate, previewMode = false }) => {
   const [course, setCourse] = useState<Course | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   
   const chatEndRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
-  const isPreview = user.role !== UserRole.STUDENT;
+  const isTutorOrAdmin = user.role !== UserRole.STUDENT;
 
   useEffect(() => { 
     let mounted = true;
@@ -67,13 +67,23 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       const pRes = await api.progress.get(user._id, courseId);
       if (!mounted) return;
       
-      if (pRes.data) {
+      if (previewMode) {
+        // Mock progress for preview mode (only module 0 unlocked conceptually, though we enforce it via UI)
+        setProgress({
+            _id: 'preview-session',
+            userId: user._id,
+            courseId: courseId,
+            completedModuleIds: [],
+            quizResults: [],
+            capstoneStatus: 'pending'
+        } as any);
+      } else if (pRes.data) {
         setProgress(pRes.data);
         if (pRes.data.completedModuleIds.length > 0) {
             const lastIdx = pRes.data.completedModuleIds.length;
             setActiveModuleIdx(Math.min(lastIdx, (courseData.modules?.length ?? 1) - 1));
         }
-      } else if (isPreview) {
+      } else if (isTutorOrAdmin) {
         setProgress({
             _id: 'preview',
             userId: user._id,
@@ -95,7 +105,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
 
   const markModuleComplete = async () => {
-    if (isPreview || !progress || !course) return;
+    if (isTutorOrAdmin || previewMode || !progress || !course) return;
     const currentModule = course.modules[activeModuleIdx];
     if (progress.completedModuleIds.includes(currentModule._id)) return;
     const newProgress = { ...progress, completedModuleIds: [...progress.completedModuleIds, currentModule._id] };
@@ -113,7 +123,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     const result: QuizResult = { quizId: quiz._id, score, passed, attemptedAt: new Date().toISOString() };
     setLastQuizResult({ score, passed });
     setViewMode('result');
-    if (!isPreview) {
+    if (!isTutorOrAdmin && !previewMode) {
         const updatedResults = [...(progress.quizResults || [])];
         updatedResults.push(result);
         const newProgress = { ...progress, quizResults: updatedResults };
@@ -212,7 +222,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
           >
               {sidebarOpen ? <X size={20}/> : <Sidebar size={20}/>}
           </button>
-          <button onClick={() => window.history.back()} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
+          <button onClick={() => onNavigate('#/')} className="p-3 bg-slate-50 hover:bg-orange-600 hover:text-white rounded-full transition-all duration-500 active:scale-90 shadow-sm border border-slate-100"><ArrowLeft size={20}/></button>
           <div>
             <h2 className="text-sm md:text-xl font-black text-slate-900 tracking-tight leading-none mb-1 truncate max-w-[150px] md:max-w-none">{course.title}</h2>
             <div className="flex items-center gap-3">
@@ -221,6 +231,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                   <div className={`w-2 h-2 rounded-full ${midTermPassed ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
                   Mid-Term Clearance
                 </div>
+                {previewMode && <span className="text-[9px] font-bold text-white uppercase tracking-widest bg-rose-500 px-3 py-1 rounded-full shadow-sm animate-pulse">Preview Mode</span>}
             </div>
           </div>
         </div>
@@ -247,18 +258,19 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 {modules.map((m, idx) => {
                     const isCompleted = progress.completedModuleIds.includes(m._id);
                     const isActive = idx === activeModuleIdx && viewMode === 'module';
-                    let isLocked = idx > 0 && !progress.completedModuleIds.includes(modules[idx-1]._id);
+                    let isLocked = idx > 0 && !progress.completedModuleIds.includes(modules[idx-1]._id) && !previewMode;
                     if (idx >= 5 && !midTermPassed) isLocked = true;
+                    if (previewMode && idx > 0) isLocked = true; // Lock everything after module 1 in preview
 
                     return (
                         <button 
                             key={m._id}
-                            disabled={isLocked && !isPreview}
+                            disabled={isLocked && !isTutorOrAdmin}
                             onClick={() => { setViewMode('module'); setActiveModuleIdx(idx); }}
-                            className={`w-full text-left p-3 rounded-2xl transition-all duration-500 flex items-center gap-3 group relative overflow-hidden ${isActive ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/30 translate-x-2' : isLocked && !isPreview ? 'opacity-30 grayscale cursor-not-allowed scale-95' : 'hover:bg-white hover:shadow-sm hover:translate-x-1 text-slate-500'}`}
+                            className={`w-full text-left p-3 rounded-2xl transition-all duration-500 flex items-center gap-3 group relative overflow-hidden ${isActive ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/30 translate-x-2' : isLocked && !isTutorOrAdmin ? 'opacity-30 grayscale cursor-not-allowed scale-95' : 'hover:bg-white hover:shadow-sm hover:translate-x-1 text-slate-500'}`}
                         >
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-500 ${isActive ? 'bg-white/20' : isCompleted ? 'bg-emerald-100 text-emerald-600' : 'bg-white shadow-sm border border-slate-200'}`}>
-                                {isCompleted ? <CheckCircle size={16}/> : isLocked && !isPreview ? <Lock size={14}/> : <span className="text-[10px] font-bold">{idx+1}</span>}
+                                {isCompleted ? <CheckCircle size={16}/> : isLocked && !isTutorOrAdmin ? <Lock size={14}/> : <span className="text-[10px] font-bold">{idx+1}</span>}
                             </div>
                             <span className="text-xs font-bold truncate tracking-tight uppercase group-hover:tracking-wider transition-all">{m.title}</span>
                             {isActive && <div className="absolute right-[-10px] top-0 bottom-0 w-6 bg-white/10 blur-xl"></div>}
@@ -274,27 +286,27 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 </p>
                 <div className="space-y-5">
                     <button 
-                        disabled={!isMidTermReady && !isPreview}
+                        disabled={(!isMidTermReady && !isTutorOrAdmin) || previewMode}
                         onClick={() => { setViewMode('quiz'); setActiveQuizIdx(0); }}
-                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 0 ? 'bg-amber-500 text-white border-amber-500 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-amber-400'}`}
+                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 0 ? 'bg-amber-500 text-white border-amber-500 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-amber-400'}`}
                     >
-                        Mid-term Exam {!isMidTermReady && <Lock size={14}/>}
+                        Mid-term Exam {(!isMidTermReady || previewMode) && <Lock size={14}/>}
                         {midTermPassed && <div className="p-1 bg-white/20 rounded-full"><CheckCircle size={14} className="text-white"/></div>}
                     </button>
                     <button 
-                        disabled={!isFinalReady && !isPreview}
+                        disabled={(!isFinalReady && !isTutorOrAdmin) || previewMode}
                         onClick={() => { setViewMode('quiz'); setActiveQuizIdx(1); }}
-                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 1 ? 'bg-orange-600 text-white border-orange-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'}`}
+                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 1 ? 'bg-orange-600 text-white border-orange-600 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'}`}
                     >
-                        Final Exam {!isFinalReady && <Lock size={14}/>}
+                        Final Exam {(!isFinalReady || previewMode) && <Lock size={14}/>}
                     </button>
                     {course.capstone && (
                       <button 
-                          disabled={!isFinalReady && !isPreview}
+                          disabled={(!isFinalReady && !isTutorOrAdmin) || previewMode}
                           onClick={() => setViewMode('capstone')}
-                          className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'capstone' ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-400'}`}
+                          className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'capstone' ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-400'}`}
                       >
-                          Mastery Project {!isFinalReady && <Lock size={14}/>}
+                          Mastery Project {(!isFinalReady || previewMode) && <Lock size={14}/>}
                       </button>
                     )}
                 </div>
@@ -319,12 +331,19 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     <div className="space-y-10">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8">
                             <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
-                            <button 
-                                onClick={markModuleComplete}
-                                className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
-                            >
-                                {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Mastery Verified ✓' : 'Execute Completion'}
-                            </button>
+                            {!previewMode && (
+                                <button 
+                                    onClick={markModuleComplete}
+                                    className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
+                                >
+                                    {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Mastery Verified ✓' : 'Execute Completion'}
+                                </button>
+                            )}
+                            {previewMode && (
+                                <button onClick={() => onNavigate('#/')} className="px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest bg-orange-600 text-white shadow-lg shadow-orange-600/30 hover:bg-orange-700 transition-all active:scale-95 whitespace-nowrap">
+                                    Enroll to Continue
+                                </button>
+                            )}
                         </div>
                         <div className="flex justify-between items-center">
                             <button 
@@ -334,20 +353,29 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             >
                                 <ChevronLeft size={18}/> Previous Segment
                             </button>
-                            <button 
-                                disabled={activeModuleIdx === modules.length - 1 || (!progress.completedModuleIds.includes(activeModule._id) && !isPreview) || (activeModuleIdx === 4 && !midTermPassed && !isPreview)}
-                                onClick={() => setActiveModuleIdx(activeModuleIdx + 1)}
-                                className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
-                            >
-                                Next Section <ChevronRight size={18}/>
-                            </button>
+                            {!previewMode ? (
+                                <button 
+                                    disabled={activeModuleIdx === modules.length - 1 || (!progress.completedModuleIds.includes(activeModule._id) && !isTutorOrAdmin) || (activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                    onClick={() => setActiveModuleIdx(activeModuleIdx + 1)}
+                                    className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
+                                >
+                                    Next Section <ChevronRight size={18}/>
+                                </button>
+                            ) : (
+                                <button 
+                                    onClick={() => onNavigate('#/')}
+                                    className="px-6 py-3 rounded-xl bg-orange-600 text-white font-bold text-[10px] uppercase tracking-widest hover:bg-orange-700 shadow-lg transition-all flex items-center gap-3 active:scale-95"
+                                >
+                                    Unlock Full Course <Lock size={14}/>
+                                </button>
+                            )}
                         </div>
                         <div className="bg-slate-50/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border border-slate-200/60 text-slate-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap font-medium shadow-sm border-t-white">
                             {activeModule.lessonContent}
                         </div>
                     </div>
 
-                    {activeModuleIdx === 4 && !midTermPassed && !isPreview && (
+                    {activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin && !previewMode && (
                         <div className="mt-8 p-6 bg-amber-50/90 backdrop-blur-3xl border border-amber-200 rounded-2xl flex items-center gap-6 text-amber-900 animate-in fade-in slide-in-from-top-10 shadow-xl shadow-amber-500/10 ring-4 ring-amber-500/5">
                             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-500 shadow-lg shadow-amber-500/20 shrink-0 animate-bounce"><Lock size={24}/></div>
                             <div className="text-sm font-bold leading-relaxed">
