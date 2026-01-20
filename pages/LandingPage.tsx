@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X } from 'lucide-react';
+import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X, User as UserIcon } from 'lucide-react';
+import { api } from '../services/apiService';
+import { Course } from '../types';
 
 interface LandingPageProps {
   onNavigate: (path: string) => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
+  const [courses, setCourses] = useState<Course[]>([]);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
+    loadCourses();
   }, []);
+
+  const loadCourses = async () => {
+    const res = await api.courses.getAll();
+    if (res.data) setCourses(res.data.filter(c => c.published !== false).slice(0, 3));
+  };
 
   const testimonials = [
     { name: "Amara Okafor", role: "Computer Science Student, Lagos", text: "The AI assistant clarified complex algorithms instantly. It's like having a study partner available 24/7 to answer my specific questions." },
@@ -164,23 +173,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
              </div>
 
              <div className="grid md:grid-cols-3 gap-8">
-                {[1, 2, 3].map((i) => (
-                   <div key={i} className="group bg-white/60 backdrop-blur-md border border-white/60 rounded-[32px] p-4 hover:bg-white transition-all hover:shadow-xl hover:shadow-slate-200/50 cursor-pointer">
+                {courses.map((course, i) => (
+                   <div key={course._id} onClick={() => onNavigate('#/login')} className="group bg-white/60 backdrop-blur-md border border-white/60 rounded-[32px] p-4 hover:bg-white transition-all hover:shadow-xl hover:shadow-slate-200/50 cursor-pointer h-32 md:h-auto flex flex-row md:flex-col gap-4 md:gap-0">
                       <div className="aspect-[4/3] bg-slate-200 rounded-[24px] mb-6 overflow-hidden relative">
-                         <img src={`/Images/Course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
+                         <img src={course.thumbnailUrl || `/Images/Course-${i + 1}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail" onError={(e) => e.currentTarget.src = `/Images/Course-${i + 1}.jpg`}/>
                          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-900">
                             Premium
                          </div>
                       </div>
-                      <div className="px-2 pb-2">
+                      <div className="px-2 pb-2 flex-1">
                          <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">{i === 1 ? 'Leadership' : i === 2 ? 'Finance' : 'Technology'}</span>
-                            <span className="text-xs font-bold text-slate-400">2h 15m</span>
+                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">Course</span>
+                            <span className="text-xs font-bold text-slate-400">{course.modules?.length || 0} Modules</span>
                          </div>
-                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{i === 1 ? 'AI-Driven Strategic Management' : i === 2 ? 'Global Finance & Fintech' : 'Applied AI for Business'}</h3>
+                         <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">{course.title}</h3>
                          <div className="flex items-center gap-2 text-sm text-slate-500">
-                            <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
-                            <span className="font-medium">By {i === 1 ? 'Dr. Tunde Bakare' : i === 2 ? 'Chioma Eze' : 'David Osei'}</span>
+                            <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center"><UserIcon size={12}/></div>
+                            <span className="font-medium truncate">By {course.tutorName}</span>
                          </div>
                       </div>
                    </div>
