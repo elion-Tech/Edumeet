@@ -148,7 +148,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                 let finalThumb = course.thumbnailUrl || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800');
 
                 return (
-                <div key={course._id} className="group bg-white rounded-[32px] shadow-lg border border-slate-200/60 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative">
+                <div key={course._id} className="group bg-white rounded-[32px] shadow-lg border border-slate-200/60 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex flex-col h-full relative h-32 md:h-48">
                     <div className="h-48 relative overflow-hidden bg-slate-900">
                         <img 
                             src={finalThumb} 
