@@ -319,7 +319,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 <div className="max-w-6xl mx-auto space-y-16 pb-40">
                     <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
                         {videoId ? (
-                            <div ref={playerContainerRef} className="w-full h-full" />
+                            <div key={videoId} ref={playerContainerRef} className="w-full h-full" />
                         ) : (
                             <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-100">
                                 <Video size={48} className="mb-4 opacity-50" />

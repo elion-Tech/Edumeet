@@ -18,6 +18,8 @@ export const useYouTubePlayer = ({ videoId, onStateChange }: UseYouTubePlayerPro
     const initPlayer = async () => {
       await loadYouTubeAPI();
       
+      if (!window.YT || !window.YT.Player) return;
+
       if (!isMounted || !containerRef.current) return;
 
       // Create a dedicated target element for the player to replace

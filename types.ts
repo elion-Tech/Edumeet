@@ -70,6 +70,7 @@ export interface Course {
   capstone?: Capstone;
   createdAt: string;
   published: boolean;
+  approvalStatus?: 'draft' | 'pending' | 'approved' | 'rejected';
   liveSession?: LiveSession;
   geminiCacheName?: string;
 }

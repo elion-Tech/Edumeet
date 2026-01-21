@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Course, User, UserRole } from '../types';
 import { api } from '../services/apiService';
-import { Users, BookOpen, Shield, Trash2, Activity, Database, Unlock, Ban, Loader2, Search, Mail, X, UserPlus, ShieldCheck, Zap, Globe, Eye, EyeOff, Edit, PlusCircle, UserMinus, Send } from 'lucide-react';
+import { Users, BookOpen, Shield, Trash2, Activity, Database, Unlock, Ban, Loader2, Search, Mail, X, UserPlus, ShieldCheck, Zap, Globe, Eye, EyeOff, Edit, PlusCircle, UserMinus, Send, CheckCircle, XCircle } from 'lucide-react';
 
 interface AdminPanelProps {
   user: User;
@@ -97,6 +97,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       if (!confirm('Permanently delete this course and all associated data?')) return;
       setActionLoading(`del-course-${courseId}`);
       await api.courses.delete(courseId);
+      await loadData();
+      setActionLoading(null);
+  };
+
+  const handleApproveCourse = async (courseId: string) => {
+      if (!confirm('Approve this course for public listing?')) return;
+      setActionLoading(`approve-course-${courseId}`);
+      await api.courses.update(courseId, { published: true, approvalStatus: 'approved' });
+      await loadData();
+      setActionLoading(null);
+  };
+
+  const handleRejectCourse = async (courseId: string) => {
+      if (!confirm('Reject this course? It will remain in draft mode.')) return;
+      setActionLoading(`reject-course-${courseId}`);
+      await api.courses.update(courseId, { published: false, approvalStatus: 'rejected' });
       await loadData();
       setActionLoading(null);
   };
@@ -228,7 +244,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="bg-slate-50/50 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
-                            <tr><th className="px-8 py-5">Course Title</th><th className="px-8 py-5">Instructor</th><th className="px-8 py-5">Price</th><th className="px-8 py-5">Status</th><th className="px-8 py-5 text-right">Actions</th></tr>
+                            <tr><th className="px-8 py-5">Course Title</th><th className="px-8 py-5">Instructor</th><th className="px-8 py-5">Price</th><th className="px-8 py-5">Status</th><th className="px-8 py-5">Approval</th><th className="px-8 py-5 text-right">Actions</th></tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredCourses.map(c => (
@@ -249,8 +265,24 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                             {c.published ? 'Published' : 'Draft'}
                                         </div>
                                     </td>
+                                    <td className="px-8 py-5">
+                                        <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full border ${
+                                            c.approvalStatus === 'approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                                            c.approvalStatus === 'rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                                            c.approvalStatus === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                            'bg-slate-50 text-slate-400 border-slate-200'
+                                        }`}>
+                                            {c.approvalStatus || 'Draft'}
+                                        </span>
+                                    </td>
                                     <td className="px-8 py-5 text-right flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600"><Edit size={18}/></button>
+                                        {c.approvalStatus === 'pending' && (
+                                            <button onClick={() => handleApproveCourse(c._id)} className="p-2.5 bg-emerald-50 border border-emerald-100 text-emerald-600 hover:bg-emerald-100 rounded-full transition-all" title="Approve"><CheckCircle size={18}/></button>
+                                        )}
+                                        {c.approvalStatus === 'pending' && (
+                                            <button onClick={() => handleRejectCourse(c._id)} className="p-2.5 bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 rounded-full transition-all" title="Reject"><XCircle size={18}/></button>
+                                        )}
                                         <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"><Trash2 size={18}/></button>
                                     </td>
                                 </tr>
