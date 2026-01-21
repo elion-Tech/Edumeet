@@ -104,7 +104,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
   const handleApproveCourse = async (courseId: string) => {
       if (!confirm('Approve this course for public listing?')) return;
       setActionLoading(`approve-course-${courseId}`);
-      await api.courses.update(courseId, { published: true, approvalStatus: 'approved' });
+      const courseToUpdate = courses.find(c => c._id === courseId);
+      if (courseToUpdate) {
+          await api.courses.save({ ...courseToUpdate, published: true, approvalStatus: 'approved' });
+      }
       await loadData();
       setActionLoading(null);
   };
@@ -112,7 +115,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
   const handleRejectCourse = async (courseId: string) => {
       if (!confirm('Reject this course? It will remain in draft mode.')) return;
       setActionLoading(`reject-course-${courseId}`);
-      await api.courses.update(courseId, { published: false, approvalStatus: 'rejected' });
+      const courseToUpdate = courses.find(c => c._id === courseId);
+      if (courseToUpdate) {
+          await api.courses.save({ ...courseToUpdate, published: false, approvalStatus: 'rejected' });
+      }
       await loadData();
       setActionLoading(null);
   };
@@ -120,7 +126,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
   const handleTogglePublish = async (course: Course) => {
       const newStatus = !course.published;
       setActionLoading(`pub-course-${course._id}`);
-      await api.courses.update(course._id, { published: newStatus });
+      await api.courses.save({ ...course, published: newStatus });
       await loadData();
       setActionLoading(null);
   };
