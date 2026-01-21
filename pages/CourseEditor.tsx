@@ -214,7 +214,7 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
       tutorId: finalTutorId,
       tutorName: finalTutorName,
       createdAt: isEditing ? originalCourse.createdAt : new Date().toISOString(),
-      published: true,
+      published: false,
       modules,
       quizzes,
       capstone: capstone 

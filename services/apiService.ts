@@ -64,6 +64,7 @@ export const api = {
     getById: (id: string) => request<Course>(`/api/courses/${id}`),
     save: (course: Course) => request<Course>('/api/courses', { method: 'POST', body: JSON.stringify(course) }),
     delete: (id: string) => request<void>(`/api/courses/${id}`, { method: 'DELETE' }),
+    // Connects to PATCH /api/courses/:id/publish -> CourseController.togglePublish
     togglePublish: (id: string, published: boolean) => request<void>(`/api/courses/${id}/publish`, { method: 'PATCH', body: JSON.stringify({ published }) }),
     scheduleLive: (courseId: string, session: LiveSession) => request<void>(`/api/courses/${courseId}/live`, { method: 'POST', body: JSON.stringify(session) }),
     getEnrolledStudents: (courseId: string) => request<{user: User, progress: Progress | null}[]>(`/api/courses/${courseId}/students`)
