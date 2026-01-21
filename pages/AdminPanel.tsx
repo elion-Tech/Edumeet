@@ -36,7 +36,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
   const loadData = async () => {
     setLoading(true);
-    const [c, u] = await Promise.all([api.courses.getAll(), api.users.getAll()]);
+    const [c, u] = await Promise.all([api.courses.getAll('all'), api.users.getAll()]);
     setCourses(Array.isArray(c.data) ? c.data.filter(Boolean) : []);
     setUsers(Array.isArray(u.data) ? u.data.filter(Boolean) : []);
     setLoading(false);

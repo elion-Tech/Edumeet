@@ -60,7 +60,7 @@ export const api = {
     }
   },
   courses: {
-    getAll: () => request<Course[]>('/api/courses'),
+    getAll: (view?: string) => request<Course[]>(`/api/courses${view ? `?view=${view}` : ''}`),
     getById: (id: string) => request<Course>(`/api/courses/${id}`),
     save: (course: Course) => request<Course>('/api/courses', { method: 'POST', body: JSON.stringify(course) }),
     delete: (id: string) => request<void>(`/api/courses/${id}`, { method: 'DELETE' }),

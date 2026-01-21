@@ -33,7 +33,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
 
   const loadData = async () => {
     setLoading(true);
-    const res = await api.courses.getAll();
+    const res = await api.courses.getAll('all');
     const allCourses = res.data ?? [];
     const filtered = user.role === UserRole.TUTOR ? allCourses.filter(c => c.tutorId === user._id) : allCourses;
     setCourses(filtered);
