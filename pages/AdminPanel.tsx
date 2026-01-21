@@ -117,6 +117,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       setActionLoading(null);
   };
 
+  const handleTogglePublish = async (course: Course) => {
+      const newStatus = !course.published;
+      setActionLoading(`pub-course-${course._id}`);
+      await api.courses.update(course._id, { published: newStatus });
+      await loadData();
+      setActionLoading(null);
+  };
+
   const handleSendMessage = async () => {
       if (!userMsgModal || !adminMessage.trim()) return;
       setActionLoading(`msg-${userMsgModal.userId}`);
@@ -283,6 +291,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         {c.approvalStatus === 'pending' && (
                                             <button onClick={() => handleRejectCourse(c._id)} className="p-2.5 bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 rounded-full transition-all" title="Reject"><XCircle size={18}/></button>
                                         )}
+                                        <button onClick={() => handleTogglePublish(c)} className={`p-2.5 border rounded-full transition-all ${c.published ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200'}`} title={c.published ? "Unpublish" : "Publish"}>{c.published ? <Eye size={18}/> : <EyeOff size={18}/>}</button>
                                         <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"><Trash2 size={18}/></button>
                                     </td>
                                 </tr>
