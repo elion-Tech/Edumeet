@@ -64,7 +64,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
       if (courseData.modules) courseData.modules = courseData.modules.filter(Boolean);
       
       setCourse(courseData);
-      const pRes = await api.progress.get(user._id, courseId);
+      
+      let pRes = { data: null };
+      if (!previewMode && !isTutorOrAdmin) {
+          pRes = await api.progress.get(user._id, courseId) as any;
+      }
+      
       if (!mounted) return;
       
       if (previewMode) {
@@ -77,7 +82,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             quizResults: [],
             capstoneStatus: 'pending'
         } as any);
-      } else if (pRes.data) {
+      } else if (pRes && pRes.data) {
         setProgress(pRes.data);
         if (pRes.data.completedModuleIds.length > 0) {
             const lastIdx = pRes.data.completedModuleIds.length;
