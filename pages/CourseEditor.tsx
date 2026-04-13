@@ -199,6 +199,7 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
       return alert(`Course MUST have exactly 10 modules. You have ${modules.length}.`);
     }
     
+    
     setSaving(true);
     
     const isEditing = !!editCourseId && !!originalCourse;
