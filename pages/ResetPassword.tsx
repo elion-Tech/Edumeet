@@ -14,6 +14,7 @@ export const ResetPassword = () => {
         const tokenMatch = href.match(/[?&]token=([^&#]+)/);
         const tokenParam = tokenMatch ? tokenMatch[1] : null;
         
+        console.log("ResetPassword: Initializing with token:", tokenParam);
         if (tokenParam) {
             setToken(tokenParam);
         } else {
@@ -33,6 +34,7 @@ export const ResetPassword = () => {
         setStatus('loading');
         try {
             const apiUrl = import.meta.env.VITE_API_URL || '';
+            console.log("ResetPassword: Submitting to", apiUrl, "with token", token);
             const response = await fetch(`${apiUrl}/api/users/reset-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
