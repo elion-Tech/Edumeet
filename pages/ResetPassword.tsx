@@ -1,69 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { resetPassword } from '../services/authService';
-import { Loader2, Key, ArrowRight } from 'lucide-react';
+import { Loader2, Lock, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
 
-interface ResetPasswordProps {
-  onNavigate: (path: string) => void;
-}
+export const ResetPassword = () => {
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [token, setToken] = useState<string | null>(null);
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [message, setMessage] = useState('');
 
-export const ResetPassword: React.FC<ResetPasswordProps> = ({ onNavigate }) => {
-  const [token, setToken] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+    useEffect(() => {
+        // Extract token from the hash URL: #/reset-password?token=...
+        const hash = window.location.hash;
+        const urlParams = new URLSearchParams(hash.split('?')[1]);
+        const tokenParam = urlParams.get('token');
+        
+        if (tokenParam) {
+            setToken(tokenParam);
+        } else {
+            setStatus('error');
+            setMessage('Invalid or missing reset token.');
+        }
+    }, []);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.hash.split('?')[1]);
-    const tokenFromUrl = params.get('token');
-    if (tokenFromUrl) {
-      setToken(tokenFromUrl);
-    } else {
-      setError("No reset token found. Please request a new reset link.");
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newPassword !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        setStatus('loading');
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || '';
+            const response = await fetch(`${apiUrl}/api/users/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus('success');
+                setMessage(data.message || 'Password updated successfully!');
+            } else {
+                setStatus('error');
+                setMessage(data.error || 'Failed to reset password.');
+            }
+        } catch (err) {
+            setStatus('error');
+            setMessage('A connection error occurred. Please try again.');
+        }
+    };
+
+    if (status === 'success') {
+        return (
+            <div className="min-h-[70vh] flex items-center justify-center p-6">
+                <div className="glass p-10 rounded-[32px] max-w-md w-full text-center space-y-6 shadow-2xl border-orange-100">
+                    <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto text-green-600">
+                        <CheckCircle2 size={40} />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900">Success!</h2>
+                    <p className="text-slate-500 font-medium">{message}</p>
+                    <button 
+                        onClick={() => window.location.hash = '#/login'} 
+                        className="w-full bg-slate-900 text-white py-4 rounded-full font-bold flex items-center justify-center gap-3 hover:bg-black transition-all"
+                    >
+                        Go to Login <ArrowRight size={18} />
+                    </button>
+                </div>
+            </div>
+        );
     }
-  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    if (!token) {
-      setError("Invalid or missing reset token.");
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      await resetPassword(token, password);
-      setSuccess(true);
-      setTimeout(() => onNavigate('/login'), 3000);
-    } catch (err: any) {
-      setError(err.message || "Failed to reset password.");
-    }
-    setLoading(false);
-  };
+    return (
+        <div className="min-h-[70vh] flex items-center justify-center p-6">
+            <div className="glass p-8 md:p-12 rounded-[32px] max-w-md w-full space-y-8 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-500 to-rose-600"></div>
+                
+                <div className="text-center">
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Reset <span className="text-orange-600">Password</span></h2>
+                    <p className="text-slate-500 mt-2 font-medium">Please enter your new secure password.</p>
+                </div>
 
-  if (success) {
-    return <div className="text-center p-10 bg-white rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold text-emerald-600 mb-2">Password Reset Successfully!</h2>
-        <p className="text-slate-600">Redirecting you to the login page...</p>
-    </div>;
-  }
-
-  return (
-    <div className="max-w-md mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl">
-      <h2 className="text-2xl font-black text-slate-900 mb-6">Set New Password</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="text-rose-600 bg-rose-50 p-3 rounded-lg">{error}</p>}
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New Password" required className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800" />
-        <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm New Password" required className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800" />
-        <button type="submit" disabled={loading || !token} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20">
-          {loading ? <Loader2 className="animate-spin" /> : 'Reset Password'}
-        </button>
-      </form>
-    </div>
-  );
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">New Password</label>
+                        <div className="relative group">
+                            <Lock className="absolute left-4 top-4 text-slate-400 group-focus-within:text-orange-600 transition-colors" size={20} />
+                            <input 
+                                type="password" 
+                                required 
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                className="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 outline-none transition-all font-bold"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            required 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-600/5 focus:border-orange-600 outline-none transition-all font-bold"
+                        />
+                    </div>
+                    <button 
+                        disabled={status === 'loading' || !token}
+                        className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white py-4 rounded-full font-bold shadow-lg hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-3 uppercase text-xs tracking-widest"
+                    >
+                        {status === 'loading' ? <Loader2 className="animate-spin" size={18} /> : 'Update Password'}
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
 };

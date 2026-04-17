@@ -64,6 +64,7 @@ const App: React.FC = () => {
         </div>
       );
     }
+    if (normalizedRoute.startsWith('/reset-password')) return <ResetPassword />;
     if (normalizedRoute === '/about') return <AboutUs onNavigate={navigate} />;
     if (normalizedRoute === '/contact') return <ContactUs onNavigate={navigate} />;
     return <LandingPage onNavigate={navigate} />;
