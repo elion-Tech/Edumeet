@@ -12,7 +12,52 @@ interface BrowseCoursesProps {
 }
 
 const PAYSTACK_PUBLIC_KEY = process.env.PAYSTACK_PUBLIC_KEY || '';
-const TEST_PAYMENT_EMAIL = 'igweokwuekene@gmail.com';
+
+interface EnrollmentButtonProps {
+  course: Course;
+  user: User;
+  isProcessing: boolean;
+  onSuccess: (courseId: string) => void;
+  onCancel: () => void;
+  onStart: (courseId: string) => void;
+}
+
+const EnrollmentButton: React.FC<EnrollmentButtonProps> = ({ course, user, isProcessing, onSuccess, onCancel, onStart }) => {
+  const config = {
+    reference: `EDM_${Date.now()}_${user._id.slice(-4)}`,
+    email: user.email,
+    amount: Math.ceil(course.price * 100), // Amount in kobo
+    publicKey: PAYSTACK_PUBLIC_KEY,
+    currency: 'NGN',
+    metadata: {
+      custom_fields: [
+        { display_name: "Course Title", variable_name: "course_title", value: course.title },
+        { display_name: "User ID", variable_name: "user_id", value: user._id }
+      ]
+    }
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const handleAction = () => {
+    onStart(course._id);
+    initializePayment({
+      onSuccess: () => onSuccess(course._id),
+      onClose: onCancel
+    });
+  };
+
+  return (
+    <button 
+      onClick={handleAction}
+      disabled={isProcessing}
+      className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
+    >
+      {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
+      {isProcessing ? 'Processing...' : 'Enroll'}
+    </button>
+  );
+};
 
 export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, onEnrollSuccess }) => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -39,35 +84,12 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
     setEnrollingId(null);
   };
 
-  // Paystack configuration for the hook
-  const paystackConfig = (course: Course) => ({
-    reference: 'EDM_' + Date.now() + '_' + user._id,
-    email: user.email, // Use the actual user's email
-    amount: Math.ceil(course.price * 100), // Amount in kobo
-    publicKey: PAYSTACK_PUBLIC_KEY,
-    currency: 'NGN',
-    metadata: {
-      courseId: course._id,
-      userId: user._id,
-    },
-  });
-
-  // Initialize Paystack hook (this will be called inside handlePayAndEnroll)
-  const initializePayment = usePaystackPayment({} as any); // Initial empty config, will be updated dynamically
-
-  const handlePayAndEnroll = (course: Course) => {
-      setEnrollingId(course._id);
-      initializePayment({
-        ...paystackConfig(course),
-        onSuccess: () => handleEnrollLogic(course._id),
-        onClose: () => setEnrollingId(null),
-      });
-  };
-
   const handleEnrollClick = (course: Course) => {
       if ((user.enrolledCourseIds?.length ?? 0) >= 3) { alert("Enrollment Limit Reached (Max 3)."); return; }
-      if (course.price > 0) handlePayAndEnroll(course);
-      else { setEnrollingId(course._id); handleEnrollLogic(course._id); }
+      if (course.price <= 0) { 
+        setEnrollingId(course._id); 
+        handleEnrollLogic(course._id); 
+      }
   };
 
   const getYoutubeId = (url: string) => {
@@ -213,14 +235,25 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                               >
                                   <Eye size={16} /> Preview
                               </button>
-                              <button 
-                                  onClick={() => handleEnrollClick(course)}
-                                  disabled={isProcessing}
-                                  className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
-                              >
-                                  {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
-                                  {isProcessing ? 'Processing...' : 'Enroll'}
-                              </button>
+                              {course.price > 0 ? (
+                                <EnrollmentButton 
+                                  course={course} 
+                                  user={user} 
+                                  isProcessing={isProcessing} 
+                                  onSuccess={handleEnrollLogic} 
+                                  onCancel={() => setEnrollingId(null)}
+                                  onStart={setEnrollingId}
+                                />
+                              ) : (
+                                <button 
+                                    onClick={() => handleEnrollClick(course)}
+                                    disabled={isProcessing}
+                                    className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
+                                >
+                                    {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CreditCard size={16} />}
+                                    {isProcessing ? 'Processing...' : 'Enroll'}
+                                </button>
+                              )}
                           </div>
                       )}
                     </div>
