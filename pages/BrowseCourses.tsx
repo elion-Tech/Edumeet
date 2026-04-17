@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Course, User } from '../types';
+import { usePaystackPayment } from 'react-paystack';
 import { api } from '../services/apiService';
 import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen, Eye } from 'lucide-react';
 
@@ -38,20 +39,29 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
     setEnrollingId(null);
   };
 
+  // Paystack configuration for the hook
+  const paystackConfig = (course: Course) => ({
+    reference: 'EDM_' + Date.now() + '_' + user._id,
+    email: user.email, // Use the actual user's email
+    amount: Math.ceil(course.price * 100), // Amount in kobo
+    publicKey: PAYSTACK_PUBLIC_KEY,
+    currency: 'NGN',
+    metadata: {
+      courseId: course._id,
+      userId: user._id,
+    },
+  });
+
+  // Initialize Paystack hook (this will be called inside handlePayAndEnroll)
+  const initializePayment = usePaystackPayment({} as any); // Initial empty config, will be updated dynamically
+
   const handlePayAndEnroll = (course: Course) => {
       setEnrollingId(course._id);
-      const PaystackPop = (window as any).PaystackPop;
-      if (!PaystackPop) { alert("Payment gateway failed to load."); setEnrollingId(null); return; }
-      const handler = PaystackPop.setup({
-          key: PAYSTACK_PUBLIC_KEY,
-          email: TEST_PAYMENT_EMAIL,
-          amount: Math.ceil(course.price * 100),
-          currency: 'NGN',
-          ref: 'EDM_' + Date.now(),
-          callback: () => handleEnrollLogic(course._id),
-          onClose: () => setEnrollingId(null)
+      initializePayment({
+        ...paystackConfig(course),
+        onSuccess: () => handleEnrollLogic(course._id),
+        onClose: () => setEnrollingId(null),
       });
-      handler.openIframe();
   };
 
   const handleEnrollClick = (course: Course) => {
