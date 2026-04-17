@@ -9,14 +9,15 @@ export const ResetPassword = () => {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        // Extract token from the hash URL: #/reset-password?token=...
-        const hash = window.location.hash;
-        const urlParams = new URLSearchParams(hash.split('?')[1]);
-        const tokenParam = urlParams.get('token');
+        // More robust token extraction from hash-based routing
+        const href = window.location.href;
+        const tokenMatch = href.match(/[?&]token=([^&#]+)/);
+        const tokenParam = tokenMatch ? tokenMatch[1] : null;
         
         if (tokenParam) {
             setToken(tokenParam);
         } else {
+            console.warn("ResetPassword: No token found in URL");
             setStatus('error');
             setMessage('Invalid or missing reset token.');
         }
