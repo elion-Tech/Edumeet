@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X, BookOpen, PenTool, MessageSquare, Target, Zap, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X, BookOpen, PenTool, MessageSquare, Target, Zap, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 interface LandingPageProps {
   onNavigate: (path: string) => void;
