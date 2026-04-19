@@ -10,6 +10,7 @@ interface AdminPanelProps {
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'server'>('overview');
+  const [userSubTab, setUserSubTab] = useState<UserRole | 'all'>('all');
   const [courses, setCourses] = useState<Course[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,10 +128,24 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       setActionLoading(null);
   };
 
-  const filteredUsers = users.filter(u => 
-    (u?.name || '').toLowerCase().includes(userSearch.toLowerCase()) ||
-    (u?.email || '').toLowerCase().includes(userSearch.toLowerCase())
-  );
+  // Advanced filtering logic for user categories
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = (u?.name || '').toLowerCase().includes(userSearch.toLowerCase()) ||
+                         (u?.email || '').toLowerCase().includes(userSearch.toLowerCase());
+    const matchesRole = userSubTab === 'all' ? true : u.role === userSubTab;
+    return matchesSearch && matchesRole;
+  });
+
+  // Revenue estimation logic based on enrollment data
+  const calculateEstimatedRevenue = () => {
+    return courses.reduce((total, course) => {
+        const enrollmentCount = users.filter(u => 
+            u.role === UserRole.STUDENT && 
+            u.enrolledCourseIds?.includes(course._id)
+        ).length;
+        return total + (course.price * enrollmentCount);
+    }, 0);
+  };
 
   const filteredCourses = courses.filter(c => 
     (c?.title || '').toLowerCase().includes(courseSearch.toLowerCase()) ||
@@ -162,10 +177,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Students', val: users.length, icon: Users, color: 'orange' },
-                    { label: 'Status', val: 'ONLINE', icon: Globe, color: 'slate' },
-                    { label: 'Courses', val: courses.length, icon: BookOpen, color: 'rose' },
-                    { label: 'Database', val: 'MongoDB Atlas', icon: Database, color: 'emerald' }
+                    { label: 'Total Students', val: users.filter(u => u.role === UserRole.STUDENT).length, icon: Users, color: 'orange' },
+                    { label: 'Instructors', val: users.filter(u => u.role === UserRole.TUTOR).length, icon: ShieldCheck, color: 'blue' },
+                    { label: 'Est. Revenue', val: `₦${calculateEstimatedRevenue().toLocaleString()}`, icon: Zap, color: 'emerald' },
+                    { label: 'Active Courses', val: courses.length, icon: BookOpen, color: 'rose' }
                 ].map((stat, i) => (
                     <div key={i} className="bg-white p-8 rounded-[32px] shadow-xl shadow-slate-200/50 border border-white flex items-center gap-6 hover:-translate-y-1 transition-transform duration-300">
                         <div className={`p-4 bg-${stat.color}-50 text-${stat.color}-600 rounded-2xl`}><stat.icon size={24}/></div>
@@ -184,7 +199,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
             <div className="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-xl shadow-slate-200/50">
                 <div className="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-50/30">
-                    <h3 className="font-bold text-slate-700 text-sm uppercase tracking-widest">Search Users</h3>
+                    <div className="flex bg-white p-1 rounded-2xl border border-slate-200">
+                        {(['all', UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN] as const).map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setUserSubTab(tab)}
+                                className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${userSubTab === tab ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                            >
+                                {tab === 'all' ? 'All Users' : tab + 's'}
+                            </button>
+                        ))}
+                    </div>
                     <div className="relative w-full md:w-96">
                         <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
                         <input placeholder="Filter by name/email..." className="w-full pl-12 pr-6 py-3 bg-white border border-slate-200 rounded-full text-sm font-semibold outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all shadow-sm" value={userSearch} onChange={e => setUserSearch(e.target.value)} />
