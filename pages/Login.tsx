@@ -20,14 +20,20 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [role, setRole] = useState<UserRole>(UserRole.STUDENT);
+  const [role, setRole] = useState<UserRole | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (view === 'register' && !confirmRole) {
-      setConfirmRole(true);
-      return;
+    if (view === 'register') {
+      if (!role) {
+        setError({ message: "Please select your role (Scholar or Instructor) before proceeding." });
+        return;
+      }
+      if (!confirmRole) {
+        setConfirmRole(true);
+        return;
+      }
     }
 
     setLoading(true);
@@ -38,7 +44,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
       if (view === 'login') {
         user = await login(email, password);
       } else {
-        user = await signup(name, email, password, phoneNumber, role);
+        user = await signup(name, email, password, phoneNumber, role as UserRole);
       }
       onLogin(user);
     } catch (err: any) {
