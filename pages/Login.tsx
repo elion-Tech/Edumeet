@@ -56,6 +56,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   const handleSwitchView = (newView: 'login' | 'register' | 'forgot') => {
     setView(newView);
     setConfirmRole(false);
+    setRole(null);
     setError(null);
   };
 
@@ -200,10 +201,10 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
                                 <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
                             </div>
                             <div className="grid grid-cols-2 gap-4 pt-2">
-                                <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-orange-500 bg-orange-50 text-orange-700 shadow-md' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
                                     <GraduationCap size={24} /> <span className="text-xs font-bold">Scholar</span>
                                 </button>
-                                <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-orange-500 bg-orange-50 text-orange-700 shadow-md' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
                                     <Sparkles size={24} /> <span className="text-xs font-bold">Instructor</span>
                                 </button>
                             </div>
