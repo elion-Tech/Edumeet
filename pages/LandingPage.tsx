@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X } from 'lucide-react';
+import { ArrowRight, Star, Users, Play, Award, ChevronLeft, ChevronRight, Sparkles, Menu, X, BookOpen, PenTool, MessageSquare, Target, Zap, ShieldCheck } from 'lucide-react';
 
 interface LandingPageProps {
   onNavigate: (path: string) => void;
@@ -83,21 +83,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 <div className="relative">
                    <div className="absolute -inset-4 bg-white/40 backdrop-blur-xl rounded-[32px] -z-10 border border-white/50 shadow-xl shadow-slate-200/50"></div>
                    <h1 className="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight text-slate-900">
-                      Africa's Learning <br/>
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-500">Revolution.</span>
+                      Learn Better. <br/>
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-500">Teach Smarter.</span>
                    </h1>
                 </div>
 
                 <p className="text-lg text-slate-600 leading-relaxed max-w-md font-medium">
-                   Master Management, Leadership, and Finance with seamless AI integration. Promoting African innovation for global adoption.
+                   Edumeet is a guided, AI-powered learning platform that transforms online education from passive content into structured, interactive, and outcome-driven learning.
                 </p>
 
                 <div className="flex items-center gap-4">
                    <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
-                      Start Tutoring <ArrowRight size={18}/>
+                      Start Learning <ArrowRight size={18}/>
                    </button>
                    <button onClick={() => onNavigate('#/login')} className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-sm uppercase tracking-widest shadow-lg shadow-orange-600/30 hover:shadow-orange-600/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
-                      Start learning <ArrowRight size={18}/>
+                      Create a Course <ArrowRight size={18}/>
                    </button>
                 </div>
              </div>
@@ -129,6 +129,128 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </div>
        </section>
 
+       {/* The Problem & Solution Section */}
+       <section className="py-24 px-6 bg-white relative">
+          <div className="max-w-7xl mx-auto">
+             <div className="grid lg:grid-cols-2 gap-20 items-start">
+                <div className="space-y-6">
+                   <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-rose-500">The Problem</h2>
+                   <h3 className="text-4xl font-black text-slate-900 leading-tight">
+                      Online learning is everywhere—<br/>
+                      <span className="text-slate-400">but real learning is not.</span>
+                   </h3>
+                   <div className="space-y-4 text-slate-600 font-medium">
+                      <p>Most platforms focus on content, not outcomes. Learners struggle to stay consistent, ask questions, and complete courses.</p>
+                      <p>For African tutors, limited tools and complex setups make it difficult to create structured, engaging knowledge sharing environments.</p>
+                   </div>
+                   <div className="pt-6 flex gap-8">
+                      {['Low Completion', 'Low Engagement', 'Untapped Potential'].map((text, i) => (
+                         <div key={i} className="flex flex-col gap-1">
+                            <span className="text-xl font-black text-slate-900">{i === 2 ? '∞' : '↓'}</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{text}</span>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="glass p-10 md:p-12 rounded-[40px] border-orange-100 shadow-2xl shadow-orange-500/5 space-y-8">
+                   <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-orange-600">Our Solution</h2>
+                   <h3 className="text-3xl font-black text-slate-900">Edumeet is built to fix this.</h3>
+                   <p className="text-slate-600 font-medium">We combine AI tutoring, structured learning paths, and interactive content to create an experience that actually works.</p>
+                   
+                   <div className="grid gap-4">
+                      {[
+                         "Step-by-step guided learning",
+                         "Real-time AI support while studying",
+                         "Interactive quizzes, exams, and projects",
+                         "Progress tracking and accountability"
+                      ].map((item, i) => (
+                         <div key={i} className="flex items-center gap-4 p-4 bg-orange-50 rounded-2xl border border-orange-100/50">
+                            <div className="w-6 h-6 bg-orange-600 rounded-full flex items-center justify-center text-white shrink-0">
+                               <CheckCircle2 size={14} />
+                            </div>
+                            <span className="font-bold text-slate-700 text-sm">{item}</span>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+             </div>
+          </div>
+       </section>
+
+       {/* Personal AI Tutor Section */}
+       <section className="py-24 px-6 bg-[#0f172a] text-white relative overflow-hidden rounded-[60px] mx-4">
+          <div className="absolute top-0 right-0 w-full h-full opacity-10">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500 rounded-full blur-[160px]"></div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
+             <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-400 border border-orange-500/30">
+                   <Sparkles size={12}/> Your Personal AI Tutor
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black">Learning shouldn’t feel <br/> <span className="text-orange-500">like guessing.</span></h2>
+                <p className="text-slate-400 font-medium text-lg">Every learner gets an AI assistant tutor available every step of the way.</p>
+             </div>
+
+             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                   { title: "Answers Instantly", desc: "No more waiting for help. Get clarification the moment you feel stuck.", icon: MessageSquare },
+                   { title: "Simplifies Concepts", desc: "Complex ideas broken down into digestible, easy-to-understand explanations.", icon: Zap },
+                   { title: "Personalized Guidance", desc: "AI that understands your pace and adapts to your specific learning style.", icon: Target },
+                   { title: "Interactive Learning", desc: "Supports voice and interactive dialogue for a true tutoring experience.", icon: Play }
+                ].map((feature, i) => (
+                   <div key={i} className="p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-white/10 transition-all group">
+                      <div className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-orange-500/20">
+                         <feature.icon size={22} />
+                      </div>
+                      <h4 className="font-bold text-xl mb-3">{feature.title}</h4>
+                      <p className="text-slate-400 text-sm leading-relaxed font-medium">{feature.desc}</p>
+                   </div>
+                ))}
+             </div>
+          </div>
+       </section>
+
+       {/* For Learners & Educators Section */}
+       <section className="py-24 px-6 bg-slate-50/50">
+          <div className="max-w-7xl mx-auto">
+             <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-white p-10 md:p-14 rounded-[48px] shadow-sm border border-slate-100 space-y-8">
+                   <div className="w-16 h-16 bg-orange-50 text-orange-600 rounded-[24px] flex items-center justify-center mb-2">
+                      <BookOpen size={32} />
+                   </div>
+                   <h3 className="text-3xl font-black text-slate-900">For Learners</h3>
+                   <p className="text-slate-600 font-medium">Stop jumping between courses. Get a guided, interactive experience that helps you build real-world skills and complete what you start.</p>
+                   <ul className="space-y-4">
+                      {['Stay Consistent', 'Understand Better', 'Complete What You Start'].map((li, i) => (
+                         <li key={i} className="flex items-center gap-3 font-bold text-slate-900 text-sm">
+                            <ShieldCheck className="text-green-500" size={18} /> {li}
+                         </li>
+                      ))}
+                   </ul>
+                   <button onClick={() => onNavigate('#/login')} className="w-full py-4 border-2 border-slate-900 text-slate-900 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-slate-900 hover:text-white transition-all">Start Learning</button>
+                </div>
+
+                <div className="bg-slate-900 p-10 md:p-14 rounded-[48px] shadow-2xl text-white space-y-8">
+                   <div className="w-16 h-16 bg-white/10 text-orange-500 rounded-[24px] flex items-center justify-center mb-2">
+                      <PenTool size={32} />
+                   </div>
+                   <h3 className="text-3xl font-black">For Educators</h3>
+                   <p className="text-slate-400 font-medium">Teach without barriers. Create and launch courses easily, structure content effectively, and scale your impact with AI-assisted tools.</p>
+                   <ul className="space-y-4">
+                      {['Easy Onboarding', 'AI-Assisted Creation', 'Scale Your Knowledge'].map((li, i) => (
+                         <li key={i} className="flex items-center gap-3 font-bold text-white text-sm">
+                            <ShieldCheck className="text-orange-500" size={18} /> {li}
+                         </li>
+                      ))}
+                   </ul>
+                   <button onClick={() => onNavigate('#/login')} className="w-full py-4 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-orange-700 transition-all shadow-xl shadow-orange-600/20">Create a Course</button>
+                </div>
+             </div>
+          </div>
+       </section>
+
        {/* Stats Section */}
        <section className="py-20 px-6">
           <div className="max-w-7xl mx-auto">
@@ -150,41 +272,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </div>
        </section>
 
-       {/* Courses Section */}
-       <section className="py-20 px-6 bg-slate-50/50">
+       {/* Impact Section */}
+       <section className="py-24 px-6 bg-white">
           <div className="max-w-7xl mx-auto">
-             <div className="flex justify-between items-end mb-12">
-                <div>
-                   <h2 className="text-3xl font-black text-slate-900 mb-4">Diverse Curriculums</h2>
-                   <p className="text-slate-500 max-w-md">Management, Finance, and Tech courses enhanced with AI.</p>
+             <div className="text-center max-w-3xl mx-auto space-y-6">
+                <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-orange-600">Built for Africa, Designed for Impact</h2>
+                <h3 className="text-4xl font-black text-slate-900 leading-tight">We are focused on solving real problems in the <span className="text-orange-600">African learning ecosystem.</span></h3>
+                <p className="text-slate-600 font-medium text-lg leading-relaxed">
+                   Edumeet isn’t just another platform. It’s a system designed to improve outcomes, not just access. We empower local educators to teach at scale while making quality education accessible to everyone.
+                </p>
+                <div className="pt-8">
+                   <button onClick={() => onNavigate('#/login')} className="px-10 py-5 bg-slate-900 text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black transition-all shadow-2xl">
+                      Be part of the future of learning
+                   </button>
                 </div>
-                <button className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors">
-                   View All <ArrowRight size={16}/>
-                </button>
-             </div>
-
-             <div className="grid md:grid-cols-3 gap-8">
-                {[1, 2, 3].map((i) => (
-                   <div key={i} className="group bg-white/60 backdrop-blur-md border border-white/60 rounded-[32px] p-4 hover:bg-white transition-all hover:shadow-xl hover:shadow-slate-200/50 cursor-pointer">
-                      <div className="aspect-[4/3] bg-slate-200 rounded-[24px] mb-6 overflow-hidden relative">
-                         <img src={`/Images/Course-${i}.jpg`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Course thumbnail"/>
-                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-900">
-                            Premium
-                         </div>
-                      </div>
-                      <div className="px-2 pb-2">
-                         <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[10px] font-bold uppercase tracking-wider">{i === 1 ? 'Leadership' : i === 2 ? 'Finance' : 'Technology'}</span>
-                            <span className="text-xs font-bold text-slate-400">2h 15m</span>
-                         </div>
-                         <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{i === 1 ? 'AI-Driven Strategic Management' : i === 2 ? 'Global Finance & Fintech' : 'Applied AI for Business'}</h3>
-                         <div className="flex items-center gap-2 text-sm text-slate-500">
-                            <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
-                            <span className="font-medium">By {i === 1 ? 'Dr. Tunde Bakare' : i === 2 ? 'Chioma Eze' : 'David Osei'}</span>
-                         </div>
-                      </div>
-                   </div>
-                ))}
              </div>
           </div>
        </section>
@@ -242,7 +343,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                    <img src="/Images/edumeet-logo2.png" alt="Edumeet Logo" className="h-9 w-auto" />
                 </div>
                 <p className="text-slate-400 max-w-sm leading-relaxed mb-8">
-                   Empowering Africa's next generation of learners through accessible, AI-enhanced education.
+                   Edumeet exists to transform content into outcomes, helping people not just learn—but actually grow.
                 </p>
                 <div className="flex gap-4">
                    {[1,2,3,4].map(i => (
