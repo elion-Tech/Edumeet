@@ -13,6 +13,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   const [view, setView] = useState<'login' | 'register' | 'forgot'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<{message: string, code?: string} | null>(null);
+  const [confirmRole, setConfirmRole] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [email, setEmail] = useState('');
@@ -23,6 +24,12 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (view === 'register' && !confirmRole) {
+      setConfirmRole(true);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -40,6 +47,12 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
     }
   };
 
+  const handleSwitchView = (newView: 'login' | 'register' | 'forgot') => {
+    setView(newView);
+    setConfirmRole(false);
+    setError(null);
+  };
+
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -47,7 +60,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
     try {
         await requestPasswordReset(email);
         alert('If an account with that email exists, a password reset link has been sent.');
-        setView('login');
+        handleSwitchView('login');
         setEmail('');
     } catch (err: any) {
         setError({ message: err.message });
@@ -162,7 +175,7 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
                         </div>
                     )}
 
-                    {view === 'register' && (
+                    {view === 'register' && !confirmRole && (
                         <>
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Full Name</label>
@@ -172,50 +185,92 @@ export const Login: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
                                 <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Phone</label>
                                 <input type="tel" required value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} placeholder="+234..." className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
                             </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Email Address</label>
+                                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Password</label>
+                                <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 pt-2">
+                                <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                    <GraduationCap size={24} /> <span className="text-xs font-bold">Scholar</span>
+                                </button>
+                                <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
+                                    <Sparkles size={24} /> <span className="text-xs font-bold">Instructor</span>
+                                </button>
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white font-bold py-4 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 mt-6"
+                            >
+                                Create Account
+                            </button>
                         </>
                     )}
 
-                    <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Email Address</label>
-                        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
-                    </div>
-
-                    {view !== 'forgot' && (
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Password</label>
-                            <input type="password" required={view !== 'forgot'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                    {view === 'register' && confirmRole && (
+                        <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-100 text-center space-y-4 animate-in zoom-in-95 duration-300">
+                            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-slate-100">
+                                {role === UserRole.STUDENT ? <GraduationCap size={32} className="text-orange-500" /> : <Sparkles size={32} className="text-orange-500" />}
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="font-bold text-slate-900">Confirm your role</h4>
+                                <p className="text-sm text-slate-500 font-medium">
+                                    You are registering as a <span className="text-orange-600 font-bold">{role === UserRole.STUDENT ? 'Scholar (Student)' : 'Instructor (Tutor)'}</span>. Is this correct?
+                                </p>
+                            </div>
+                            <div className="pt-2 flex flex-col gap-3">
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full bg-slate-900 text-white font-bold py-4 rounded-full transition-all hover:bg-black disabled:opacity-50"
+                                >
+                                    {loading ? <Loader2 className="animate-spin mx-auto" size={24} /> : 'Yes, Confirm & Register'}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setConfirmRole(false)}
+                                    className="w-full bg-white text-slate-600 border border-slate-200 font-bold py-4 rounded-full transition-all hover:bg-slate-50"
+                                >
+                                    No, Go Back
+                                </button>
+                            </div>
                         </div>
                     )}
 
-                    {view === 'register' && (
-                        <div className="grid grid-cols-2 gap-4 pt-2">
-                            <button type="button" onClick={() => setRole(UserRole.STUDENT)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.STUDENT ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
-                                <GraduationCap size={24} /> <span className="text-xs font-bold">Scholar</span>
-                            </button>
-                            <button type="button" onClick={() => setRole(UserRole.TUTOR)} className={`p-4 rounded-3xl border transition-all duration-300 flex flex-col items-center gap-2 ${role === UserRole.TUTOR ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-slate-100 text-slate-400 hover:bg-slate-50'}`}>
-                                <Sparkles size={24} /> <span className="text-xs font-bold">Instructor</span>
-                            </button>
-                        </div>
-                    )}
+                    {(view === 'login' || view === 'forgot') && (
+                        <>
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Email Address</label>
+                                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                            </div>
 
-                    {view === 'login' && (
-                        <div className="flex justify-end">
-                            <button type="button" onClick={() => { setView('forgot'); setError(null); }} className="text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">
-                                Forgot password?
-                            </button>
-                        </div>
-                    )}
+                            {view === 'login' && (
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-700 ml-4 uppercase tracking-wide">Password</label>
+                                    <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-full focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400" />
+                                    <div className="flex justify-end pt-1">
+                                        <button type="button" onClick={() => handleSwitchView('forgot')} className="text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">
+                                            Forgot password?
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white font-bold py-4 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 mt-6"
-                    >
-                        {loading ? <Loader2 className="animate-spin mx-auto" size={24} /> : (view === 'forgot' ? 'Send Reset Link' : view === 'login' ? 'Sign In' : 'Create Account')}
-                    </button>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-orange-500 to-rose-600 text-white font-bold py-4 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 mt-4"
+                            >
+                                {loading ? <Loader2 className="animate-spin mx-auto" size={24} /> : (view === 'forgot' ? 'Send Reset Link' : 'Sign In')}
+                            </button>
+                        </>
+                    )}
 
                     <div className="text-center pt-6">
-                        <button type="button" onClick={() => { setView(view === 'forgot' ? 'login' : view === 'login' ? 'register' : 'login'); setError(null); }} className="text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+                        <button type="button" onClick={() => handleSwitchView(view === 'forgot' ? 'login' : view === 'login' ? 'register' : 'login')} className="text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors">
                             {view === 'forgot' ? "Back to Login" : view === 'login' ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
                         </button>
                     </div>
