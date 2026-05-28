@@ -85,10 +85,10 @@ Constraints:
     let requestConfig: any = {
       systemInstruction: systemInstruction,
       temperature: 0.2,
-    };
+    }; // Use the same model as the cache for consistency and availability
 
     let contents: any[] = [];
-    let model = 'gemini-2.0-flash-exp';
+    let model = 'models/gemini-1.5-flash-001';
 
     if (cacheName) {
       // CACHED PATH: Send only the question + cache reference
@@ -126,7 +126,7 @@ Constraints:
 export const speakText = async (text: string): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const response = await retryOperation(() => ai.models.generateContent({
+    const response = await retryOperation(() => ai.models.generateContent({ // Use the same model as the cache for consistency and availability
       model: "gemini-2.0-flash-exp",
       contents: [{ parts: [{ text: `Synthesize speech for: ${text}` }] }],
       config: {
@@ -150,7 +150,7 @@ export const generateCourseImage = async (title: string, description: string): P
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const prompt = `A professional, 3D minimal education illustration. Title: "${title}". Description: "${description}". Clean, high-fidelity, artistic. No text.`;
-
+    // Use the same model as the cache for consistency and availability
     const response = await retryOperation(() => ai.models.generateContent({
       model: 'gemini-2.0-flash-exp',
       contents: { parts: [{ text: prompt }] },
@@ -177,7 +177,7 @@ export const generateCourseContent = async (
   courseTitle: string
 ): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY }); // Use the same model as the cache for consistency and availability
     const model = 'gemini-2.0-flash-exp';
     let prompt = '';
     let responseSchema: any = undefined;
