@@ -39,11 +39,7 @@ async function getOrCreateCache(course: any, fullTranscript: string): Promise<st
     const cacheManager = (new GoogleGenAI({ apiKey: API_KEY }) as any).cachedContents;
 
     const cache = await cacheManager.create({
-<<<<<<< HEAD
-      model: 'models/gemini-1.5-flash-001', // Use specific version for v1beta stability
-=======
-      model: 'models/gemini-1.5-flash-001', // Flash is cheaper/faster for caching
->>>>>>> parent of d338027 (Update geminiService.ts)
+      model: 'gemini-1.5-flash', // Use stable model ID without prefix for the SDK
       displayName: `course_cache_${course._id}`,
       systemInstruction: "You are a helpful AI Tutor. Use the provided course context to answer questions.",
       contents: [{ role: 'user', parts: [{ text: fullTranscript }] }],
@@ -92,21 +88,13 @@ Constraints:
     }; // Use the same model as the cache for consistency and availability
 
     let contents: any[] = [];
-<<<<<<< HEAD
-    let model = 'gemini-1.5-flash-001';
-=======
-    let model = 'models/gemini-1.5-flash-001';
->>>>>>> parent of d338027 (Update geminiService.ts)
+    let model = 'gemini-1.5-flash';
 
     if (cacheName) {
       // CACHED PATH: Send only the question + cache reference
       requestConfig.cachedContent = cacheName;
       contents = [{ role: 'user', parts: [{ text: `STUDENT QUERY: ${question}` }] }];
-<<<<<<< HEAD
-      model = 'gemini-1.5-flash-001'; // Must match the model used to create the cache
-=======
-      model = 'models/gemini-1.5-flash-001'; // Must match the model used to create the cache
->>>>>>> parent of d338027 (Update geminiService.ts)
+      model = 'gemini-1.5-flash'; // Must match the model used to create the cache
     } else {
       // FALLBACK PATH: Send full transcript (Expensive)
       const prompt = `
@@ -139,11 +127,7 @@ export const speakText = async (text: string): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await retryOperation(() => ai.models.generateContent({ // Use the same model as the cache for consistency and availability
-<<<<<<< HEAD
-      model: "gemini-1.5-flash-001",
-=======
-      model: "gemini-2.0-flash-exp",
->>>>>>> parent of d338027 (Update geminiService.ts)
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: `Synthesize speech for: ${text}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
@@ -168,11 +152,7 @@ export const generateCourseImage = async (title: string, description: string): P
     const prompt = `A professional, 3D minimal education illustration. Title: "${title}". Description: "${description}". Clean, high-fidelity, artistic. No text.`;
     // Use the same model as the cache for consistency and availability
     const response = await retryOperation(() => ai.models.generateContent({
-<<<<<<< HEAD
-      model: 'gemini-1.5-flash-001',
-=======
-      model: 'gemini-2.0-flash-exp',
->>>>>>> parent of d338027 (Update geminiService.ts)
+      model: 'gemini-1.5-flash',
       contents: { parts: [{ text: prompt }] },
       config: {
         imageConfig: { aspectRatio: "16:9" }
@@ -198,11 +178,7 @@ export const generateCourseContent = async (
 ): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY }); // Use the same model as the cache for consistency and availability
-<<<<<<< HEAD
-    const model = 'gemini-1.5-flash-001';
-=======
-    const model = 'gemini-2.0-flash-exp';
->>>>>>> parent of d338027 (Update geminiService.ts)
+    const model = 'gemini-1.5-flash';
     let prompt = '';
     let responseSchema: any = undefined;
 
