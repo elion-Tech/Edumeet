@@ -12,8 +12,7 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [tailwindcss(), react()],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY), // Map VITE_GEMINI_API_KEY from .env to import.meta.env for client
         'process.env.PAYSTACK_PUBLIC_KEY': JSON.stringify(env.PAYSTACK_PUBLIC_KEY),
         'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL)
       },
