@@ -36,10 +36,10 @@ async function getOrCreateCache(course: any, fullTranscript: string): Promise<st
     }
 
     console.log("Creating new Gemini Context Cache for course:", course.title);
-    const cacheManager = (new GoogleGenAI({ apiKey: API_KEY }) as any).cachedContents;
+    const cacheManager = (new GoogleGenAI({ apiKey: API_KEY }) as any).caches;
 
     const cache = await cacheManager.create({
-      model: 'gemini-1.5-flash', // Use stable model ID without prefix for the SDK
+      model: 'gemini-1.5-flash',
       displayName: `course_cache_${course._id}`,
       systemInstruction: "You are a helpful AI Tutor. Use the provided course context to answer questions.",
       contents: [{ role: 'user', parts: [{ text: fullTranscript }] }],
