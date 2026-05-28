@@ -24,42 +24,6 @@ const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay
 };
 
 /**
- * Manages Context Caching for Course Transcripts.
- * If a cache exists and is valid, it returns the cache name.
- * If not, it uploads the transcript, creates a cache, and returns the new name.
- */
-async function getOrCreateCache(course: any, fullTranscript: string): Promise<string> {
-  try {
-    // 1. Check if existing cache is still valid (if we have a name)
-    if (course.geminiCacheName) {
-      return course.geminiCacheName;
-    }
-
-    console.log("Creating new Gemini Context Cache for course:", course.title);
-    const genAI = new GoogleGenAI({ apiKey: API_KEY });
-    const cacheManager = (genAI as any).caches;
-
-    const cache = await cacheManager.create({
-      model: 'models/gemini-1.5-flash-001', // Explicit version required for caching
-      displayName: `course_cache_${course._id}`,
-      systemInstruction: "You are a helpful AI Tutor. Use the provided course context to answer questions.",
-      contents: [{ role: 'user', parts: [{ text: fullTranscript }] }],
-      ttlSeconds: 3000, // 50 minutes
-    });
-
-    console.log("Cache created successfully:", cache.name);
-    
-    // Mutate the local course object so we don't re-create it this session
-    course.geminiCacheName = cache.name;
-    
-    return cache.name;
-  } catch (error) {
-    console.error("Cache creation failed, falling back to standard context:", error);
-    return "";
-  }
-}
-
-/**
  * AI Tutor service using Gemini 3 Pro for advanced reasoning.
  */
 export async function* askAiTutorStream(
@@ -67,57 +31,49 @@ export async function* askAiTutorStream(
   course: any // Passing full course object to access cache info
 ) {
   try {
-    const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const systemInstruction = `You are a professional, grounded AI Tutor for "edumeet". 
-Your core mission is to help students synthesize and understand the lesson material.
-Grounded Principle: You must ONLY use the provided LESSON TRANSCRIPT for factual details. 
-If the information is not in the transcript, acknowledge it and provide general academic guidance.
-Constraints: 
-- Use PLAIN TEXT ONLY. 
-- No bolding, italics, or complex markdown. 
-- Use simple, direct, academic yet friendly language.`;
+    const ai = new GoogleGenAI({
+      apiKey: API_KEY
+    });
 
-    // 1. Aggregate all module transcripts
-    const fullTranscript = course.modules.map((m: any) => m.transcript).join('\n\n');
-    
-    // 2. Get Cache Reference
-    const cacheName = await getOrCreateCache(course, fullTranscript);
+    const transcript = course.modules
+      .map((m: any) => m.transcript)
+      .join("\n\n")
+      .slice(0, 12000);
 
-    let requestConfig: any = {
-      systemInstruction: systemInstruction,
-      temperature: 0.2,
-    }; // Use the same model as the cache for consistency and availability
+    const prompt = `
+You are a professional AI tutor.
 
-    let contents: any[] = [];
-    let model = 'models/gemini-1.5-flash-001';
+Course: ${course.title}
 
-    if (cacheName) {
-      // CACHED PATH: Send only the question + cache reference
-      requestConfig.cachedContent = cacheName;
-      contents = [{ role: 'user', parts: [{ text: `STUDENT QUERY: ${question}` }] }];
-      model = 'models/gemini-1.5-flash-001'; // Must match the model used to create the cache
-    } else {
-      // FALLBACK PATH: Send full transcript (Expensive)
-      const prompt = `
-      COURSE: ${course.title}
-      AVAILABLE KNOWLEDGE: ${fullTranscript.substring(0, 30000)}
-      STUDENT QUERY: ${question}
-      Provide a clear, pedagogical response:`;
-      contents = [{ role: 'user', parts: [{ text: prompt }] }];
-    }
+Transcript:
+${transcript}
+
+Student Question:
+${question}
+`;
 
     const result = await retryOperation(() => ai.models.generateContentStream({
-      model: model,
-      contents: contents,
-      config: requestConfig
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: prompt
+            }
+          ]
+        }
+      ],
+      config: {
+      temperature: 0.2,
     }));
 
     for await (const chunk of result) {
       if (chunk.text) yield chunk.text;
     }
   } catch (error: any) {
-    console.error("AI Tutor Stream Error:", error);
-    yield "The central knowledge base is currently busy. Please pause and try your query again in a few seconds.";
+    console.error(error);
+    yield "AI tutor temporarily unavailable.";
   }
 }
 
@@ -127,8 +83,8 @@ Constraints:
 export const speakText = async (text: string): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const response = await retryOperation(() => ai.models.generateContent({ // Use the same model as the cache for consistency and availability
-      model: "models/gemini-1.5-flash-001",
+    const response = await retryOperation(() => ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Synthesize speech for: ${text}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
@@ -152,8 +108,8 @@ export const generateCourseImage = async (title: string, description: string): P
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const prompt = `A professional, 3D minimal education illustration. Title: "${title}". Description: "${description}". Clean, high-fidelity, artistic. No text.`;
     // Use the same model as the cache for consistency and availability
-    const response = await retryOperation(() => ai.models.generateContent({
-      model: 'models/gemini-1.5-flash-001',
+    const response = await retryOperation(() => ai.models.generateContent({ 
+      model: 'gemini-2.0-flash-preview-image-generation',
       contents: { parts: [{ text: prompt }] },
       config: {
         imageConfig: { aspectRatio: "16:9" }
@@ -178,8 +134,8 @@ export const generateCourseContent = async (
   courseTitle: string
 ): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: API_KEY }); // Use the same model as the cache for consistency and availability
-    const model = 'models/gemini-1.5-flash-001';
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const model = 'gemini-2.5-flash';
     let prompt = '';
     let responseSchema: any = undefined;
 
