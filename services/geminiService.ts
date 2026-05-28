@@ -65,7 +65,8 @@ ${question}
         }
       ],
       config: {
-      temperature: 0.2,
+        temperature: 0.2,
+      }, // Added closing brace and comma
     }));
 
     for await (const chunk of result) {
