@@ -256,7 +256,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
-                <span className="hidden md:inline">{chatOpen ? 'Close Assistant' : 'Ask me'}</span>
+                <span className="hidden md:inline">{chatOpen ? 'Close' : 'Ask me'}</span>
             </button>
         </div>
       </div>
@@ -376,29 +376,25 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     )}
 
-                    {/* Floating Navigation Buttons */}
-                    {viewMode === 'module' && (
-                        <>
-                            <button 
-                                disabled={activeModuleIdx === 0}
-                                onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                                className="hidden md:flex fixed top-1/2 left-4 transform -translate-y-1/2 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-30 disabled:cursor-not-allowed"
-                                title="Previous Lesson"
-                            >
-                                <ChevronLeft size={24} className="text-slate-700"/>
-                            </button>
-                            {!previewMode ? (
-                                <button 
-                                    disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
-                                    onClick={handleNextLesson}
-                                    className="hidden md:flex fixed top-1/2 right-4 transform -translate-y-1/2 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-30 disabled:cursor-not-allowed"
-                                    title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
-                                >
-                                    <ChevronRight size={24} className="text-slate-700"/>
-                                </button>
-                            ) : null}
-                        </>
-                    )}
+                    {/* Closer, Responsive Floating Navigation Buttons */}
+                    <button 
+                        disabled={activeModuleIdx === 0}
+                        onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
+                        className="flex absolute top-48 md:top-64 left-2 md:-left-12 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-2 md:p-4 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-10 disabled:cursor-not-allowed border border-slate-200"
+                        title="Previous Lesson"
+                    >
+                        <ChevronLeft size={24} className="text-slate-700 w-5 h-5 md:w-8 md:h-8"/>
+                    </button>
+                    {!previewMode ? (
+                        <button 
+                            disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                            onClick={handleNextLesson}
+                            className="flex absolute top-48 md:top-64 right-2 md:-right-12 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-2 md:p-4 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-10 disabled:cursor-not-allowed border border-slate-200"
+                            title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
+                        >
+                            <ChevronRight size={24} className="text-slate-700 w-5 h-5 md:w-8 md:h-8"/>
+                        </button>
+                    ) : null}
                 </div>
             )}
 
@@ -481,7 +477,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                         <div>
                             <p className="text-[10px] font-bold uppercase tracking-widest text-orange-300/80 mb-0.5">Grounded Assistant</p>
-                            <h3 className="text-lg font-black tracking-tight">AI Assistant</h3>
+                            <h3 className="text-lg font-black tracking-tight">Ask me</h3>
                         </div>
                     </div>
                     <button onClick={() => setChatOpen(false)} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all relative z-10 active:scale-90"><X size={18}/></button>
