@@ -330,9 +330,19 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
         {/* Liquid Workspace */}
         <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms] custom-scrollbar">
+            {/* Subtle Curriculum Progress Bar */}
+            <div className="max-w-6xl mx-auto mb-8">
+                <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                        className="h-full bg-orange-500 transition-all duration-1000 ease-out shadow-sm"
+                        style={{ width: `${(progress.completedModuleIds.length / (modules.length || 1)) * 100}%` }}
+                    />
+                </div>
+            </div>
+
             {viewMode === 'module' && activeModule && (
-                <div className="max-w-6xl mx-auto space-y-4 pb-6">
-                    <div className="aspect-video max-h-[45vh] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
+                <div className="max-w-6xl mx-auto space-y-16 pb-40">
+                    <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
                         {videoId ? (
                             <div key={videoId} ref={playerContainerRef} className="w-full h-full" />
                         ) : (
