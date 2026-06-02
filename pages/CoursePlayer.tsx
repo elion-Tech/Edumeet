@@ -146,6 +146,11 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     setIsSubmitting(false);
   };
 
+  const handleNextLesson = async () => {
+    await markModuleComplete();
+    if (activeModuleIdx < modules.length - 1) setActiveModuleIdx(prev => prev + 1);
+  };
+
   const handleSendMessage = async (e?: React.FormEvent, customInput?: string) => {
     if (e) e.preventDefault();
     const finalInput = customInput || input;
@@ -249,6 +254,15 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 <span className="hidden md:inline">{chatOpen ? 'Hide Assistant' : 'Open AI Assistant'}</span>
             </button>
         </div>
+        <div className="flex items-center gap-2 md:gap-4">
+            <button 
+                onClick={() => setChatOpen(!chatOpen)} 
+                className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg' : 'bg-slate-900 text-white hover:bg-black'}`}
+            >
+                <MessageSquare size={16}/>
+                <span className="hidden md:inline">{chatOpen ? 'Close Chat' : 'Need Help? Ask AI'}</span>
+            </button>
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">
@@ -319,10 +333,10 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         </div>}
 
         {/* Liquid Workspace */}
-        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-12 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
+        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
             {viewMode === 'module' && activeModule && (
-                <div className="max-w-6xl mx-auto space-y-16 pb-40">
-                    <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
+                <div className="max-w-6xl mx-auto space-y-6 pb-20">
+                    <div className="aspect-video max-h-[55vh] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
                         {videoId ? (
                             <div key={videoId} ref={playerContainerRef} className="w-full h-full" />
                         ) : (
@@ -333,7 +347,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         )}
                     </div>
 
-                    <div className="space-y-10">
+                    <div className="space-y-8">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8">
                             <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
                             {!previewMode && (
@@ -341,7 +355,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                     onClick={markModuleComplete}
                                     className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
                                 >
-                                    {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Mastery Verified ✓' : 'Execute Completion'}
+                                    {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Lesson Mastery Verified ✓' : "I've finished this lesson"}
                                 </button>
                             )}
                             {previewMode && (
@@ -356,15 +370,15 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
                                 className="px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
                             >
-                                <ChevronLeft size={18}/> Previous Segment
+                                <ChevronLeft size={18}/> Back to Previous
                             </button>
                             {!previewMode ? (
                                 <button 
-                                    disabled={activeModuleIdx === modules.length - 1 || (!progress.completedModuleIds.includes(activeModule._id) && !isTutorOrAdmin) || (activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
-                                    onClick={() => setActiveModuleIdx(activeModuleIdx + 1)}
+                                    disabled={activeModuleIdx === modules.length - 1 || (activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                    onClick={handleNextLesson}
                                     className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
                                 >
-                                    Next Section <ChevronRight size={18}/>
+                                    Continue to Next Lesson <ChevronRight size={18}/>
                                 </button>
                             ) : (
                                 <button 
@@ -393,7 +407,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
             {/* Assessment and Result pages use similar spatial logic... */}
             {viewMode === 'quiz' && (
-              <div className="max-w-5xl mx-auto py-16 text-center animate-in zoom-in duration-700">
+              <div className="max-w-5xl mx-auto py-10 text-center animate-in zoom-in duration-700">
                 <div className="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto text-amber-500 mb-6 animate-float shadow-inner border border-amber-100">
                   <Sparkles size={32}/>
                 </div>
@@ -422,25 +436,25 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     ))}
                 </div>
-                <button onClick={handleQuizSubmit} className="mt-8 bg-orange-600 text-white px-8 py-3 rounded-full font-black uppercase tracking-widest shadow-lg shadow-orange-600/30 active:scale-95 hover:translate-y-[-2px] transition-all">Execute Submission</button>
+                <button onClick={handleQuizSubmit} className="mt-8 bg-orange-600 text-white px-8 py-3 rounded-full font-black uppercase tracking-widest shadow-lg shadow-orange-600/30 active:scale-95 hover:translate-y-[-2px] transition-all">Hand in my answers</button>
               </div>
             )}
 
             {viewMode === 'result' && lastQuizResult && (
-                <div className="max-w-4xl mx-auto py-16 text-center animate-in zoom-in duration-700">
+                <div className="max-w-4xl mx-auto py-12 text-center animate-in zoom-in duration-700">
                     <div className={`w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl ${lastQuizResult.passed ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'}`}>
                         {lastQuizResult.passed ? <Trophy size={48}/> : <AlertCircle size={48}/>}
                     </div>
                     <h2 className="text-4xl font-black text-slate-900 mb-2">{lastQuizResult.score}%</h2>
                     <p className="text-lg font-bold text-slate-500 mb-8">{lastQuizResult.passed ? 'Assessment Passed. Module Unlocked.' : 'Score below threshold. Review material and retry.'}</p>
                     <button onClick={() => { setViewMode('module'); setActiveModuleIdx(prev => Math.min(prev + 1, (course.modules?.length ?? 1) - 1)); }} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest hover:bg-black transition-all">
-                        Return to Course
+                        Return to Lessons
                     </button>
                 </div>
             )}
 
             {viewMode === 'capstone' && course.capstone && (
-                <div className="max-w-4xl mx-auto py-20 animate-in slide-in-from-bottom-12">
+                <div className="max-w-4xl mx-auto py-12 animate-in slide-in-from-bottom-12">
                     <h2 className="text-2xl font-black text-slate-900 mb-6">Final Capstone Project</h2>
                     <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-6">
                         <h3 className="text-indigo-900 font-bold mb-4 uppercase tracking-widest text-xs">Directives</h3>
@@ -453,7 +467,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         onChange={e => setCapstoneText(e.target.value)}
                     />
                     <button onClick={handleCapstoneSubmit} disabled={isSubmitting} className="w-full py-3 bg-emerald-600 text-white rounded-xl font-black uppercase tracking-widest shadow-lg shadow-emerald-600/30 hover:bg-emerald-700 transition-all">
-                        {isSubmitting ? 'Transmitting...' : 'Submit Final Project'}
+                        {isSubmitting ? 'Transmitting...' : 'Turn in my project'}
                     </button>
                 </div>
             )}

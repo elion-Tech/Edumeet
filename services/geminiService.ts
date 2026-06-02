@@ -63,18 +63,10 @@ export function localizeAndCompress(text: string, options: { useAfricanTone?: bo
     });
   });
 
-  // 3. Optional African Tone Layer
-  if (options.useAfricanTone) {
-    processed = processed
-      .replace(/It works like this/gi, "Na like this e dey work")
-      .replace(/Do you understand\?/gi, "You understand am?")
-      .replace(/This is/gi, "E be");
-  }
-
-  // 4. Strip leftover markdown artifacts
+  // 3. Strip leftover markdown artifacts
   processed = processed.replace(/\*\*|\-\s/g, "");
 
-  // 5. Compression & Hard Sentence Cap
+  // 4. Compression & Hard Sentence Cap
   // Split by sentence endings, filter empty, and cap at 5 sentences for TTS/conciseness
   let sentences = processed.split(/[.!?]+\s+/).filter(s => s.trim().length > 5);
   
@@ -107,10 +99,11 @@ export async function* askAiTutorStream(
 
     const historyText = history.map(h => `${h.role === 'user' ? 'Student' : 'AI'}: ${h.text}`).join("\n");
 
-    const prompt = `You are a warm, supportive mentor teaching a child. 
+    const prompt = `You are a professional and supportive AI Tutor. 
 
 Guidelines:
-1. Role & Style: Be encouraging and relatable. Use very simple language and everyday analogies. Avoid mechanical labels or academic jargon.
+1. Role & Style: Maintain a professional yet encouraging tone. Use clear, simple language suitable for education, but avoid slang or overly casual speech.
+2. Contextual Boundary: Strictly adhere to the lesson transcript provided below. Do not discuss topics outside the scope of this course. If the student asks an off-topic or non-educational question, politely decline and steer them back to the lesson.
 2. Formatting (STRICT):
    - Do NOT use markdown bold formatting (**).
    - Do NOT use bullet points beginning with "-". Use numbered lists (1. 2.) if needed.
@@ -140,12 +133,13 @@ Student Question: ${question}`;
       generationConfig: {
         temperature: 0.2,
       }
-    }, { signal }));
+    }, { signal }), 3, 4000, signal);
 
     for await (const chunk of result) {
       if (chunk.text) yield chunk.text;
     }
   } catch (error: any) {
+    if (error.message === 'Operation aborted' || error.name === 'AbortError') return;
     console.error(error);
     yield "AI tutor temporarily unavailable.";
   }
@@ -154,7 +148,7 @@ Student Question: ${question}`;
 /**
  * Generates audio for the given text using Gemini TTS.
  */
-export const speakText = async (text: string): Promise<string> => {
+export const speakText = async (text: string, signal?: AbortSignal): Promise<string> => {
   try {
     // Pre-process text to save TTS tokens and reduce latency
     const optimizedText = localizeAndCompress(text, { forTts: true });
@@ -171,10 +165,11 @@ export const speakText = async (text: string): Promise<string> => {
             },
         },
       },
-    }), 5, 5000); 
+    }, { signal }), 5, 5000, signal); 
 
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   } catch (error) {
+    if ((error as any).message === 'Operation aborted' || (error as any).name === 'AbortError') return "";
     console.error("TTS generation failed:", error);
     return "";
   }
