@@ -24,6 +24,67 @@ const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay
 };
 
 /**
+ * Lightweight JS post-processor for localization and compression.
+ * Prevents unnecessary second AI calls for formatting.
+ */
+export function localizeAndCompress(text: string, options: { useAfricanTone?: boolean, forTts?: boolean } = {}): string {
+  let processed = text;
+
+  // 1. Remove/Simplify Formal Phrases & Redundancy
+  const formalMap: Record<string, string> = {
+    "Furthermore": "",
+    "In addition": "",
+    "Moreover": "",
+    "It is important to note that": "Note that",
+    "It should be mentioned that": "Also,",
+    "the process by which": "how",
+    "in order to": "to",
+    "actually": "",
+    "basically": "",
+    "really": "",
+    "very": ""
+  };
+
+  // 2. Localization Swaps
+  const localMap: Record<string, string> = {
+    "For example": "Like this",
+    "For instance": "Like this",
+    "You should": "You can",
+    "Students are advised to": "Students should"
+  };
+
+  // Apply replacements
+  [formalMap, localMap].forEach(map => {
+    Object.entries(map).forEach(([key, val]) => {
+      const regex = new RegExp(`\\b${key}\\b`, 'gi');
+      processed = processed.replace(regex, val);
+    });
+  });
+
+  // 3. Optional African Tone Layer
+  if (options.useAfricanTone) {
+    processed = processed
+      .replace(/It works like this/gi, "Na like this e dey work")
+      .replace(/Do you understand\?/gi, "You understand am?")
+      .replace(/This is/gi, "E be");
+  }
+
+  // 4. Strip leftover markdown artifacts
+  processed = processed.replace(/\*\*|\-\s/g, "");
+
+  // 5. Compression & Hard Sentence Cap
+  // Split by sentence endings, filter empty, and cap at 5 sentences for TTS/conciseness
+  let sentences = processed.split(/[.!?]+\s+/).filter(s => s.trim().length > 5);
+  
+  const maxSentences = options.forTts ? 4 : 6;
+  if (sentences.length > maxSentences) {
+    sentences = sentences.slice(0, maxSentences);
+  }
+
+  return sentences.join(". ").trim() + (sentences.length > 0 ? "." : "");
+}
+
+/**
  * AI Tutor service using Gemini 3 Pro for advanced reasoning.
  */
 export async function* askAiTutorStream(
@@ -52,20 +113,13 @@ Guidelines:
    - Do NOT use bullet points beginning with "-". Use numbered lists (1. 2.) if needed.
    - Use section headings and spacing between sections.
 3. Continuity: Use the transcript as the primary source and the conversation history to build upon prior explanations. Avoid repetition.
-4. Length: 2–5 short paragraphs default.
+4. Length: EXTREMELY CONCISE.
 
-Structure:
-Main Idea
-(Brief explanation of the concept)
-
-Why It Matters
-(Relatable explanation connected to real-world situations)
-
-Example
-(A simple practical example)
-
-Follow-Up
-(A short question or suggestion to keep learning)
+Structure Template:
+Concept: (Name)
+Explanation: (1-2 short lines)
+Example: (1 line max)
+Follow-Up: (One short question)
 
 Course: ${course.title}
 Transcript: ${transcript}
@@ -105,10 +159,13 @@ Student Question: ${question}`;
  */
 export const speakText = async (text: string): Promise<string> => {
   try {
+    // Pre-process text to save TTS tokens and reduce latency
+    const optimizedText = localizeAndCompress(text, { forTts: true });
+    
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await retryOperation(() => ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Synthesize speech for: ${text}` }] }],
+      contents: [{ parts: [{ text: `Synthesize speech for: ${optimizedText}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
