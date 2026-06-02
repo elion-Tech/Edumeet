@@ -28,7 +28,8 @@ const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay
  */
 export async function* askAiTutorStream(
   question: string,
-  course: any // Passing full course object to access cache info
+  course: any,
+  history: { role: string; text: string }[] = []
 ) {
   try {
     const ai = new GoogleGenAI({
@@ -40,17 +41,38 @@ export async function* askAiTutorStream(
       .join("\n\n")
       .slice(0, 12000);
 
-    const prompt = `
-You are a professional AI tutor.
+    const historyText = history.map(h => `${h.role === 'user' ? 'Student' : 'AI'}: ${h.text}`).join("\n");
+
+    const prompt = `You are an intelligent learning assistant inside Edumeet.
+
+Guidelines:
+1. Style: Concise, clear, and relatable. Use simple language and practical analogies.
+2. Formatting (STRICT):
+   - Do NOT use markdown bold formatting (**).
+   - Do NOT use bullet points beginning with "-". Use numbered lists (1. 2.) if needed.
+   - Use section headings and spacing between sections.
+3. Continuity: Use the transcript as the primary source and the conversation history to build upon prior explanations. Avoid repetition.
+4. Length: 2–5 short paragraphs default.
+
+Structure:
+Main Idea
+(Brief explanation of the concept)
+
+Why It Matters
+(Relatable explanation connected to real-world situations)
+
+Example
+(A simple practical example)
+
+Follow-Up
+(A short question or suggestion to keep learning)
 
 Course: ${course.title}
+Transcript: ${transcript}
+History:
+${historyText}
 
-Transcript:
-${transcript}
-
-Student Question:
-${question}
-`;
+Student Question: ${question}`;
 
     const result = await retryOperation(() => ai.models.generateContentStream({
       model: "gemini-2.5-flash",
