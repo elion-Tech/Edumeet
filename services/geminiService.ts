@@ -168,13 +168,16 @@ export const speakText = async (text: string): Promise<string> => {
             },
         },
       },
-    }));
+    }), 5, 5000); // Increased retries and initial delay for TTS
 
-    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
+    const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
+    resolve(audioData);
   } catch (error) {
     console.error("TTS generation failed:", error);
-    return "";
+    resolve("");
   }
+    });
+  });
 };
 
 export const generateCourseImage = async (title: string, description: string): Promise<string> => {
