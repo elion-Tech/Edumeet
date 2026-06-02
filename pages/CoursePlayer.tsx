@@ -256,7 +256,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                 className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
-                <span className="hidden md:inline">{chatOpen ? 'Hide Assistant' : 'Need Help? Ask our course assistant'}</span>
+                <span className="hidden md:inline">{chatOpen ? 'Close Assistant' : 'Ask me'}</span>
             </button>
         </div>
       </div>
@@ -341,7 +341,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             </div>
 
             {viewMode === 'module' && activeModule && (
-                <div className="max-w-6xl mx-auto space-y-16 pb-40">
+                <div className="max-w-6xl mx-auto space-y-16 pb-40 relative">
                     <div className="aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
                         {videoId ? (
                             <div key={videoId} ref={playerContainerRef} className="w-full h-full" />
@@ -362,31 +362,6 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 </button>
                             )}
                         </div>
-                        <div className="flex justify-between items-center">
-                            <button 
-                                disabled={activeModuleIdx === 0}
-                                onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                                className="px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
-                            >
-                                <ChevronLeft size={18}/> Back to Previous
-                            </button>
-                            {!previewMode ? (
-                                <button 
-                                    disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
-                                    onClick={handleNextLesson}
-                                    className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
-                                >
-                                    {activeModuleIdx === modules.length - 1 ? "Finish and Complete Course" : "I've finished this lesson, let's continue"} <ChevronRight size={18}/>
-                                </button>
-                            ) : (
-                                <button 
-                                    onClick={() => onNavigate('#/')}
-                                    className="px-6 py-3 rounded-xl bg-orange-600 text-white font-bold text-[10px] uppercase tracking-widest hover:bg-orange-700 shadow-lg transition-all flex items-center gap-3 active:scale-95"
-                                >
-                                    Unlock Full Course <Lock size={14}/>
-                                </button>
-                            )}
-                        </div>
                         <div className="bg-slate-50/50 backdrop-blur-xl p-4 md:p-8 rounded-2xl border border-slate-200/60 text-slate-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap font-medium shadow-sm border-t-white">
                             {activeModule.lessonContent}
                         </div>
@@ -399,6 +374,30 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 Progression Gated: Secure passing score in <button onClick={() => { setViewMode('quiz'); setActiveQuizIdx(0); }} className="text-amber-600 underline decoration-8 decoration-amber-600/10 hover:decoration-amber-600/30 transition-all">Mid-term Examination</button> is required to unlock Advanced Curriculum Chapters.
                             </div>
                         </div>
+                    )}
+
+                    {/* Floating Navigation Buttons */}
+                    {viewMode === 'module' && (
+                        <>
+                            <button 
+                                disabled={activeModuleIdx === 0}
+                                onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
+                                className="hidden md:flex fixed top-1/2 left-4 transform -translate-y-1/2 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-30 disabled:cursor-not-allowed"
+                                title="Previous Lesson"
+                            >
+                                <ChevronLeft size={24} className="text-slate-700"/>
+                            </button>
+                            {!previewMode ? (
+                                <button 
+                                    disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                    onClick={handleNextLesson}
+                                    className="hidden md:flex fixed top-1/2 right-4 transform -translate-y-1/2 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg opacity-70 hover:opacity-100 transition-all z-50 disabled:opacity-30 disabled:cursor-not-allowed"
+                                    title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
+                                >
+                                    <ChevronRight size={24} className="text-slate-700"/>
+                                </button>
+                            ) : null}
+                        </>
                     )}
                 </div>
             )}
