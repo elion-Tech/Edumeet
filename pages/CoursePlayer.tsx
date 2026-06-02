@@ -148,7 +148,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
   const handleNextLesson = async () => {
     await markModuleComplete();
-    if (activeModuleIdx < modules.length - 1) setActiveModuleIdx(prev => prev + 1);
+    if (activeModuleIdx < modules.length - 1) {
+      setActiveModuleIdx(prev => prev + 1);
+    } else {
+      if (course?.quizzes?.length) setViewMode('quiz');
+      else if (course?.capstone) setViewMode('capstone');
+    }
   };
 
   const handleSendMessage = async (e?: React.FormEvent, customInput?: string) => {
@@ -245,22 +250,13 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-            <button 
-                onClick={() => setChatOpen(!chatOpen)} 
-                className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg ring-4 ring-orange-600/10' : 'bg-slate-900 text-white hover:bg-black'}`}
-            >
-                <MessageSquare size={16}/>
-                <span className="hidden md:inline">{chatOpen ? 'Hide Assistant' : 'Open AI Assistant'}</span>
-            </button>
-        </div>
         <div className="flex items-center gap-2 md:gap-4">
             <button 
                 onClick={() => setChatOpen(!chatOpen)} 
                 className={`flex items-center gap-2 p-3 md:px-5 md:py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-700 active:scale-95 ${chatOpen ? 'bg-orange-600 text-white shadow-lg' : 'bg-slate-900 text-white hover:bg-black'}`}
             >
                 <MessageSquare size={16}/>
-                <span className="hidden md:inline">{chatOpen ? 'Close Chat' : 'Need Help? Ask AI'}</span>
+                <span className="hidden md:inline">{chatOpen ? 'Hide Assistant' : 'Need Help? Ask our course assistant'}</span>
             </button>
         </div>
       </div>
@@ -333,10 +329,10 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         </div>}
 
         {/* Liquid Workspace */}
-        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
+        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms] custom-scrollbar">
             {viewMode === 'module' && activeModule && (
-                <div className="max-w-6xl mx-auto space-y-6 pb-20">
-                    <div className="aspect-video max-h-[55vh] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
+                <div className="max-w-6xl mx-auto space-y-4 pb-6">
+                    <div className="aspect-video max-h-[45vh] bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border-[8px] border-white ring-2 ring-slate-100 relative group animate-in zoom-in duration-1000">
                         {videoId ? (
                             <div key={videoId} ref={playerContainerRef} className="w-full h-full" />
                         ) : (
@@ -347,17 +343,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         )}
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-6">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8">
                             <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-[1] tracking-tight">{activeModule.title}</h1>
-                            {!previewMode && (
-                                <button 
-                                    onClick={markModuleComplete}
-                                    className={`px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 active:scale-95 whitespace-nowrap shadow-lg ${progress.completedModuleIds.includes(activeModule._id) ? 'bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10' : 'bg-gradient-to-r from-orange-500 to-rose-600 text-white shadow-orange-600/30'}`}
-                                >
-                                    {progress.completedModuleIds.includes(activeModule._id) ? 'Status: Lesson Mastery Verified ✓' : "I've finished this lesson"}
-                                </button>
-                            )}
                             {previewMode && (
                                 <button onClick={() => onNavigate('#/')} className="px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest bg-orange-600 text-white shadow-lg shadow-orange-600/30 hover:bg-orange-700 transition-all active:scale-95 whitespace-nowrap">
                                     Enroll to Continue
@@ -374,11 +362,11 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                             </button>
                             {!previewMode ? (
                                 <button 
-                                    disabled={activeModuleIdx === modules.length - 1 || (activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                    disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
                                     onClick={handleNextLesson}
                                     className="px-6 py-3 rounded-xl bg-[#0f172a] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-black shadow-lg disabled:opacity-30 transition-all flex items-center gap-3 active:scale-95"
                                 >
-                                    Continue to Next Lesson <ChevronRight size={18}/>
+                                    {activeModuleIdx === modules.length - 1 ? "Finish and Complete Course" : "I've finished this lesson, let's continue"} <ChevronRight size={18}/>
                                 </button>
                             ) : (
                                 <button 
