@@ -380,19 +380,19 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     <button 
                         disabled={activeModuleIdx === 0}
                         onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                        className="flex absolute top-48 md:top-64 left-2 md:-left-10 transform -translate-y-1/2 bg-white/95 backdrop-blur-md p-2 md:p-2.5 rounded-full shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-500/20 enabled:hover:shadow-orange-500/40 disabled:opacity-10 disabled:cursor-not-allowed border border-white/50"
+                        className="flex absolute top-48 md:top-64 left-2 md:-left-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                         title="Previous Lesson"
                     >
-                        <ChevronLeft size={20} className="text-slate-800 w-5 h-5 md:w-6 md:h-6"/>
+                        <ChevronLeft size={20} className="text-white w-5 h-5 md:w-6 md:h-6"/>
                     </button>
                     {!previewMode ? (
                         <button 
                             disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
                             onClick={handleNextLesson}
-                            className="flex absolute top-48 md:top-64 right-2 md:-right-10 transform -translate-y-1/2 bg-white/95 backdrop-blur-md p-2 md:p-2.5 rounded-full shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-500/20 enabled:hover:shadow-orange-500/40 disabled:opacity-10 disabled:cursor-not-allowed border border-white/50"
+                            className="flex absolute top-48 md:top-64 right-2 md:-right-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                             title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
                         >
-                            <ChevronRight size={20} className="text-slate-800 w-5 h-5 md:w-6 md:h-6"/>
+                            <ChevronRight size={20} className="text-white w-5 h-5 md:w-6 md:h-6"/>
                         </button>
                     ) : null}
                 </div>
