@@ -3,7 +3,7 @@ import { GoogleGenAI, Type, Modality } from "@google/genai";
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 // Helper to handle rate limits (429) with exponential backoff
-const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay = 4000): Promise<T> => {
+const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay = 4000, signal?: AbortSignal): Promise<T> => {
   try {
     return await operation();
   } catch (error: any) {
@@ -12,6 +12,8 @@ const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay
                         error?.message?.includes('quota') ||
                         error?.message?.includes('RESOURCE_EXHAUSTED');
     
+    if (signal?.aborted) throw new Error('Operation aborted');
+
     if (retries > 0 && isRateLimit) {
       const match = error?.message?.match(/retry in ([\d.]+)s/);
       const waitTime = match ? Math.ceil(parseFloat(match[1]) * 1000) + 1000 : delay;
@@ -90,7 +92,8 @@ export function localizeAndCompress(text: string, options: { useAfricanTone?: bo
 export async function* askAiTutorStream(
   question: string,
   course: any,
-  history: { role: string; text: string }[] = []
+  history: { role: string; text: string }[] = [],
+  signal?: AbortSignal
 ) {
   try {
     const ai = new GoogleGenAI({
@@ -134,10 +137,10 @@ Student Question: ${question}`;
           ]
         }
       ],
-      config: {
+      generationConfig: {
         temperature: 0.2,
-      }, // Added closing brace and comma
-    }));
+      }
+    }, { signal }));
 
     for await (const chunk of result) {
       if (chunk.text) yield chunk.text;
@@ -168,16 +171,13 @@ export const speakText = async (text: string): Promise<string> => {
             },
         },
       },
-    }), 5, 5000); // Increased retries and initial delay for TTS
+    }), 5, 5000); 
 
-    const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
-    resolve(audioData);
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   } catch (error) {
     console.error("TTS generation failed:", error);
-    resolve("");
+    return "";
   }
-    });
-  });
 };
 
 export const generateCourseImage = async (title: string, description: string): Promise<string> => {
