@@ -227,7 +227,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6rem)] bg-white rounded-[32px] shadow-2xl border border-slate-200/80 overflow-hidden relative animate-in fade-in zoom-in-95 duration-1000">
+    <div className="flex flex-col min-h-screen bg-white rounded-[32px] shadow-2xl border border-slate-200/80 relative animate-in fade-in zoom-in-95 duration-1000">
       {/* Immersive Header */}
       <div className="px-6 py-4 border-b bg-white/70 backdrop-blur-3xl flex justify-between items-center z-20">
         <div className="flex items-center gap-4 md:gap-8">
@@ -261,7 +261,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         </div>
       </div>
 
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 relative">
         {/* Spatial Navigation Sidebar */}
         {sidebarOpen && <div className="w-full md:w-72 bg-slate-50/95 backdrop-blur-xl border-r border-slate-200/60 overflow-y-auto p-6 space-y-8 custom-scrollbar animate-in slide-in-from-left-10 duration-300 absolute xl:static z-40 h-full shadow-2xl xl:shadow-none">
             <div>
@@ -329,7 +329,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
         </div>}
 
         {/* Liquid Workspace */}
-        <div className="flex-1 overflow-y-auto bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms] custom-scrollbar">
+        <div className="flex-1 bg-white p-4 md:p-8 lg:p-10 relative animate-in fade-in slide-in-from-bottom-12 duration-[1200ms]">
             {/* Subtle Curriculum Progress Bar */}
             <div className="max-w-6xl mx-auto mb-8">
                 <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
@@ -351,6 +351,26 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                                 <p className="font-medium">Video content unavailable</p>
                             </div>
                         )}
+                    </div>
+
+                    {/* Mobile Navigation: Placed beneath the video */}
+                    <div className="flex md:hidden gap-3 pt-2">
+                        <button 
+                            disabled={activeModuleIdx === 0}
+                            onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
+                            className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest active:scale-95 disabled:opacity-30 border border-orange-500/30"
+                        >
+                            <ChevronLeft size={16}/> Previous
+                        </button>
+                        {!previewMode ? (
+                            <button 
+                                disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                onClick={handleNextLesson}
+                                className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest active:scale-95 disabled:opacity-30 border border-orange-500/30"
+                            >
+                                Next <ChevronRight size={16}/>
+                            </button>
+                        ) : null}
                     </div>
 
                     <div className="space-y-6">
@@ -376,11 +396,11 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     )}
 
-                    {/* Closer, Responsive Floating Navigation Buttons */}
+                    {/* Desktop Floating Navigation: Hidden on mobile */}
                     <button 
                         disabled={activeModuleIdx === 0}
                         onClick={() => setActiveModuleIdx(activeModuleIdx - 1)}
-                        className="flex absolute top-48 md:top-64 left-2 md:-left-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
+                        className="hidden md:flex absolute top-48 md:top-64 left-2 md:-left-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                         title="Previous Lesson"
                     >
                         <ChevronLeft size={20} className="text-white w-5 h-5 md:w-6 md:h-6"/>
@@ -389,7 +409,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         <button 
                             disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
                             onClick={handleNextLesson}
-                            className="flex absolute top-48 md:top-64 right-2 md:-right-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
+                            className="hidden md:flex absolute top-48 md:top-64 right-2 md:-right-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                             title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
                         >
                             <ChevronRight size={20} className="text-white w-5 h-5 md:w-6 md:h-6"/>
