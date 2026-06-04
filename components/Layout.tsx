@@ -164,11 +164,6 @@ export const Layout: React.FC<LayoutProps> = ({ user, onLogout, onNavigate, chil
               <p className="text-slate-500 text-xs font-medium mb-0.5">Welcome back,</p>
               <p className="text-slate-900 font-bold text-lg tracking-tight leading-none max-w-[120px] md:max-w-none truncate">{user?.name}</p>
             </div>
-            <div className="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50/80 text-emerald-700 border border-emerald-100/50 shadow-sm">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                System Online
-            </div>
           </div>
 
           {user && (
