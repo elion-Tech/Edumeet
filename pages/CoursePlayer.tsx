@@ -276,7 +276,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     const isCompleted = progress.completedModuleIds.includes(m._id);
                     const isActive = idx === activeModuleIdx && viewMode === 'module';
                     let isLocked = idx > 0 && !progress.completedModuleIds.includes(modules[idx-1]._id) && !previewMode;
-                    if (idx > Math.floor(modules.length / 2) && course.quizzes.length > 0 && !midTermPassed) isLocked = true;
+                    if (idx > Math.floor(modules.length / 2) && course.quizzes.length > 1 && !midTermPassed) isLocked = true;
                     if (previewMode && idx > 0) isLocked = true; // Lock everything after module 1 in preview
 
                     return (
@@ -390,7 +390,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     </div>
 
-                    {activeModuleIdx === Math.floor(modules.length / 2) && course.quizzes.length > 0 && !midTermPassed && !isTutorOrAdmin && !previewMode && (
+                    {modules.length > 2 && course.quizzes.length > 1 && activeModuleIdx === Math.floor(modules.length / 2) && !midTermPassed && !isTutorOrAdmin && !previewMode && (
                         <div className="mt-8 p-6 bg-amber-50/90 backdrop-blur-3xl border border-amber-200 rounded-2xl flex items-center gap-6 text-amber-900 animate-in fade-in slide-in-from-top-10 shadow-xl shadow-amber-500/10 ring-4 ring-amber-500/5">
                             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-500 shadow-lg shadow-amber-500/20 shrink-0 animate-bounce"><Lock size={24}/></div>
                             <div className="text-sm font-bold leading-relaxed">
@@ -410,7 +410,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     </button>
                     {!previewMode ? (
                         <button 
-                            disabled={(activeModuleIdx === Math.floor(modules.length / 2) && !midTermPassed && !isTutorOrAdmin)}
+                            disabled={(activeModuleIdx === Math.floor(modules.length / 2) && course.quizzes.length > 1 && !midTermPassed && !isTutorOrAdmin)}
                             onClick={handleNextLesson}
                             className="hidden md:flex absolute top-48 md:top-64 right-2 md:-right-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                             title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}
