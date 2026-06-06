@@ -256,13 +256,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
       {activeTab === 'courses' && (
         <div className="space-y-6 animate-in slide-in-from-bottom-4">
-            <div className="flex justify-between items-center gap-4">
-                <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2"><BookOpen size={20} className="text-orange-600"/> Course Management</h3>
-                <div className="relative w-full md:w-96">
-                    <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
-                    <input placeholder="Search courses..." className="w-full pl-12 pr-6 py-3 bg-white border border-slate-200 rounded-full text-sm font-semibold outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all shadow-sm" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
-                </div>
-            </div>
             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2"><BookOpen size={20} className="text-orange-600"/> Course Management</h3>
 
             <div className="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-xl shadow-slate-200/50">
