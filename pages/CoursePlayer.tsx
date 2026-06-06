@@ -222,8 +222,8 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
 
   if (loading || !course || !progress) return <div className="p-20 text-center flex flex-col items-center gap-6"><div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center shadow-inner"><Loader2 className="animate-spin text-orange-600" size={32} /></div><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Operational Workspace</p></div>;
 
-  const isMidTermReady = activeModuleIdx >= 4;
-  const isFinalReady = activeModuleIdx === 9;
+  const isMidTermReady = activeModuleIdx >= Math.floor(modules.length / 2) - 1;
+  const isFinalReady = activeModuleIdx === modules.length - 1;
   const midTermPassed = progress.quizResults?.some(r => r.quizId === course.quizzes[0]?._id && r.passed);
 
   return (
@@ -242,10 +242,12 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             <h2 className="text-sm md:text-xl font-black text-slate-900 tracking-tight leading-none mb-1 truncate max-w-[150px] md:max-w-none">{course.title}</h2>
             <div className="flex items-center gap-3">
                 <span className="text-[9px] font-bold text-orange-600 uppercase tracking-widest bg-orange-50 px-3 py-1 rounded-full border border-orange-100 shadow-sm">Segment {activeModuleIdx + 1} // {modules.length}</span>
-                <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-2">
-                  <div className={`w-2 h-2 rounded-full ${midTermPassed ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
-                  Mid-Term Clearance
-                </div>
+                {course.quizzes.length > 0 && (
+                  <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-2">
+                    <div className={`w-2 h-2 rounded-full ${midTermPassed ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
+                    Gatekeeper Cleared
+                  </div>
+                )}
                 {previewMode && <span className="text-[9px] font-bold text-white uppercase tracking-widest bg-rose-500 px-3 py-1 rounded-full shadow-sm animate-pulse">Preview Mode</span>}
             </div>
           </div>
@@ -274,7 +276,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     const isCompleted = progress.completedModuleIds.includes(m._id);
                     const isActive = idx === activeModuleIdx && viewMode === 'module';
                     let isLocked = idx > 0 && !progress.completedModuleIds.includes(modules[idx-1]._id) && !previewMode;
-                    if (idx >= 5 && !midTermPassed) isLocked = true;
+                    if (idx > Math.floor(modules.length / 2) && course.quizzes.length > 0 && !midTermPassed) isLocked = true;
                     if (previewMode && idx > 0) isLocked = true; // Lock everything after module 1 in preview
 
                     return (
@@ -300,21 +302,22 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     <Award size={16} className="text-amber-500"/> Assessment
                 </p>
                 <div className="space-y-5">
-                    <button 
-                        disabled={(!isMidTermReady && !isTutorOrAdmin) || previewMode}
-                        onClick={() => { setViewMode('quiz'); setActiveQuizIdx(0); }}
-                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 0 ? 'bg-amber-500 text-white border-amber-500 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-amber-400'}`}
-                    >
-                        Mid-term Exam {(!isMidTermReady || previewMode) && <Lock size={14}/>}
-                        {midTermPassed && <div className="p-1 bg-white/20 rounded-full"><CheckCircle size={14} className="text-white"/></div>}
-                    </button>
-                    <button 
-                        disabled={(!isFinalReady && !isTutorOrAdmin) || previewMode}
-                        onClick={() => { setViewMode('quiz'); setActiveQuizIdx(1); }}
-                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === 1 ? 'bg-orange-600 text-white border-orange-600 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'}`}
-                    >
-                        Final Exam {(!isFinalReady || previewMode) && <Lock size={14}/>}
-                    </button>
+                    {course.quizzes.map((quiz, qIdx) => {
+                        const isLast = qIdx === course.quizzes.length - 1;
+                        const isReady = isLast ? isFinalReady : isMidTermReady;
+                        const label = course.quizzes.length === 1 ? 'Final Examination' : qIdx === 0 ? 'Mid-term Exam' : isLast ? 'Final Exam' : `Assessment ${qIdx + 1}`;
+                        return (
+                          <button 
+                              key={quiz._id}
+                              disabled={(!isReady && !isTutorOrAdmin) || previewMode}
+                              onClick={() => { setViewMode('quiz'); setActiveQuizIdx(qIdx); }}
+                              className={`w-full text-left p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 flex items-center justify-between group ${viewMode === 'quiz' && activeQuizIdx === qIdx ? 'bg-orange-600 text-white border-orange-600 shadow-lg' : previewMode ? 'opacity-50 cursor-not-allowed bg-slate-50 border-slate-200' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'}`}
+                          >
+                              {label} {(!isReady || previewMode) && <Lock size={14}/>}
+                              {qIdx === 0 && midTermPassed && <div className="p-1 bg-white/20 rounded-full"><CheckCircle size={14} className="text-white"/></div>}
+                          </button>
+                        );
+                    })}
                     {course.capstone && (
                       <button 
                           disabled={(!isFinalReady && !isTutorOrAdmin) || previewMode}
@@ -387,7 +390,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </div>
                     </div>
 
-                    {activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin && !previewMode && (
+                    {activeModuleIdx === Math.floor(modules.length / 2) && course.quizzes.length > 0 && !midTermPassed && !isTutorOrAdmin && !previewMode && (
                         <div className="mt-8 p-6 bg-amber-50/90 backdrop-blur-3xl border border-amber-200 rounded-2xl flex items-center gap-6 text-amber-900 animate-in fade-in slide-in-from-top-10 shadow-xl shadow-amber-500/10 ring-4 ring-amber-500/5">
                             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-500 shadow-lg shadow-amber-500/20 shrink-0 animate-bounce"><Lock size={24}/></div>
                             <div className="text-sm font-bold leading-relaxed">
@@ -407,7 +410,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     </button>
                     {!previewMode ? (
                         <button 
-                            disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                            disabled={(activeModuleIdx === Math.floor(modules.length / 2) && !midTermPassed && !isTutorOrAdmin)}
                             onClick={handleNextLesson}
                             className="hidden md:flex absolute top-48 md:top-64 right-2 md:-right-8 transform -translate-y-1/2 bg-orange-600 py-4 px-1.5 rounded-xl shadow-xl z-50 transition-all duration-300 enabled:hover:scale-110 enabled:shadow-orange-600/40 disabled:opacity-10 disabled:cursor-not-allowed border border-orange-500/30"
                             title={activeModuleIdx === modules.length - 1 ? "Finish Course" : "Next Lesson"}

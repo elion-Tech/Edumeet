@@ -14,7 +14,7 @@ Edumeet is a modern, AI-powered learning platform designed to transform online e
 
 ### 📝 For Tutors & Admins
 - **AI-Assisted Creation**: One-click generation of course summaries, lecture transcripts, and quiz questions using Gemini.
-- **Mastery Control**: Define mid-term exams, final exams, and practical Capstone projects.
+- **Mastery Control**: Define flexible assessment paths including mid-term exams, final exams, and practical Capstone projects.
 - **Tutor Dashboard**: Manage enrolled students, review Capstone submissions, and schedule live classroom sessions.
 - **Admin Panel**: High-level system overview including revenue estimation, user provisioning, and system health checks.
 
