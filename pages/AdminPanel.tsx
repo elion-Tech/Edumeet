@@ -11,6 +11,7 @@ interface AdminPanelProps {
 export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'server'>('overview');
   const [userSubTab, setUserSubTab] = useState<UserRole | 'all'>('all');
+  const [courseStatusFilter, setCourseStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [courses, setCourses] = useState<Course[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -151,6 +152,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
     (c?.title || '').toLowerCase().includes(courseSearch.toLowerCase()) ||
     (c?.tutorName || '').toLowerCase().includes(courseSearch.toLowerCase())
   );
+  const filteredCourses = courses.filter(c => {
+    const matchesSearch = (c?.title || '').toLowerCase().includes(courseSearch.toLowerCase()) ||
+                         (c?.tutorName || '').toLowerCase().includes(courseSearch.toLowerCase());
+    const matchesStatus = courseStatusFilter === 'all' ? true : 
+                         courseStatusFilter === 'published' ? c.published : !c.published;
+    return matchesSearch && matchesStatus;
+  });
 
   if (loading) return (
     <div className="p-20 text-center flex flex-col items-center gap-4">
@@ -259,8 +267,26 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                     <input placeholder="Search courses..." className="w-full pl-12 pr-6 py-3 bg-white border border-slate-200 rounded-full text-sm font-semibold outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all shadow-sm" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
                 </div>
             </div>
+            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2"><BookOpen size={20} className="text-orange-600"/> Course Management</h3>
 
             <div className="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-xl shadow-slate-200/50">
+                <div className="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-50/30">
+                    <div className="flex bg-white p-1 rounded-2xl border border-slate-200">
+                        {(['all', 'published', 'draft'] as const).map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setCourseStatusFilter(tab)}
+                                className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${courseStatusFilter === tab ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                            >
+                                {tab === 'all' ? 'All Courses' : tab}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="relative w-full md:w-96">
+                        <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
+                        <input placeholder="Search courses..." className="w-full pl-12 pr-6 py-3 bg-white border border-slate-200 rounded-full text-sm font-semibold outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all shadow-sm" value={courseSearch} onChange={e => setCourseSearch(e.target.value)} />
+                    </div>
+                </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="bg-slate-50/50 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
@@ -326,7 +352,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                 <div className="space-y-3">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-2">API Endpoint</label>
                     <div className="w-full p-5 bg-slate-50 border border-slate-200 rounded-3xl font-mono text-sm text-orange-600 shadow-inner overflow-hidden truncate">
-                        https://edumeetserver.onrender.com
+                        https://edumeetserveR.XXXXXXXXXXX.com
                     </div>
                 </div>
 
