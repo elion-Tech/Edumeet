@@ -148,10 +148,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
     }, 0);
   };
 
-  const filteredCourses = courses.filter(c => 
-    (c?.title || '').toLowerCase().includes(courseSearch.toLowerCase()) ||
-    (c?.tutorName || '').toLowerCase().includes(courseSearch.toLowerCase())
-  );
   const filteredCourses = courses.filter(c => {
     const matchesSearch = (c?.title || '').toLowerCase().includes(courseSearch.toLowerCase()) ||
                          (c?.tutorName || '').toLowerCase().includes(courseSearch.toLowerCase());
