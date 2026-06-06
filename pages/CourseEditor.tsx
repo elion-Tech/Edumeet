@@ -55,10 +55,6 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
   }, [editCourseId]);
 
   const addModule = () => {
-    if (modules.length >= 10) {
-      alert("Maximum 10 modules allowed per course.");
-      return;
-    }
     const newModule: Module = {
       _id: `m_${Date.now()}_${modules.length}`,
       title: `Module ${modules.length + 1}`,
@@ -82,13 +78,9 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
   };
 
   const addQuiz = () => {
-    if (quizzes.length >= 2) {
-      alert("Maximum 2 quizzes allowed per course.");
-      return;
-    }
     const newQuiz: Quiz = {
       _id: `q_${Date.now()}`,
-      title: quizzes.length === 0 ? 'Mid-term Examination' : 'Final Examination',
+      title: quizzes.length === 0 ? 'Mid-term Examination' : quizzes.length === 1 ? 'Final Examination' : `Assessment ${quizzes.length + 1}`,
       questions: []
     };
     setQuizzes([...quizzes, newQuiz]);
@@ -195,8 +187,8 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
 
   const handleSubmit = async (e: React.FormEvent, preview: boolean = false) => {
     if (e) e.preventDefault();
-    if (modules.length !== 10) {
-      return alert(`Course MUST have exactly 10 modules. You have ${modules.length}.`);
+    if (modules.length === 0) {
+      return alert("Course must have at least one module.");
     }
     
     
@@ -340,13 +332,12 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
           <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
             <Video size={16} className="text-indigo-600" />
-            Module Architecture ({modules.length}/10)
+            Module Architecture ({modules.length})
           </h3>
           <button 
             type="button"
             onClick={addModule}
             className="text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-100 disabled:opacity-50 transition-all"
-            disabled={modules.length >= 10}
           >
             + Create Module
           </button>
@@ -417,12 +408,11 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
           <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
             <HelpCircle size={16} className="text-indigo-600" />
-            Assessment Layers ({quizzes.length}/2)
+            Assessment Layers ({quizzes.length})
           </h3>
           <button 
             onClick={addQuiz}
             className="text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-100 disabled:opacity-50 transition-all"
-            disabled={quizzes.length >= 2}
           >
             + Add Examination
           </button>
