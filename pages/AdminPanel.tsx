@@ -236,7 +236,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                             {u.isSuspended ? 'Suspended' : 'Active'}
                                         </div>
                                     </td>
-                                    <td className="px-8 py-5 text-right flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <td className="px-8 py-5 text-right flex justify-end gap-3">
                                         <button onClick={() => handleToggleSuspend(u)} className={`p-2.5 rounded-full transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={18}/> : <Ban size={18}/>}</button>
                                         <button onClick={() => handleDeleteUser(u._id)} className="p-2.5 bg-slate-100 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><UserMinus size={18}/></button>
                                         <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2.5 bg-slate-100 text-slate-400 hover:bg-orange-50 hover:text-orange-600 rounded-full transition-all"><Mail size={18}/></button>
@@ -285,7 +285,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                             {c.published ? 'Published' : 'Draft'}
                                         </div>
                                     </td>
-                                    <td className="px-8 py-5 text-right flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <td className="px-8 py-5 text-right flex justify-end gap-3">
                                         <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600"><Edit size={18}/></button>
                                         <button onClick={() => handleTogglePublish(c)} className={`p-2.5 border rounded-full transition-all ${c.published ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200'}`} title={c.published ? "Unpublish" : "Publish"}>{c.published ? <Eye size={18}/> : <EyeOff size={18}/>}</button>
                                         <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"><Trash2 size={18}/></button>
