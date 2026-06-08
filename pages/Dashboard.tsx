@@ -95,8 +95,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
       console.error("Attempted to open live session modal for an undefined course.");
       return;
     }
+
+    // datetime-local input requires YYYY-MM-DDTHH:mm format.
+    const dateObj = course.liveSession?.date ? new Date(course.liveSession.date) : null;
+    const formattedDate = (dateObj && !isNaN(dateObj.getTime())) 
+      ? new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+      : '';
+
     setLsTopic(course.liveSession?.topic || '');
-    setLsDate(course.liveSession?.date || '');
+    setLsDate(formattedDate);
     setLsMeetingLink(course.liveSession?.meetingLink || '');
     setLiveSessionModalCourse(course);
   }
