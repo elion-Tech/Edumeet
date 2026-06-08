@@ -121,6 +121,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
 
   if (loading) return <div className="text-center py-20 flex flex-col items-center gap-4 animate-in fade-in"><Loader2 className="animate-spin text-orange-600" size={32} /><p className="font-bold text-xs uppercase tracking-widest text-slate-400">Loading Dashboard</p></div>;
 
+  // Helper to get information about the currently selected course for student management
+  const selectedCourse = courses.find(c => c._id === selectedCourseId);
+
   return (
     <div className="space-y-8 pb-12 animate-in fade-in duration-700">
       <div className="bg-white/70 backdrop-blur-3xl rounded-[32px] p-8 shadow-xl border border-white/40 flex flex-col md:flex-row items-center gap-8">
@@ -245,7 +248,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     {item.progress?.capstoneStatus === 'submitted' && (
-                                        <button onClick={() => setGradingModal({progressId: item.progress!._id, userId: item.user._id, studentName: item.user.name, submission: item.progress!.capstoneSubmissionText || '', courseTitle: course.title})} className="bg-orange-600 text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-md shadow-orange-100">Review Submission</button>
+                                        <button 
+                                          onClick={() => setGradingModal({
+                                            progressId: item.progress!._id, 
+                                            userId: item.user._id, 
+                                            studentName: item.user.name, 
+                                            submission: item.progress!.capstoneSubmissionText || '', 
+                                            courseTitle: selectedCourse?.title || 'Course'
+                                          })} 
+                                          className="bg-orange-600 text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-md shadow-orange-100"
+                                        >
+                                          Review Submission
+                                        </button>
                                     )}
                                 </td>
                             </tr>
