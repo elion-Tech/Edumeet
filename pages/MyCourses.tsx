@@ -204,9 +204,9 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
             ) : (
             courses.map(course => {
                 const prog = progressMap[course._id];
-                const { total, modules, quizzes: quizGrades, capstone, isComplete } = calculateGradeDetails(course, prog);
-                const modules = course.modules ?? [];
-                const videoId = modules[0] ? getYoutubeId(modules[0].videoUrl) : null;
+                const { total, modules: moduleProgress, quizzes: quizGrades, capstone, isComplete } = calculateGradeDetails(course, prog);
+                const courseModules = course.modules ?? [];
+                const videoId = courseModules[0] ? getYoutubeId(courseModules[0].videoUrl) : null;
                 const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : (course.thumbnailUrl || 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800');
 
                 return (
@@ -227,10 +227,10 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
                                     <div className="h-1.5 bg-indigo-600 rounded-full transition-all" style={{ width: `${total}%` }}></div>
                                 </div>
                                 <div className="grid grid-cols-4 gap-1 pt-2 border-t border-slate-200/50">
-                                    {modules.length > 0 && (
+                                    {courseModules.length > 0 && (
                                         <div className="text-center">
                                             <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mods</div>
-                                            <div className="text-[10px] font-bold text-slate-700">{modules}%</div>
+                                            <div className="text-[10px] font-bold text-slate-700">{moduleProgress}%</div>
                                         </div>
                                     )}
                                     {quizGrades.map((qg) => (
