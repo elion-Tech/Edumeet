@@ -16,11 +16,12 @@ export const useYouTubePlayer = ({ videoId, onStateChange }: UseYouTubePlayerPro
     let isMounted = true;
 
     const initPlayer = () => {
-      if (!isMounted || !containerRef.current || !window.YT?.Player) return;
+      if (!isMounted || !containerRef.current || !window.YT || !window.YT.Player) return;
 
       // Clear container and create fresh target
       containerRef.current.innerHTML = '';
       const playerTarget = document.createElement('div');
+      playerTarget.id = `yt-player-${Math.random().toString(36).substr(2, 9)}`;
       containerRef.current.appendChild(playerTarget);
 
       try {
@@ -50,10 +51,20 @@ export const useYouTubePlayer = ({ videoId, onStateChange }: UseYouTubePlayerPro
     };
 
     const start = async () => {
-      await loadYouTubeAPI();
-      if (isMounted) {
-        // Delay slightly to let the DOM stabilize for the handshake
+      try {
+        await loadYouTubeAPI();
+        if (!isMounted) return;
+
+        // Ensure window.YT is fully ready before proceeding
+        let checkCount = 0;
+        while (!window.YT?.Player && checkCount < 20) {
+          await new Promise(r => setTimeout(r, 50));
+          checkCount++;
+        }
+
         setTimeout(initPlayer, 100);
+      } catch (err) {
+        console.error("YouTube API Loading Failed", err);
       }
     };
 

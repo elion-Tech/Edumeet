@@ -10,17 +10,23 @@ declare global {
  * Supports: standard, short, embed, and shorts URLs.
  */
 export const extractVideoId = (url: string): string | null => {
-  if (!url) return null;
+  if (!url || typeof url !== 'string') return null;
   
-  // Regex matches:
-  // youtube.com/watch?v=ID
-  // youtu.be/ID
-  // youtube.com/embed/ID
-  // youtube.com/shorts/ID
-  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?)|(shorts\/))\??v?=?([^#&?]*).*/;
+  // Standard watch URL or any URL with ?v= or &v=
+  const vMatch = url.match(/[?&]v=([^&#]+)/);
+  if (vMatch && vMatch[1].length === 11) return vMatch[1];
+
+  // youtu.be/ID, embed/ID, shorts/ID, or v/ID
+  const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:\S+)?$/;
   const match = url.match(regExp);
+  if (match && match[1].length === 11) return match[1];
+
+  // Fallback for tricky URLs where the ID might be after /
+  const parts = url.split('/');
+  const lastPart = parts[parts.length - 1].split(/[?&]/)[0];
+  if (lastPart.length === 11) return lastPart;
   
-  return (match && match[8].length === 11) ? match[8] : null;
+  return null;
 };
 
 let apiPromise: Promise<void> | null = null;
@@ -52,7 +58,12 @@ export const loadYouTubeAPI = (): Promise<void> => {
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+    
+    if (firstScriptTag && firstScriptTag.parentNode) {
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    } else {
+      document.head.appendChild(tag);
+    }
 
     window.onYouTubeIframeAPIReady = () => {
       resolve();
