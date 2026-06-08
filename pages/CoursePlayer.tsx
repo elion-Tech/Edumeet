@@ -228,7 +228,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const activeModule = modules[activeModuleIdx];
   const videoId = activeModule ? extractVideoId(activeModule.videoUrl) : null;
   const playerContainerRef = useYouTubePlayer({ 
-    videoId,
+    videoId: (viewMode === 'module' && !loading) ? videoId : null,
     onStateChange: (event) => {
         // Placeholder for future progress tracking integration
         // event.data === 1 (PLAYING), 2 (PAUSED), 0 (ENDED)
@@ -382,7 +382,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                         </button>
                         {!previewMode ? (
                             <button 
-                                disabled={(activeModuleIdx === 4 && !midTermPassed && !isTutorOrAdmin)}
+                                disabled={(activeModuleIdx === Math.floor(modules.length / 2) && course.quizzes.length > 1 && !midTermPassed && !isTutorOrAdmin)}
                                 onClick={handleNextLesson}
                                 className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest active:scale-95 disabled:opacity-30 border border-orange-500/30"
                             >
