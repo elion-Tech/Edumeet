@@ -48,56 +48,90 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
   };
 
   const calculateGradeDetails = (course: Course, prog: Progress | undefined) => {
-      if (!prog) return { total: 0, modules: 0, mid: 0, final: 0, capstone: 0 };
+      if (!prog) return { total: 0, modules: 0, quizzes: [], capstone: 0, isComplete: false };
       
       const modules = course.modules ?? [];
       const quizzes = course.quizzes ?? [];
-      const completedModules = prog.completedModuleIds ?? [];
-      // Fix: Use quizResults property as defined in Progress type.
+      const capstoneConfig = course.capstone;
+      const completedModuleIds = prog.completedModuleIds ?? [];
       const quizResults = prog.quizResults ?? [];
+      const capstoneGrade = prog.capstoneGrade;
 
-      let modulePoints = 0;
+      let currentWeightedScore = 0;
+      let maxPossibleWeightedScore = 0;
+
+      const MODULE_BASE_WEIGHT = 20;
+      const QUIZ_BASE_WEIGHT = 20; // Per quiz
+      const CAPSTONE_BASE_WEIGHT = 40;
+
+      const gradeBreakdown: { modules: number, quizzes: { id: string, title: string, score: number, passed: boolean }[], capstone: number } = {
+          modules: 0,
+          quizzes: [],
+          capstone: 0
+      };
+
+      // 1. Modules contribution
+      let isModulesComplete = true;
       if (modules.length > 0) {
-          modulePoints = (completedModules.length / modules.length) * 20;
+          maxPossibleWeightedScore += MODULE_BASE_WEIGHT;
+          const completedModuleCount = completedModuleIds.length;
+          const moduleCompletionPercentage = (completedModuleCount / modules.length) * 100;
+          currentWeightedScore += (moduleCompletionPercentage / 100) * MODULE_BASE_WEIGHT;
+          gradeBreakdown.modules = Math.round(moduleCompletionPercentage * 10) / 10;
+          isModulesComplete = completedModuleCount === modules.length;
+      } else {
+          gradeBreakdown.modules = 100; // If no modules, consider them 100% complete
       }
 
-      let midPoints = 0;
-      if (quizzes.length > 0) {
-          const q = quizzes[0];
-          // Fix: Access quizResults instead of quizScores.
-          const record = quizResults.find(s => s.quizId === q?._id);
-          const qCount = q?.questions?.length ?? 0;
-          if (record && qCount > 0) {
-              // Fix: record.score is a percentage (0-100), adjust calculation for 20% weight.
-              midPoints = (record.score / 100) * 20;
+      // 2. Quizzes contribution
+      const quizCompletionStatus: { id: string, passed: boolean }[] = [];
+      quizzes.forEach((q) => {
+          maxPossibleWeightedScore += QUIZ_BASE_WEIGHT;
+          const result = quizResults.find(r => r.quizId === q._id);
+          let quizScore = 0;
+          let quizPassed = false;
+          if (result) {
+              quizScore = result.score;
+              quizPassed = result.passed;
+              currentWeightedScore += (quizScore / 100) * QUIZ_BASE_WEIGHT;
           }
-      }
+          gradeBreakdown.quizzes.push({ id: q._id, title: q.title, score: Math.round(quizScore * 10) / 10, passed: quizPassed });
+          quizCompletionStatus.push({ id: q._id, passed: quizPassed });
+      });
+      const areQuizzesComplete = quizzes.length === 0 || quizCompletionStatus.every(qs => qs.passed);
 
-      let finalPoints = 0;
-      if (quizzes.length > 1) {
-          const q = quizzes[1];
-          // Fix: Access quizResults instead of quizScores.
-          const record = quizResults.find(s => s.quizId === q?._id);
-          const qCount = q?.questions?.length ?? 0;
-          if (record && qCount > 0) {
-              // Fix: record.score is a percentage (0-100), adjust calculation for 20% weight.
-              finalPoints = (record.score / 100) * 20;
+      // 3. Capstone contribution
+      let isCapstoneComplete = true;
+      if (capstoneConfig) {
+          maxPossibleWeightedScore += CAPSTONE_BASE_WEIGHT;
+          if (prog.capstoneStatus === 'graded' && capstoneGrade !== undefined) {
+              currentWeightedScore += (capstoneGrade / 100) * CAPSTONE_BASE_WEIGHT;
+              gradeBreakdown.capstone = Math.round(capstoneGrade * 10) / 10;
+              isCapstoneComplete = true;
+          } else {
+              gradeBreakdown.capstone = 0;
+              isCapstoneComplete = false;
           }
+      } else {
+          gradeBreakdown.capstone = 100; // If no capstone, consider it 100% complete
       }
 
-      let capstonePoints = 0;
-      if (prog.capstoneGrade !== undefined) {
-          capstonePoints = (prog.capstoneGrade / 100) * 40;
+      // Calculate overall total percentage
+      let total = 0;
+      if (maxPossibleWeightedScore > 0) {
+          total = (currentWeightedScore / maxPossibleWeightedScore) * 100;
+      } else {
+          total = 100; // If no components, consider 100% complete (e.g., an empty course, though unlikely)
       }
 
-      const total = Math.round(modulePoints + midPoints + finalPoints + capstonePoints);
-      
+      const isCourseComplete = isModulesComplete && areQuizzesComplete && isCapstoneComplete;
+
       return {
           total,
-          modules: Math.round(modulePoints * 10) / 10,
-          mid: Math.round(midPoints * 10) / 10,
-          final: Math.round(finalPoints * 10) / 10,
-          capstone: Math.round(capstonePoints * 10) / 10
+          modules: gradeBreakdown.modules,
+          quizzes: gradeBreakdown.quizzes,
+          capstone: gradeBreakdown.capstone,
+          isComplete: isCourseComplete
       };
   };
 
@@ -170,8 +204,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
             ) : (
             courses.map(course => {
                 const prog = progressMap[course._id];
-                const grades = calculateGradeDetails(course, prog);
-                const isComplete = prog && prog.capstoneStatus === 'graded';
+                const { total, modules, quizzes: quizGrades, capstone, isComplete } = calculateGradeDetails(course, prog);
                 const modules = course.modules ?? [];
                 const videoId = modules[0] ? getYoutubeId(modules[0].videoUrl) : null;
                 const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : (course.thumbnailUrl || 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800');
@@ -184,35 +217,43 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
                     <div className="p-4 flex-1 flex flex-col">
                         <h3 className="text-base font-bold text-slate-900 mb-1 line-clamp-1">{course.title}</h3>
                         <p className="text-xs text-slate-500 mb-4 font-medium uppercase tracking-tighter">Instructor: {course.tutorName}</p>
-                        <div className="mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Performance</span>
-                                <span className="text-xl font-bold text-indigo-600">{grades.total}%</span>
+                        {prog ? (
+                            <div className="mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Performance</span>
+                                    <span className="text-xl font-bold text-indigo-600">{total}%</span>
+                                </div>
+                                <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden mb-4">
+                                    <div className="h-1.5 bg-indigo-600 rounded-full transition-all" style={{ width: `${total}%` }}></div>
+                                </div>
+                                <div className="grid grid-cols-4 gap-1 pt-2 border-t border-slate-200/50">
+                                    {modules.length > 0 && (
+                                        <div className="text-center">
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mods</div>
+                                            <div className="text-[10px] font-bold text-slate-700">{modules}%</div>
+                                        </div>
+                                    )}
+                                    {quizGrades.map((qg) => (
+                                        <div key={qg.id} className="text-center">
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{qg.title.split(' ')[0]}</div>
+                                            <div className="text-[10px] font-bold text-slate-700">{qg.score}%</div>
+                                        </div>
+                                    ))}
+                                    {capstone !== undefined && (
+                                        <div className="text-center">
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Cap</div>
+                                            <div className="text-[10px] font-bold text-slate-700">{capstone}%</div>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden mb-4">
-                                <div className="h-1.5 bg-indigo-600 rounded-full transition-all" style={{ width: `${grades.total}%` }}></div>
+                        ) : (
+                            <div className="mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100 text-center text-slate-500 text-sm font-medium">
+                                No progress yet.
                             </div>
-                            <div className="grid grid-cols-4 gap-1 pt-2 border-t border-slate-200/50">
-                                <div className="text-center">
-                                    <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mods</div>
-                                    <div className="text-[10px] font-bold text-slate-700">{grades.modules}/20</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mid</div>
-                                    <div className="text-[10px] font-bold text-slate-700">{grades.mid}/20</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Fin</div>
-                                    <div className="text-[10px] font-bold text-slate-700">{grades.final}/20</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Cap</div>
-                                    <div className="text-[10px] font-bold text-slate-700">{grades.capstone}/40</div>
-                                </div>
-                            </div>
-                        </div>
-                        <button onClick={() => onNavigate(`#/course/${course._id}`)} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all">
-                            {isComplete ? 'Review Certification' : 'Resume Session'}
+                        )}
+                        <button onClick={() => onNavigate(`#/course/${course._id}`)} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                            {isComplete ? <Award size={16}/> : <PlayCircle size={16}/>} {isComplete ? 'View Certificate' : 'Resume Session'}
                         </button>
                     </div>
                 </div>
