@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Course, User, UserRole, Progress } from '../types';
 import { api } from '../services/apiService';
-import { Edit, Users, Award, CheckCircle, Video, Calendar, Loader2, Trash2, X, Phone, Mail, User as UserIcon, ShieldCheck, Megaphone, Send, PlusCircle } from 'lucide-react';
+import { Edit, Users, Award, CheckCircle, Video, Calendar, Loader2, Trash2, X, Phone, Mail, User as UserIcon, ShieldCheck, Megaphone, Send, PlusCircle, Clock, ExternalLink } from 'lucide-react';
 
 interface DashboardProps {
   user: User;
@@ -15,7 +15,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [selectedCourseId, setSelectedCourseId] = useState<string>('');
   const [enrolledStudents, setEnrolledStudents] = useState<{user: User, progress: Progress | null}[]>([]);
   
-  const [gradingModal, setGradingModal] = useState<{progressId: string, userId: string, studentName: string, submission: string} | null>(null);
+  const [gradingModal, setGradingModal] = useState<{progressId: string, userId: string, studentName: string, submission: string, courseTitle: string} | null>(null);
   const [liveSessionModal, setLiveSessionModal] = useState<{courseId: string, courseTitle: string} | null>(null);
   const [broadcastModal, setBroadcastModal] = useState<{courseId: string, courseTitle: string} | null>(null);
   
@@ -24,9 +24,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [actionLoading, setActionLoading] = useState(false);
   const [lsTopic, setLsTopic] = useState('');
   const [lsDate, setLsDate] = useState('');
-  const [lsLink, setLsLink] = useState('');
+  const [lsMeetingLink, setLsMeetingLink] = useState('');
   const [broadcastMessage, setBroadcastMessage] = useState('');
-
+  
   useEffect(() => {
     loadData();
   }, []);
@@ -72,13 +72,32 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   };
 
   const handleScheduleLive = async () => {
-      if (!liveSessionModal || !lsTopic || !lsDate || !lsLink) return;
+      if (!liveSessionModal || !lsTopic || !lsDate || !lsMeetingLink) return;
       setActionLoading(true);
-      await api.courses.scheduleLive(liveSessionModal.courseId, { topic: lsTopic, date: lsDate, meetingLink: lsLink, isActive: true });
+      await api.courses.scheduleLive(liveSessionModal.courseId, { topic: lsTopic, date: lsDate, meetingLink: lsMeetingLink, isActive: true });
       setLiveSessionModal(null);
       setActionLoading(false);
       alert("Live class scheduled.");
+      loadData(); // Reload data to reflect changes
   };
+
+  const handleDeleteLiveSession = async (courseId: string) => {
+    if (!confirm('Are you sure you want to delete this live session?')) return;
+    setActionLoading(true);
+    await api.courses.scheduleLive(courseId, null); // Send null to delete the session
+    setActionLoading(false);
+    alert("Live session deleted.");
+    loadData(); // Reload data to reflect changes
+  };
+
+  const openLiveSessionModalForEdit = (course: Course) => {
+    if (course.liveSession) {
+      setLsTopic(course.liveSession.topic);
+      setLsDate(course.liveSession.date);
+      setLsMeetingLink(course.liveSession.meetingLink);
+    }
+    setLiveSessionModal({ courseId: course._id, courseTitle: course.title });
+  }
 
   const handleBroadcast = async () => {
       if (!broadcastModal || !broadcastMessage.trim()) return;
@@ -146,11 +165,186 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                 <div key={course._id} className={`bg-white/70 backdrop-blur-2xl p-6 rounded-[32px] shadow-lg border transition-all duration-300 ${selectedCourseId === course._id ? 'border-orange-600 shadow-orange-600/10' : 'border-white/40 hover:border-orange-200'}`}>
                     <h3 className="text-lg font-bold text-slate-900 truncate mb-6 tracking-tight">{course.title}</h3>
                     <div className="grid grid-cols-2 gap-3">
-                        <button onClick={() => fetchStudents(course._id)} className={`col-span-2 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${selectedCourseId === course._id ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>View Students</button>
+                        <button onClick={() => fetchStudents(course._id)} className={`col-span-2 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${selectedCourseId === course._id ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                            View Students
+                        </button>
                         <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="p-2.5 bg-white border border-slate-100 rounded-full hover:bg-slate-50 transition-all flex items-center justify-center text-slate-600"><Edit size={16} /></button>
                         <button onClick={() => setBroadcastModal({courseId: course._id, courseTitle: course.title})} className="p-2.5 bg-orange-50 border border-orange-100 rounded-full hover:bg-orange-100 transition-all flex items-center justify-center text-orange-600"><Megaphone size={16} /></button>
-                        <button onClick={() => setLiveSessionModal({courseId: course._id, courseTitle: course.title})} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600"><Video size={16} /></button>
+                        
+                        {course.liveSession?.isActive ? (
+                            <button onClick={() => openLiveSessionModalForEdit(course)} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Edit Live Session">
+                                <Video size={16} />
+                            </button>
+                        ) : (
+                            <button onClick={() => {
+                                setLsTopic('');
+                                setLsDate('');
+                                setLsMeetingLink('');
+                                setLiveSessionModal({courseId: course._id, courseTitle: course.title});
+                            }} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Schedule Live Session">
+                                <Video size={16} />
+                            </button>
+                        )}
+                        
                         <button onClick={() => handleDelete(course._id)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300"><Trash2 size={16} /></button>
+                    </div>
+                    {course.liveSession?.isActive && (
+                        <div className="mt-6 p-4 bg-rose-50 border border-rose-100 rounded-xl text-rose-800 text-xs font-bold leading-relaxed">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Video size={14} className="text-rose-600" />
+                                <span>Live Session: {course.liveSession.topic}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-slate-600 font-medium">
+                                <Calendar size={12} /> {new Date(course.liveSession.date).toLocaleDateString()}
+                                <Clock size={12} className="ml-3" /> {new Date(course.liveSession.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <a href={course.liveSession.meetingLink} target="_blank" rel="noopener noreferrer" className="ml-auto text-rose-600 hover:underline flex items-center gap-1">
+                                    Join <ExternalLink size={12} />
+                                </a>
+                            </div>
+                            <div className="flex justify-end gap-2 mt-3">
+                                <button onClick={() => openLiveSessionModalForEdit(course)} className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase hover:bg-rose-200 transition-colors">Edit</button>
+                                <button onClick={() => handleDeleteLiveSession(course._id)} className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase hover:bg-rose-200 transition-colors">Delete</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+              ))
+          )}
+      </div>
+
+      <div className="space-y-6">
+        <h3 className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest"><Users size={16} className="text-orange-600" /> Enrolled Students</h3>
+        <div className="bg-white/70 backdrop-blur-xl rounded-[32px] border border-white/40 overflow-hidden shadow-lg">
+            <table className="w-full text-left text-sm">
+                <thead className="bg-slate-50/50 border-b border-slate-100 text-slate-500 uppercase text-[10px] font-bold tracking-widest">
+                    <tr><th className="px-6 py-4">Student Name</th><th className="px-6 py-4">Status</th><th className="px-6 py-4">Capstone Submission</th><th className="px-6 py-4 text-right">Actions</th></tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                    {(enrolledStudents ?? []).length === 0 ? (
+                        <tr><td colSpan={4} className="px-6 py-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">No students enrolled yet</td></tr>
+                    ) : (
+                        enrolledStudents.map((item, idx) => (
+                            <tr key={idx} className="hover:bg-orange-50/30 transition-colors">
+                                <td className="px-6 py-4">
+                                    <div className="font-bold text-sm text-slate-900 leading-none mb-1">{item.user.name}</div>
+                                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{item.user.email}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border ${item.progress?.capstoneStatus === 'submitted' ? 'bg-amber-50 text-amber-600 border-amber-200' : item.progress?.capstoneStatus === 'graded' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
+                                        {item.progress?.capstoneStatus || 'Pending Enrollment'}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {item.progress?.capstoneSubmissionText ? (
+                                        <span className="text-slate-600 text-xs line-clamp-2">{item.progress.capstoneSubmissionText}</span>
+                                    ) : (
+                                        <span className="text-slate-400 text-xs">N/A</span>
+                                    )}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    {item.progress?.capstoneStatus === 'submitted' && (
+                                        <button onClick={() => setGradingModal({progressId: item.progress!._id, userId: item.user._id, studentName: item.user.name, submission: item.progress!.capstoneSubmissionText || '', courseTitle: course.title})} className="bg-orange-600 text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-md shadow-orange-100">Review Submission</button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+      </div>
+
+      {gradingModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Grading</p>
+                        <h3 className="text-xl font-bold text-slate-900">Grade Capstone for {gradingModal.courseTitle}</h3>
+                    </div>
+                    <button onClick={() => setGradingModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
+                </div>
+                <div className="space-y-4">
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 max-h-40 overflow-y-auto">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Project Submission</p>
+                        <p className="text-sm font-medium text-slate-700 whitespace-pre-wrap">{gradingModal.submission}</p>
+                    </div>
+                    
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Score (0-100)</label>
+                        <input type="number" min="0" max="100" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" value={gradeScore} onChange={e => setGradeScore(Number(e.target.value))} />
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Feedback</label>
+                        <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all resize-none h-24" placeholder="Enter constructive feedback..." value={gradeFeedback} onChange={e => setGradeFeedback(e.target.value)} />
+                    </div>
+
+                    <button onClick={submitGrade} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Award size={18}/>} Submit Grade
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {liveSessionModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Live Class</p>
+                        <h3 className="text-xl font-bold text-slate-900">{liveSessionModal.courseTitle}</h3>
+                    </div>
+                    <button onClick={() => setLiveSessionModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
+                </div>
+                <div className="space-y-4">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Session Topic</label>
+                        <input className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" placeholder="e.g. Module 1 Deep Dive" value={lsTopic} onChange={e => setLsTopic(e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Date & Time</label>
+                        <input type="datetime-local" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" value={lsDate} onChange={e => setLsDate(e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Meeting URL</label>
+                        <input className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" placeholder="https://meet.google.com/..." value={lsMeetingLink} onChange={e => setLsMeetingLink(e.target.value)} />
+                    </div>
+                    <button onClick={handleScheduleLive} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {course.liveSession?.isActive ? 'Update Session' : 'Schedule Now'}
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {broadcastModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Announcement</p>
+                        <h3 className="text-xl font-bold text-slate-900">Send Announcement</h3>
+                    </div>
+                    <button onClick={() => setBroadcastModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
+                </div>
+                <div className="space-y-4">
+                    <div className="bg-orange-50 p-4 rounded-2xl text-orange-800 text-xs font-bold leading-relaxed mb-2 border border-orange-100">
+                        <Megaphone size={16} className="inline mr-2 mb-0.5"/>
+                        Sending to all students in <span className="font-bold">{broadcastModal.courseTitle}</span>.
+                    </div>
+                    <textarea className="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all min-h-[120px] resize-none" placeholder="Type your announcement here..." value={broadcastMessage} onChange={e => setBroadcastMessage(e.target.value)} />
+                    <button onClick={handleBroadcast} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Send size={18}/>} Send Message
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+    </div>
+  );
+};
                     </div>
                 </div>
               ))
