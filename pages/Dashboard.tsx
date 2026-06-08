@@ -16,7 +16,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [enrolledStudents, setEnrolledStudents] = useState<{user: User, progress: Progress | null}[]>([]);
   
   const [gradingModal, setGradingModal] = useState<{progressId: string, userId: string, studentName: string, submission: string, courseTitle: string} | null>(null);
-  const [liveSessionModal, setLiveSessionModal] = useState<{courseId: string, courseTitle: string, isLiveSessionActive: boolean} | null>(null);
+  const [liveSessionModalCourse, setLiveSessionModalCourse] = useState<Course | null>(null);
   const [broadcastModal, setBroadcastModal] = useState<{courseId: string, courseTitle: string} | null>(null);
   
   const [gradeScore, setGradeScore] = useState(0);
@@ -34,7 +34,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const loadData = async () => {
     setLoading(true);
     const res = await api.courses.getAll('all');
-    const allCourses = res.data ?? [];
+    const allCourses = res.data?.filter(Boolean) ?? []; // Ensure no null/undefined courses
     const filtered = user.role === UserRole.TUTOR ? allCourses.filter(c => c.tutorId === user._id) : allCourses;
     setCourses(filtered);
     if (filtered.length > 0) {
@@ -72,10 +72,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   };
 
   const handleScheduleLive = async () => {
-      if (!liveSessionModal || !lsTopic || !lsDate || !lsMeetingLink) return;
+      if (!liveSessionModalCourse || !lsTopic || !lsDate || !lsMeetingLink) return;
       setActionLoading(true);
-      await api.courses.scheduleLive(liveSessionModal.courseId, { topic: lsTopic, date: lsDate, meetingLink: lsMeetingLink, isActive: true });
-      setLiveSessionModal(null);
+      await api.courses.scheduleLive(liveSessionModalCourse._id, { topic: lsTopic, date: lsDate, meetingLink: lsMeetingLink, isActive: true });
+      setLiveSessionModalCourse(null);
       setActionLoading(false);
       alert("Live class scheduled.");
       loadData(); // Reload data to reflect changes
@@ -91,14 +91,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   };
 
   const openLiveSessionModalForEdit = (course: Course) => {
-    if (course.liveSession) {
-      setLsTopic(course.liveSession.topic);
-      setLsDate(course.liveSession.date);
-      setLsMeetingLink(course.liveSession.meetingLink);
-    } else {
-      setLsTopic(''); setLsDate(''); setLsMeetingLink(''); // Clear fields for new session
+    if (!course) { // Defensive check
+      console.error("Attempted to open live session modal for an undefined course.");
+      return;
     }
-    setLiveSessionModal({ courseId: course._id, courseTitle: course.title, isLiveSessionActive: !!course.liveSession?.isActive });
+    setLsTopic(course.liveSession?.topic || '');
+    setLsDate(course.liveSession?.date || '');
+    setLsMeetingLink(course.liveSession?.meetingLink || '');
+    setLiveSessionModalCourse(course);
   }
 
   const handleBroadcast = async () => {
@@ -182,11 +182,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 setLsTopic('');
                                 setLsDate('');
                                 setLsMeetingLink('');
-                                setLiveSessionModal({
-                                  courseId: course._id,
-                                  courseTitle: course.title,
-                                  isLiveSessionActive: false // New session, so not active yet
-                                });
+                                setLiveSessionModalCourse(course);
                             }} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Schedule Live Session">
                                 <Video size={16} />
                             </button>
@@ -294,15 +290,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
         </div>
       )}
 
-      {liveSessionModal && (
+      {liveSessionModalCourse && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Live Class</p>
-                        <h3 className="text-xl font-bold text-slate-900">{liveSessionModal.courseTitle}</h3>
+                        <h3 className="text-xl font-bold text-slate-900">{liveSessionModalCourse.title}</h3>
                     </div>
-                    <button onClick={() => setLiveSessionModal(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
+                    <button onClick={() => setLiveSessionModalCourse(null)} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
                 </div>
                 <div className="space-y-4">
                     <div className="space-y-1">
@@ -318,7 +314,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                         <input className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" placeholder="https://meet.google.com/..." value={lsMeetingLink} onChange={e => setLsMeetingLink(e.target.value)} />
                     </div>
                     <button onClick={handleScheduleLive} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
-                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {liveSessionModal.isLiveSessionActive ? 'Update Session' : 'Schedule Now'}
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {liveSessionModalCourse.liveSession?.isActive ? 'Update Session' : 'Schedule Now'}
                     </button>
                 </div>
             </div>
