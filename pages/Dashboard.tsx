@@ -73,11 +73,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
 
   const handleScheduleLive = async () => {
       if (!liveSessionModalCourse || !lsTopic || !lsDate || !lsMeetingLink) return;
+      
+      // Better Setup: Validate date is not in the past
+      if (new Date(lsDate) < new Date()) {
+          alert("Cannot schedule a meeting in the past.");
+          return;
+      }
+
       setActionLoading(true);
       await api.courses.scheduleLive(liveSessionModalCourse._id, { topic: lsTopic, date: lsDate, meetingLink: lsMeetingLink, isActive: true });
       setLiveSessionModalCourse(null);
       setActionLoading(false);
-      alert("Live class scheduled.");
+      alert("Live class scheduled and students have been notified.");
       loadData(); // Reload data to reflect changes
   };
 
