@@ -16,7 +16,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [enrolledStudents, setEnrolledStudents] = useState<{user: User, progress: Progress | null}[]>([]);
   
   const [gradingModal, setGradingModal] = useState<{progressId: string, userId: string, studentName: string, submission: string, courseTitle: string} | null>(null);
-  const [liveSessionModal, setLiveSessionModal] = useState<{courseId: string, courseTitle: string} | null>(null);
+  const [liveSessionModal, setLiveSessionModal] = useState<{courseId: string, courseTitle: string, isLiveSessionActive: boolean} | null>(null);
   const [broadcastModal, setBroadcastModal] = useState<{courseId: string, courseTitle: string} | null>(null);
   
   const [gradeScore, setGradeScore] = useState(0);
@@ -95,8 +95,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
       setLsTopic(course.liveSession.topic);
       setLsDate(course.liveSession.date);
       setLsMeetingLink(course.liveSession.meetingLink);
+    } else {
+      setLsTopic(''); setLsDate(''); setLsMeetingLink(''); // Clear fields for new session
     }
-    setLiveSessionModal({ courseId: course._id, courseTitle: course.title });
+    setLiveSessionModal({ courseId: course._id, courseTitle: course.title, isLiveSessionActive: !!course.liveSession?.isActive });
   }
 
   const handleBroadcast = async () => {
@@ -180,7 +182,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 setLsTopic('');
                                 setLsDate('');
                                 setLsMeetingLink('');
-                                setLiveSessionModal({courseId: course._id, courseTitle: course.title});
+                                setLiveSessionModal({
+                                  courseId: course._id,
+                                  courseTitle: course.title,
+                                  isLiveSessionActive: false // New session, so not active yet
+                                });
                             }} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Schedule Live Session">
                                 <Video size={16} />
                             </button>
@@ -312,7 +318,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                         <input className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" placeholder="https://meet.google.com/..." value={lsMeetingLink} onChange={e => setLsMeetingLink(e.target.value)} />
                     </div>
                     <button onClick={handleScheduleLive} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
-                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {course.liveSession?.isActive ? 'Update Session' : 'Schedule Now'}
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {liveSessionModal.isLiveSessionActive ? 'Update Session' : 'Schedule Now'}
                     </button>
                 </div>
             </div>
