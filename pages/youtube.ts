@@ -33,9 +33,20 @@ export const loadYouTubeAPI = (): Promise<void> => {
   if (apiPromise) return apiPromise;
 
   apiPromise = new Promise((resolve) => {
-    if (window.YT && window.YT.Player) {
+    // If the API is already loaded and the Player constructor is ready, resolve immediately
+    if (window.YT && window.YT.Player && typeof window.YT.Player === 'function') {
       resolve();
       return;
+    }
+
+    // If the script is already in the document but not ready, we just need to wait for the callback
+    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const originalCallback = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+            if (originalCallback) originalCallback();
+            resolve();
+        };
+        return;
     }
 
     const tag = document.createElement('script');

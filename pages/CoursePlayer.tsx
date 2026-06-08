@@ -48,6 +48,7 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
   const [isListening, setIsListening] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(false);
   
+  const abortControllerRef = useRef<AbortController | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const isTutorOrAdmin = user.role !== UserRole.STUDENT;
@@ -160,14 +161,21 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
     if (e) e.preventDefault();
     const finalInput = customInput || input;
     if (!finalInput.trim() || !course) return;
+
+    // Stop any existing request
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+
     setMessages(prev => [...prev, { role: 'user', text: finalInput, timestamp: Date.now() }]);
     setInput('');
     setThinking(true);
+
     try {
       let accumulatedText = "";
-      const stream = askAiTutorStream(finalInput, course);
+      const stream = askAiTutorStream(finalInput, course, [], abortControllerRef.current.signal);
       setMessages(prev => [...prev, { role: 'model', text: "", timestamp: Date.now() }]);
       setThinking(false);
+
       for await (const chunk of stream) {
         accumulatedText += chunk;
         setMessages(prev => {
@@ -176,19 +184,26 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
             return last;
         });
       }
-      if (autoSpeak) playAiVoice(accumulatedText);
-    } catch (err) {
+
+      // Choice: Speak by default only if toggle is ON and not aborted
+      if (autoSpeak && accumulatedText && !abortControllerRef.current.signal.aborted) {
+        playAiVoice(accumulatedText, abortControllerRef.current.signal);
+      }
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
       setMessages(prev => [...prev, { role: 'model', text: "AI Grounding Error.", timestamp: Date.now() }]);
       setThinking(false);
     }
   };
 
-  const playAiVoice = async (text: string) => {
+  const playAiVoice = async (text: string, signal?: AbortSignal) => {
     if (isReading) return;
     setIsReading(true);
     try {
-        const base64Audio = await speakText(text);
+        const base64Audio = await speakText(text, signal);
         if (!base64Audio) { setIsReading(false); return; }
+        if (signal?.aborted) { setIsReading(false); return; }
+
         if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
         const audioBuffer = await decodeAudioData(decode(base64Audio), audioCtxRef.current, 24000, 1);
         const source = audioCtxRef.current.createBufferSource();

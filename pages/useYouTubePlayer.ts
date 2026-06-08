@@ -15,40 +15,49 @@ export const useYouTubePlayer = ({ videoId, onStateChange }: UseYouTubePlayerPro
 
     let isMounted = true;
 
-    const initPlayer = async () => {
-      await loadYouTubeAPI();
-      
-      if (!window.YT || !window.YT.Player) return;
+    const initPlayer = () => {
+      if (!isMounted || !containerRef.current || !window.YT?.Player) return;
 
-      if (!isMounted || !containerRef.current) return;
-
-      // Create a dedicated target element for the player to replace
-      // This ensures the containerRef itself isn't replaced by the iframe
+      // Clear container and create fresh target
       containerRef.current.innerHTML = '';
       const playerTarget = document.createElement('div');
       containerRef.current.appendChild(playerTarget);
 
-      playerRef.current = new window.YT.Player(playerTarget, {
-        videoId,
-        width: '100%',
-        height: '100%',
-        playerVars: {
-          modestbranding: 1,
-          rel: 0,
-          autoplay: 0,
-          showinfo: 0,
-          origin: window.location.origin, // Explicitly set origin
-          enablejsapi: 1,
-        },
-        events: {
-          onStateChange: (event: any) => {
-             if (onStateChange) onStateChange(event);
+      try {
+        playerRef.current = new window.YT.Player(playerTarget, {
+          videoId,
+          width: '100%',
+          height: '100%',
+          playerVars: {
+            modestbranding: 1,
+            rel: 0,
+            autoplay: 0,
+            showinfo: 0,
+            // Use the current origin for the security handshake
+            origin: window.location.origin, 
+            enablejsapi: 1,
+          },
+          events: {
+            onStateChange: (event: any) => {
+               if (isMounted && onStateChange) onStateChange(event);
+            },
+            onError: (e: any) => console.error("YT Player Error:", e.data)
           }
-        }
-      });
+        });
+      } catch (err) {
+        console.error("YT Construction Failed:", err);
+      }
     };
 
-    initPlayer();
+    const start = async () => {
+      await loadYouTubeAPI();
+      if (isMounted) {
+        // Delay slightly to let the DOM stabilize for the handshake
+        setTimeout(initPlayer, 100);
+      }
+    };
+
+    start();
 
     return () => {
       isMounted = false;
