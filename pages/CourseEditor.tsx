@@ -296,6 +296,7 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                         value={price}
                         onChange={e => setPrice(Number(e.target.value))}
                         />
+                    </div>
                 </div>
                 {price === 0 && (
                     <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
