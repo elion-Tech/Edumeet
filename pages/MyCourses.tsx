@@ -118,7 +118,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
           const completedModuleCount = completedModuleIds.length;
           const moduleCompletionPercentage = (completedModuleCount / modules.length) * 100;
           currentWeightedScore += (moduleCompletionPercentage / 100) * MODULE_WEIGHT;
-          gradeBreakdown.modules = Math.round(moduleCompletionPercentage * 10) / 10;
           gradeBreakdown.modules = Math.round(moduleCompletionPercentage);
           isModulesComplete = completedModuleCount === modules.length;
       } else {
@@ -138,7 +137,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
               currentWeightedScore += (quizScore / 100) * QUIZ_WEIGHT;
           }
           const quizTitle = quizzes.length === 1 ? 'Final Assessment' : q.title;
-          gradeBreakdown.quizzes.push({ id: q._id, title: quizTitle, score: Math.round(quizScore * 10) / 10, passed: quizPassed });
           gradeBreakdown.quizzes.push({ id: q._id, title: quizTitle, score: Math.round(quizScore), passed: quizPassed });
           quizCompletionStatus.push({ id: q._id, passed: quizPassed });
       });
@@ -150,7 +148,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
           maxPossibleWeightedScore += CAPSTONE_WEIGHT;
           if (prog.capstoneStatus === 'graded' && prog.capstoneGrade !== undefined) {
               currentWeightedScore += (prog.capstoneGrade / 100) * CAPSTONE_WEIGHT;
-              gradeBreakdown.capstone = Math.round(prog.capstoneGrade * 10) / 10;
               gradeBreakdown.capstone = Math.round(prog.capstoneGrade);
               isCapstoneComplete = true;
           } else {
@@ -164,7 +161,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
       // Calculate overall total percentage
       let total = 0;
       if (maxPossibleWeightedScore > 0) {
-          total = (currentWeightedScore / maxPossibleWeightedScore) * 100;
           total = Math.round((currentWeightedScore / maxPossibleWeightedScore) * 100);
       } else {
           total = 100; // If no components, consider 100% complete (e.g., an empty course, though unlikely)
