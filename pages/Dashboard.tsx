@@ -276,7 +276,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 <button onClick={() => handleDeleteLiveSession(course._id, ls._id)} className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-[10px] font-bold uppercase hover:bg-red-200 transition-colors">Delete</button>
                             </div>
                         </div>
-                    ))}
+                    )))}
                     {/* Add new live session button if less than 2 sessions */}
                     {tutorLiveSessions.filter(ls => ls.courseId === course._id).length < 2 && (
                         <div className="mt-4">
