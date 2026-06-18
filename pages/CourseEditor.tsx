@@ -355,6 +355,7 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                 )}
             </div>
         </div>
+            </div>
       </div>
 
       <div className="space-y-6">
