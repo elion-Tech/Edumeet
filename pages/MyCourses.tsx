@@ -89,72 +89,73 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
   };
 
   const calculateGradeDetails = (course: Course, prog: Progress | undefined) => {
-      if (!prog) return { total: 0, modules: 0, quizzes: [], capstone: 0, isComplete: false };
+      if (!prog) return { total: 0, modules: 0, quizzes: [], capstone: undefined, isComplete: false };
       
       const modules = course.modules ?? [];
       const quizzes = course.quizzes ?? [];
       const capstoneConfig = course.capstone;
       const completedModuleIds = prog.completedModuleIds ?? [];
       const quizResults = prog.quizResults ?? [];
-      const capstoneGrade = prog.capstoneGrade;
 
       let currentWeightedScore = 0;
       let maxPossibleWeightedScore = 0;
 
-      const MODULE_BASE_WEIGHT = 20;
-      const QUIZ_BASE_WEIGHT = 20; // Per quiz
-      const CAPSTONE_BASE_WEIGHT = 40;
+      // Define base weights, these will be used if the component exists
+      const MODULE_WEIGHT = modules.length > 0 ? 20 : 0;
+      const QUIZ_WEIGHT = quizzes.length > 0 ? (quizzes.length === 1 ? 40 : 20) : 0; // Single quiz has more weight
+      const CAPSTONE_WEIGHT = capstoneConfig ? 40 : 0;
 
-      const gradeBreakdown: { modules: number, quizzes: { id: string, title: string, score: number, passed: boolean }[], capstone: number } = {
+      const gradeBreakdown: { modules: number, quizzes: { id: string, title: string, score: number, passed: boolean }[], capstone?: number } = {
           modules: 0,
           quizzes: [],
-          capstone: 0
+          capstone: undefined
       };
 
       // 1. Modules contribution
       let isModulesComplete = true;
       if (modules.length > 0) {
-          maxPossibleWeightedScore += MODULE_BASE_WEIGHT;
+          maxPossibleWeightedScore += MODULE_WEIGHT;
           const completedModuleCount = completedModuleIds.length;
           const moduleCompletionPercentage = (completedModuleCount / modules.length) * 100;
-          currentWeightedScore += (moduleCompletionPercentage / 100) * MODULE_BASE_WEIGHT;
+          currentWeightedScore += (moduleCompletionPercentage / 100) * MODULE_WEIGHT;
           gradeBreakdown.modules = Math.round(moduleCompletionPercentage * 10) / 10;
           isModulesComplete = completedModuleCount === modules.length;
       } else {
-          gradeBreakdown.modules = 100; // If no modules, consider them 100% complete
+          isModulesComplete = true;
       }
 
       // 2. Quizzes contribution
       const quizCompletionStatus: { id: string, passed: boolean }[] = [];
       quizzes.forEach((q) => {
-          maxPossibleWeightedScore += QUIZ_BASE_WEIGHT;
+          maxPossibleWeightedScore += QUIZ_WEIGHT;
           const result = quizResults.find(r => r.quizId === q._id);
           let quizScore = 0;
           let quizPassed = false;
           if (result) {
               quizScore = result.score;
               quizPassed = result.passed;
-              currentWeightedScore += (quizScore / 100) * QUIZ_BASE_WEIGHT;
+              currentWeightedScore += (quizScore / 100) * QUIZ_WEIGHT;
           }
-          gradeBreakdown.quizzes.push({ id: q._id, title: q.title, score: Math.round(quizScore * 10) / 10, passed: quizPassed });
+          const quizTitle = quizzes.length === 1 ? 'Final Assessment' : q.title;
+          gradeBreakdown.quizzes.push({ id: q._id, title: quizTitle, score: Math.round(quizScore * 10) / 10, passed: quizPassed });
           quizCompletionStatus.push({ id: q._id, passed: quizPassed });
       });
       const areQuizzesComplete = quizzes.length === 0 || quizCompletionStatus.every(qs => qs.passed);
 
       // 3. Capstone contribution
       let isCapstoneComplete = true;
-      if (capstoneConfig) {
-          maxPossibleWeightedScore += CAPSTONE_BASE_WEIGHT;
-          if (prog.capstoneStatus === 'graded' && capstoneGrade !== undefined) {
-              currentWeightedScore += (capstoneGrade / 100) * CAPSTONE_BASE_WEIGHT;
-              gradeBreakdown.capstone = Math.round(capstoneGrade * 10) / 10;
+      if (capstoneConfig && prog.capstoneStatus) {
+          maxPossibleWeightedScore += CAPSTONE_WEIGHT;
+          if (prog.capstoneStatus === 'graded' && prog.capstoneGrade !== undefined) {
+              currentWeightedScore += (prog.capstoneGrade / 100) * CAPSTONE_WEIGHT;
+              gradeBreakdown.capstone = Math.round(prog.capstoneGrade * 10) / 10;
               isCapstoneComplete = true;
           } else {
               gradeBreakdown.capstone = 0;
               isCapstoneComplete = false;
           }
       } else {
-          gradeBreakdown.capstone = 100; // If no capstone, consider it 100% complete
+          isCapstoneComplete = true;
       }
 
       // Calculate overall total percentage
@@ -270,19 +271,19 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
                                 <div className="grid grid-cols-4 gap-1 pt-2 border-t border-slate-200/50">
                                     {courseModules.length > 0 && (
                                         <div className="text-center">
-                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mods</div>
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Modules</div>
                                             <div className="text-[10px] font-bold text-slate-700">{moduleProgress}%</div>
                                         </div>
                                     )}
                                     {quizGrades.map((qg) => (
                                         <div key={qg.id} className="text-center">
-                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{qg.title.split(' ')[0]}</div>
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5 truncate">{qg.title.split(' ')[0]}</div>
                                             <div className="text-[10px] font-bold text-slate-700">{qg.score}%</div>
                                         </div>
                                     ))}
                                     {capstone !== undefined && (
                                         <div className="text-center">
-                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Cap</div>
+                                            <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Capstone</div>
                                             <div className="text-[10px] font-bold text-slate-700">{capstone}%</div>
                                         </div>
                                     )}
