@@ -318,8 +318,8 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                                     onChange={e => setPassword(e.target.value)} />
                             </div>
                         )}
-                    </div>
-                </div>
+                    </div> // This div closes the password protection section
+                )}
             </div>
         </div>
 
