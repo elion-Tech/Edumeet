@@ -97,14 +97,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                     <h3 className="text-lg font-bold text-slate-900 truncate mb-4 tracking-tight">{course.title}</h3>
                     <p className="text-slate-500 text-sm mb-6 line-clamp-2">{course.description}</p>
                     <div className="flex gap-3">
-                        <button onClick={() => onNavigate(`#/course-details/${course._id}`)} className="flex-1 py-2.5 bg-orange-600 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 active:scale-95 flex items-center justify-center gap-2">
-                            <BookOpen size={16} /> View Details
+                        <button onClick={() => onNavigate(`#/course-details/${course._id}`)} className="flex-1 py-2.5 sm:py-3 bg-orange-600 text-white rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 active:scale-95 flex items-center justify-center gap-2">
+                            <BookOpen size={16} className="sm:size-18" /> View Details
                         </button>
-                        <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="flex-1 py-2.5 bg-white border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center justify-center gap-2 text-slate-600">
-                            <Edit size={16} /> Edit Course
+                        <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="flex-1 py-2.5 sm:py-3 bg-white border border-slate-200 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center justify-center gap-2 text-slate-600">
+                            <Edit size={16} className="sm:size-18" /> Edit Course
                         </button>
-                        <button onClick={() => handleDelete(course._id)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300">
-                            <Trash2 size={16} />
+                        <button onClick={() => handleDelete(course._id)} className="p-2.5 sm:p-3 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300">
+                            <Trash2 size={16} className="sm:size-18" />
                         </button>
                             </div>
                 </div>
