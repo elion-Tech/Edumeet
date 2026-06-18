@@ -252,9 +252,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-right flex justify-end gap-3">
-                                        <button onClick={() => handleToggleSuspend(u)} className={`p-2.5 rounded-full transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={18}/> : <Ban size={18}/>}</button>
-                                        <button onClick={() => handleDeleteUser(u._id)} className="p-2.5 bg-slate-100 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><UserMinus size={18}/></button>
-                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2.5 bg-slate-100 text-slate-400 hover:bg-orange-50 hover:text-orange-600 rounded-full transition-all"><Mail size={18}/></button>
+                                        <button onClick={() => handleToggleSuspend(u)} className={`p-2 rounded-full transition-all ${u.isSuspended ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600'}`}>{u.isSuspended ? <Unlock size={16}/> : <Ban size={16}/>}</button>
+                                        <button onClick={() => handleDeleteUser(u._id)} className="p-2 bg-slate-100 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><UserMinus size={16}/></button>
+                                        <button onClick={() => setUserMsgModal({ userId: u._id, userName: u.name })} className="p-2 bg-slate-100 text-slate-400 hover:bg-orange-50 hover:text-orange-600 rounded-full transition-all"><Mail size={16}/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -312,11 +312,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-right flex justify-end gap-3">
-                                        <button onClick={() => onNavigate(`#/course-details/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="View Details"><Eye size={18}/></button>
+                                        <button onClick={() => onNavigate(`#/course-details/${c._id}`)} className="p-2 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="View Details"><Eye size={16}/></button>
                                         {/* Added a separate edit button for direct editing if needed, or the details page can have it */}
-                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="Edit Course"><Edit size={18}/></button>
-                                        <button onClick={() => handleTogglePublish(c)} className={`p-2.5 border rounded-full transition-all ${c.published ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200'}`} title={c.published ? "Unpublish" : "Publish"}>{c.published ? <Eye size={18}/> : <EyeOff size={18}/>}</button>
-                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all" title="Delete Course"><Trash2 size={18}/></button>
+                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="Edit Course"><Edit size={16}/></button>
+                                        <button onClick={() => handleTogglePublish(c)} className={`p-2 border rounded-full transition-all ${c.published ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200'}`} title={c.published ? "Unpublish" : "Publish"}>{c.published ? <Eye size={16}/> : <EyeOff size={16}/>}</button>
+                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all" title="Delete Course"><Trash2 size={16}/></button>
                                     </td>
                                 </tr>
                             ))}
@@ -361,8 +361,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         <td className="px-8 py-5 text-right">
                                             <button 
                                                 onClick={() => handleDeleteLiveSession(session.courseId, session._id)} 
-                                                className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"
-                                            ><Trash2 size={18}/></button>
+                                                className="p-2 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"
+                                            ><Trash2 size={16}/></button>
                                         </td>
                                     </tr>
                                 );

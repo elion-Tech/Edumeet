@@ -257,11 +257,11 @@ export const CourseDetailsView: React.FC<CourseDetailsViewProps> = ({ user, cour
         </div>
         {isTutorOrAdmin && (
             <div className="flex gap-3">
-                <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="bg-white border border-slate-200 text-slate-600 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2 font-black text-xs sm:text-sm uppercase tracking-widest">
-                    <Edit size={18} className="sm:size-20" /> Edit Course
+                <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest">
+                    <Edit size={16} /> Edit Course
                 </button>
-                <button onClick={handleDeleteCourse} disabled={actionLoading} className="bg-rose-50 border border-rose-200 text-rose-600 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl hover:bg-rose-100 transition-all flex items-center gap-2 font-black text-xs sm:text-sm uppercase tracking-widest">
-                    {actionLoading ? <Loader2 size={16} className="animate-spin"/> : <Trash2 size={18} className="sm:size-20" />} Delete Course
+                <button onClick={handleDeleteCourse} disabled={actionLoading} className="bg-rose-50 border border-rose-200 text-rose-600 px-3 py-1.5 rounded-xl hover:bg-rose-100 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest">
+                    {actionLoading ? <Loader2 size={14} className="animate-spin"/> : <Trash2 size={16} />} Delete Course
                 </button>
             </div>
         )}
@@ -386,8 +386,8 @@ export const CourseDetailsView: React.FC<CourseDetailsViewProps> = ({ user, cour
                                             submission: item.progress!.capstoneSubmissionText || '', 
                                             courseTitle: course.title
                                           })} 
-                                          className="bg-orange-600 text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-md shadow-orange-100"
-                                        > 
+                                          className="bg-orange-600 text-white px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:bg-orange-700 transition-all shadow-md shadow-orange-100"
+                                        >
                                           Review Submission
                                         </button>
                                     )}
