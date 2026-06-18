@@ -8,6 +8,7 @@ import { LandingPage } from './pages/LandingPage';
 import { MyCourses } from './pages/MyCourses';
 import { CourseEditor } from './pages/CourseEditor';
 import { CoursePlayer } from './pages/CoursePlayer';
+import { CourseDetailsView } from './pages/CourseDetailsView';
 import { ResetPassword } from './pages/ResetPassword';
 import { AdminPanel } from './pages/AdminPanel';
 import { AboutUs } from './pages/AboutUs';
@@ -90,6 +91,8 @@ const App: React.FC = () => {
       content = <CoursePlayer user={user} courseId={normalizedRoute.split('/')[2]} onNavigate={navigate} previewMode={true} />;
   } else if (normalizedRoute.startsWith('/reset-password')) {
       content = <ResetPassword onNavigate={navigate} />;
+  } else if (normalizedRoute.startsWith('/course-details/')) {
+      content = <CourseDetailsView user={user} courseId={normalizedRoute.split('/')[2]} onNavigate={navigate} />;
   } else if (normalizedRoute === '/admin') {
       content = <AdminPanel user={user} onNavigate={navigate} />;
   } else if (normalizedRoute === '/about') {

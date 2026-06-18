@@ -312,9 +312,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-right flex justify-end gap-3">
-                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600"><Edit size={18}/></button>
+                                        <button onClick={() => onNavigate(`#/course-details/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="View Details"><Eye size={18}/></button>
+                                        {/* Added a separate edit button for direct editing if needed, or the details page can have it */}
+                                        <button onClick={() => onNavigate(`#/edit-course/${c._id}`)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-full hover:bg-white hover:shadow-md transition-all text-slate-600" title="Edit Course"><Edit size={18}/></button>
                                         <button onClick={() => handleTogglePublish(c)} className={`p-2.5 border rounded-full transition-all ${c.published ? 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200'}`} title={c.published ? "Unpublish" : "Publish"}>{c.published ? <Eye size={18}/> : <EyeOff size={18}/>}</button>
-                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"><Trash2 size={18}/></button>
+                                        <button onClick={() => handleDeleteCourse(c._id)} className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all" title="Delete Course"><Trash2 size={18}/></button>
                                     </td>
                                 </tr>
                             ))}
