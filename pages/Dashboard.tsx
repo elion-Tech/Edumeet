@@ -140,6 +140,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
     setActionLoading(false);
   };
 
+  const handleDeleteLiveSession = async (courseId: string, liveSessionId: string) => {
+      if (!confirm('Are you sure you want to permanently delete this live session? This action cannot be undone.')) return;
+      setActionLoading(true);
+      const res = await api.courses.deleteLiveSession(courseId, liveSessionId);
+      if (res.error) {
+          alert(res.error);
+      } else {
+          alert("Live session deleted successfully.");
+          loadData(); // Reload data to reflect changes
+      }
+      setActionLoading(false);
+  };
+
+
+
   const openLiveSessionModalForEdit = (course: Course, session: LiveSession) => {
     // datetime-local input requires YYYY-MM-DDTHH:mm format.
     const dateObj = session.date ? new Date(session.date) : null;
@@ -258,6 +273,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 <button onClick={() => handleToggleLiveSession(ls._id, course._id, ls.isActive)} className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-colors flex items-center gap-1 ${ls.isActive ? 'bg-rose-100 text-rose-700 hover:bg-rose-200' : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'}`}>
                                     {ls.isActive ? <ToggleRight size={14} /> : <ToggleLeft size={14} />} {ls.isActive ? 'Deactivate' : 'Activate'}
                                 </button>
+                                <button onClick={() => handleDeleteLiveSession(course._id, ls._id)} className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-[10px] font-bold uppercase hover:bg-red-200 transition-colors">Delete</button>
                             </div>
                         </div>
                     ))}
