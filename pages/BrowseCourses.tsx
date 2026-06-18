@@ -108,9 +108,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
         handleEnrollLogic(course._id); 
       } else if (course.price <= 0 && course.isPasswordProtected) {
         setPasswordModalCourse(course);
-      } else {
-        // This case was missing: it handles paid courses.
-      }
+      } 
   };
 
   const getYoutubeId = (url: string) => {
@@ -289,7 +287,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                                   onStart={setEnrollingId}
                                 />
                               ) : (
-                                <button
+                                <button 
                                     onClick={() => handleEnrollClick(course)}
                                     disabled={isProcessing}
                                     className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"
