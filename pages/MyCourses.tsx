@@ -245,7 +245,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
                 <div key={course._id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-all flex flex-col relative group">
                     <button 
                         onClick={() => handleUnenroll(course._id)}
-                        className="absolute top-3 right-3 z-10 p-2 bg-white/60 backdrop-blur-md rounded-full text-slate-500 hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90"
+                        className="absolute top-3 right-3 z-10 p-2 bg-slate-100/70 backdrop-blur-md rounded-full text-slate-500 hover:bg-rose-500 hover:text-white transition-all active:scale-90"
                         title="Unenroll from this course"
                     >
                         <Trash2 size={14} />
