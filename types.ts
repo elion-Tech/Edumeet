@@ -52,6 +52,7 @@ export interface Capstone {
 
 export interface LiveSession {
   _id: string;
+  courseId: string; // Added to reflect the backend LiveClass model
   topic: string;
   date: string;
   meetingLink: string;
