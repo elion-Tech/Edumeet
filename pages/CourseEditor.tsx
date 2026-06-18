@@ -208,7 +208,7 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
       description,
       thumbnailUrl,
       price,
-      isPasswordProtected: price === 0 && isPasswordProtected, // Only protect if free
+      isPasswordProtected: price === 0 && isPasswordProtected, 
       password: price === 0 && isPasswordProtected ? password : '',
       tutorId: finalTutorId,
       tutorName: finalTutorName,
