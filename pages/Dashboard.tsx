@@ -249,7 +249,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                         <button onClick={() => handleDelete(course._id)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300"><Trash2 size={16} /></button>
                     </div>
 
-                    {/* Display existing live sessions for this course */}
                     {tutorLiveSessions.filter(ls => ls.courseId === course._id).map(ls => (
                         <div key={ls._id} className="mt-6 p-4 bg-rose-50 border border-rose-100 rounded-xl text-rose-800 text-xs font-bold leading-relaxed">
                             <div className="flex items-center justify-between mb-2">
@@ -276,7 +275,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 <button onClick={() => handleDeleteLiveSession(course._id, ls._id)} className="px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-[10px] font-bold uppercase hover:bg-red-200 transition-colors">Delete</button>
                             </div>
                         </div>
-                    )))}
+                    ))}
                     {/* Add new live session button if less than 2 sessions */}
                     {tutorLiveSessions.filter(ls => ls.courseId === course._id).length < 2 && (
                         <div className="mt-4">
