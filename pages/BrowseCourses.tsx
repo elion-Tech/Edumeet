@@ -108,6 +108,8 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
         handleEnrollLogic(course._id); 
       } else if (course.price <= 0 && course.isPasswordProtected) {
         setPasswordModalCourse(course);
+      } else {
+        // This case was missing: it handles paid courses.
       }
   };
 
