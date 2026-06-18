@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
-import { Course, User, UserRole, Progress } from '../types';
+import { Course, User, UserRole, Progress, LiveSession } from '../types';
 import { api } from '../services/apiService';
-import { Edit, Users, Award, CheckCircle, Video, Calendar, Loader2, Trash2, X, Phone, Mail, User as UserIcon, ShieldCheck, Megaphone, Send, PlusCircle, Clock, ExternalLink } from 'lucide-react';
+import { Edit, Users, Award, CheckCircle, Video, Calendar, Loader2, Trash2, X, Phone, Mail, User as UserIcon, ShieldCheck, Megaphone, Send, PlusCircle, Clock, ExternalLink, ToggleRight, ToggleLeft } from 'lucide-react';
 
 interface DashboardProps {
   user: User;
@@ -16,6 +16,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [enrolledStudents, setEnrolledStudents] = useState<{user: User, progress: Progress | null}[]>([]);
   
   const [gradingModal, setGradingModal] = useState<{progressId: string, userId: string, studentName: string, submission: string, courseTitle: string} | null>(null);
+  const [tutorLiveSessions, setTutorLiveSessions] = useState<LiveSession[]>([]);
+  const [editingLiveSession, setEditingLiveSession] = useState<LiveSession | null>(null);
   const [liveSessionModalCourse, setLiveSessionModalCourse] = useState<Course | null>(null);
   const [broadcastModal, setBroadcastModal] = useState<{courseId: string, courseTitle: string} | null>(null);
   
@@ -37,6 +39,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
     const allCourses = res.data?.filter(Boolean) ?? []; // Ensure no null/undefined courses
     const filtered = user.role === UserRole.TUTOR ? allCourses.filter(c => c.tutorId === user._id) : allCourses;
     setCourses(filtered);
+
+    const liveSessionsRes = await api.courses.getAllLiveSessions();
+    if (liveSessionsRes.data) {
+        setTutorLiveSessions(liveSessionsRes.data.filter((ls: LiveSession) => filtered.some(c => c._id === ls.courseId)));
+    }
+
     if (filtered.length > 0) {
         setSelectedCourseId(filtered[0]._id);
         fetchStudents(filtered[0]._id);
@@ -71,7 +79,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
       setActionLoading(false);
   };
 
-  const handleScheduleLive = async () => {
+  const handleScheduleLive = async (sessionToUpdate?: LiveSession) => {
       if (!liveSessionModalCourse || !lsTopic || !lsDate || !lsMeetingLink) return;
       
       // Better Setup: Validate date is not in the past
@@ -81,38 +89,69 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
       }
 
       setActionLoading(true);
-      await api.courses.scheduleLive(liveSessionModalCourse._id, { topic: lsTopic, date: lsDate, meetingLink: lsMeetingLink, isActive: true });
-      setLiveSessionModalCourse(null);
+      const sessionData = {
+          _id: sessionToUpdate?._id, // Pass _id if updating
+          topic: lsTopic,
+          date: lsDate,
+          meetingLink: lsMeetingLink,
+          isActive: true // Always active when scheduling/updating
+      };
+      const res = await api.courses.scheduleLive(liveSessionModalCourse._id, sessionData);
+      if (res.error) {
+          alert(res.error);
+      } else {
+          alert("Live class scheduled/updated and students have been notified.");
+          setLiveSessionModalCourse(null);
+          setEditingLiveSession(null);
+          setLsTopic('');
+          setLsDate('');
+          setLsMeetingLink('');
+          loadData(); // Reload data to reflect changes
+      }
       setActionLoading(false);
-      alert("Live class scheduled and students have been notified.");
-      loadData(); // Reload data to reflect changes
   };
 
-  const handleDeleteLiveSession = async (courseId: string) => {
-    if (!confirm('Are you sure you want to delete this live session?')) return;
+  const handleToggleLiveSession = async (liveSessionId: string, courseId: string, currentStatus: boolean) => {
+    const action = currentStatus ? 'deactivate' : 'activate';
+    if (!confirm(`Are you sure you want to ${action} this live session?`)) return;
+
     setActionLoading(true);
-    await api.courses.scheduleLive(courseId, null); // Send null to delete the session
-    setActionLoading(false);
-    alert("Live session deleted.");
-    loadData(); // Reload data to reflect changes
-  };
-
-  const openLiveSessionModalForEdit = (course: Course) => {
-    if (!course) { // Defensive check
-      console.error("Attempted to open live session modal for an undefined course.");
-      return;
+    const sessionToToggle = tutorLiveSessions.find(ls => ls._id === liveSessionId);
+    if (!sessionToToggle) {
+        alert("Session not found.");
+        setActionLoading(false);
+        return;
     }
 
+    const sessionData = {
+        _id: liveSessionId,
+        topic: sessionToToggle.topic,
+        date: sessionToToggle.date,
+        meetingLink: sessionToToggle.meetingLink,
+        isActive: !currentStatus // Toggle status
+    };
+    const res = await api.courses.scheduleLive(courseId, sessionData);
+    if (res.error) {
+        alert(res.error);
+    } else {
+        alert(`Live session ${action}d.`);
+        loadData(); // Reload data to reflect changes
+    }
+    setActionLoading(false);
+  };
+
+  const openLiveSessionModalForEdit = (course: Course, session: LiveSession) => {
     // datetime-local input requires YYYY-MM-DDTHH:mm format.
-    const dateObj = course.liveSession?.date ? new Date(course.liveSession.date) : null;
+    const dateObj = session.date ? new Date(session.date) : null;
     const formattedDate = (dateObj && !isNaN(dateObj.getTime())) 
       ? new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
       : '';
 
-    setLsTopic(course.liveSession?.topic || '');
+    setLsTopic(session.topic || '');
     setLsDate(formattedDate);
-    setLsMeetingLink(course.liveSession?.meetingLink || '');
+    setLsMeetingLink(session.meetingLink || '');
     setLiveSessionModalCourse(course);
+    setEditingLiveSession(session);
   }
 
   const handleBroadcast = async () => {
@@ -137,6 +176,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
 
   // Helper to get information about the currently selected course for student management
   const selectedCourse = courses.find(c => c._id === selectedCourseId);
+  // Get live sessions for the current course
+  const currentCourseLiveSessions = tutorLiveSessions.filter(ls => ls.courseId === selectedCourseId);
 
   return (
     <div className="space-y-8 pb-12 animate-in fade-in duration-700">
@@ -190,40 +231,48 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                         <button onClick={() => onNavigate(`#/edit-course/${course._id}`)} className="p-2.5 bg-white border border-slate-100 rounded-full hover:bg-slate-50 transition-all flex items-center justify-center text-slate-600"><Edit size={16} /></button>
                         <button onClick={() => setBroadcastModal({courseId: course._id, courseTitle: course.title})} className="p-2.5 bg-orange-50 border border-orange-100 rounded-full hover:bg-orange-100 transition-all flex items-center justify-center text-orange-600"><Megaphone size={16} /></button>
                         
-                        {course.liveSession?.isActive ? (
-                            <button onClick={() => openLiveSessionModalForEdit(course)} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Edit Live Session">
-                                <Video size={16} />
-                            </button>
-                        ) : (
+                        <button onClick={() => handleDelete(course._id)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300"><Trash2 size={16} /></button>
+                    </div>
+
+                    {/* Display existing live sessions for this course */}
+                    {tutorLiveSessions.filter(ls => ls.courseId === course._id).map(ls => (
+                        <div key={ls._id} className="mt-6 p-4 bg-rose-50 border border-rose-100 rounded-xl text-rose-800 text-xs font-bold leading-relaxed">
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                    <Video size={14} className="text-rose-600" />
+                                    <span>Live Session: {ls.topic}</span>
+                                </div>
+                                <span className={`px-2 py-1 rounded-full text-[9px] font-bold uppercase ${ls.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                                    {ls.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-slate-600 font-medium mt-2">
+                                <Calendar size={12} /> {new Date(ls.date).toLocaleDateString()}
+                                <Clock size={12} className="ml-3" /> {new Date(ls.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <a href={ls.meetingLink} target="_blank" rel="noopener noreferrer" className="ml-auto text-rose-600 hover:underline flex items-center gap-1">
+                                    Join <ExternalLink size={12} />
+                                </a>
+                            </div>
+                            <div className="flex justify-end gap-2 mt-3">
+                                <button onClick={() => openLiveSessionModalForEdit(course, ls)} className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase hover:bg-rose-200 transition-colors">Edit</button>
+                                <button onClick={() => handleToggleLiveSession(ls._id, course._id, ls.isActive)} className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-colors flex items-center gap-1 ${ls.isActive ? 'bg-rose-100 text-rose-700 hover:bg-rose-200' : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'}`}>
+                                    {ls.isActive ? <ToggleRight size={14} /> : <ToggleLeft size={14} />} {ls.isActive ? 'Deactivate' : 'Activate'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    {/* Add new live session button if less than 2 sessions */}
+                    {tutorLiveSessions.filter(ls => ls.courseId === course._id).length < 2 && (
+                        <div className="mt-4">
                             <button onClick={() => {
                                 setLsTopic('');
                                 setLsDate('');
                                 setLsMeetingLink('');
                                 setLiveSessionModalCourse(course);
-                            }} className="p-2.5 bg-rose-50 border border-rose-100 rounded-full hover:bg-rose-100 transition-all flex items-center justify-center text-rose-600" title="Schedule Live Session">
-                                <Video size={16} />
+                                setEditingLiveSession(null); // Clear editing state for new session
+                            }} className="w-full py-2.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-[10px] font-bold uppercase tracking-widest hover:bg-rose-100 transition-all flex items-center justify-center gap-2">
+                                <PlusCircle size={16} /> Schedule New Live Session
                             </button>
-                        )}
-                        
-                        <button onClick={() => handleDelete(course._id)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center justify-center text-slate-300"><Trash2 size={16} /></button>
-                    </div>
-                    {course.liveSession?.isActive && (
-                        <div className="mt-6 p-4 bg-rose-50 border border-rose-100 rounded-xl text-rose-800 text-xs font-bold leading-relaxed">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Video size={14} className="text-rose-600" />
-                                <span>Live Session: {course.liveSession.topic}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-slate-600 font-medium">
-                                <Calendar size={12} /> {new Date(course.liveSession.date).toLocaleDateString()}
-                                <Clock size={12} className="ml-3" /> {new Date(course.liveSession.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                <a href={course.liveSession.meetingLink} target="_blank" rel="noopener noreferrer" className="ml-auto text-rose-600 hover:underline flex items-center gap-1">
-                                    Join <ExternalLink size={12} />
-                                </a>
-                            </div>
-                            <div className="flex justify-end gap-2 mt-3">
-                                <button onClick={() => openLiveSessionModalForEdit(course)} className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase hover:bg-rose-200 transition-colors">Edit</button>
-                                <button onClick={() => handleDeleteLiveSession(course._id)} className="px-3 py-1.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase hover:bg-rose-200 transition-colors">Delete</button>
-                            </div>
                         </div>
                     )}
                 </div>
@@ -341,8 +390,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">Meeting URL</label>
                         <input className="w-full p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" placeholder="https://meet.google.com/..." value={lsMeetingLink} onChange={e => setLsMeetingLink(e.target.value)} />
                     </div>
-                    <button onClick={handleScheduleLive} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
-                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {liveSessionModalCourse.liveSession?.isActive ? 'Update Session' : 'Schedule Now'}
+                    <button onClick={() => handleScheduleLive(editingLiveSession || undefined)} disabled={actionLoading} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95">
+                        {actionLoading ? <Loader2 className="animate-spin"/> : <Video size={18}/>} {editingLiveSession ? 'Update Session' : 'Schedule Now'}
                     </button>
                 </div>
             </div>

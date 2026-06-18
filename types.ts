@@ -71,7 +71,6 @@ export interface Course {
   capstone?: Capstone;
   createdAt: string;
   published: boolean;
-  liveSessions?: LiveSession[];
   geminiCacheName?: string;
 }
 
