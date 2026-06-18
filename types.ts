@@ -74,6 +74,13 @@ export interface Course {
   geminiCacheName?: string;
 }
 
+export interface CourseLiveSession {
+  courseId: string;
+  courseTitle: string;
+  tutorName: string;
+  session: LiveSession;
+}
+
 export interface QuizResult {
   quizId: string;
   score: number;

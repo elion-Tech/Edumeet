@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Course, User } from '../types';
+import { Course, User, LiveSession, CourseLiveSession } from '../types';
 import { usePaystackPayment } from 'react-paystack';
 import { api } from '../services/apiService';
 import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen, Eye } from 'lucide-react';
@@ -102,9 +102,32 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
     c.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const activeLiveSessions = courses
-    .filter(c => c.liveSession?.isActive && (user.enrolledCourseIds ?? []).includes(c._id))
-    .map(c => ({ courseId: c._id, courseTitle: c.title, session: c.liveSession! }));
+  const [allActiveLiveSessions, setAllActiveLiveSessions] = useState<CourseLiveSession[]>([]);
+
+  useEffect(() => {
+    if (user?.enrolledCourseIds?.length > 0) {
+      const fetchActiveLiveSessions = async () => {
+        const enrolledCourseIds = user.enrolledCourseIds ?? [];
+        const allSessions: CourseLiveSession[] = [];
+        for (const courseId of enrolledCourseIds) {
+          const res = await api.courses.getLiveSessionsByCourse(courseId);
+          if (res.data) {
+            const course = courses.find(c => c._id === courseId); // Find the full course object
+            if (course) {
+              const activeSessionsForCourse = res.data
+                .filter((ls: LiveSession) => ls.isActive)
+                .map((ls: LiveSession) => ({ courseId: course._id, courseTitle: course.title, tutorName: course.tutorName, session: ls }));
+              allSessions.push(...activeSessionsForCourse);
+            }
+          }
+        }
+        setAllActiveLiveSessions(allSessions.sort((a, b) => new Date(a.session.date).getTime() - new Date(b.session.date).getTime()));
+      };
+      fetchActiveLiveSessions();
+    }
+  }, [user.enrolledCourseIds, courses]); // Re-run when enrolled courses or course data changes
+
+  const activeLiveSessions = allActiveLiveSessions;
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-slate-500 animate-in fade-in duration-1000">
