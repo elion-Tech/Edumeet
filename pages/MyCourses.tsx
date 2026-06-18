@@ -136,13 +136,14 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
   };
 
   const liveSessions = (courses ?? [])
-    .filter(c => c.liveSession && c.liveSession.isActive)
-    .map(c => ({
-        courseId: c._id,
-        courseTitle: c.title,
-        tutorName: c.tutorName,
-        session: c.liveSession!
-    }))
+    .flatMap(c => (c.liveSessions ?? [])
+        .filter(ls => ls.isActive)
+        .map(ls => ({
+            courseId: c._id,
+            courseTitle: c.title,
+            tutorName: c.tutorName,
+            session: ls
+        })))
     .sort((a, b) => new Date(a.session.date).getTime() - new Date(b.session.date).getTime());
 
   if (loading) return (

@@ -51,6 +51,7 @@ export interface Capstone {
 }
 
 export interface LiveSession {
+  _id: string;
   topic: string;
   date: string;
   meetingLink: string;
@@ -70,7 +71,7 @@ export interface Course {
   capstone?: Capstone;
   createdAt: string;
   published: boolean;
-  liveSession?: LiveSession;
+  liveSessions?: LiveSession[];
   geminiCacheName?: string;
 }
 
