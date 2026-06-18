@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Course, User, UserRole } from '../types';
+import { Course, User, UserRole, LiveSession } from '../types';
 import { api } from '../services/apiService';
-import { Users, BookOpen, Shield, Trash2, Activity, Database, Unlock, Ban, Loader2, Search, Mail, X, UserPlus, ShieldCheck, Zap, Globe, Eye, EyeOff, Edit, PlusCircle, UserMinus, Send } from 'lucide-react';
+import { Users, BookOpen, Shield, Trash2, Activity, Database, Unlock, Ban, Loader2, Search, Mail, X, UserPlus, ShieldCheck, Zap, Globe, Eye, EyeOff, Edit, PlusCircle, UserMinus, Send, Video, Calendar } from 'lucide-react';
 
 interface AdminPanelProps {
   user: User;
@@ -9,11 +9,12 @@ interface AdminPanelProps {
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNavigate }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'server'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'live' | 'server'>('overview');
   const [userSubTab, setUserSubTab] = useState<UserRole | 'all'>('all');
   const [courseStatusFilter, setCourseStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [courses, setCourses] = useState<Course[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [liveSessions, setLiveSessions] = useState<LiveSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   
@@ -38,9 +39,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
 
   const loadData = async () => {
     setLoading(true);
-    const [c, u] = await Promise.all([api.courses.getAll('all'), api.users.getAll()]);
+    const [c, u, l] = await Promise.all([api.courses.getAll('all'), api.users.getAll(), api.courses.getAllLiveSessions()]);
     setCourses(Array.isArray(c.data) ? c.data.filter(Boolean) : []);
     setUsers(Array.isArray(u.data) ? u.data.filter(Boolean) : []);
+    setLiveSessions(Array.isArray(l.data) ? l.data.filter(Boolean) : []);
     setLoading(false);
   };
 
@@ -114,6 +116,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
       setActionLoading(null);
   };
 
+  const handleDeleteLiveSession = async (courseId: string, sessionId: string) => {
+      if (!confirm('Permanently delete this live session?')) return;
+      setActionLoading(`del-live-${sessionId}`);
+      await api.courses.deleteLiveSession(courseId, sessionId);
+      await loadData();
+      setActionLoading(null);
+  };
+
   const handleSendMessage = async () => {
       if (!userMsgModal || !adminMessage.trim()) return;
       setActionLoading(`msg-${userMsgModal.userId}`);
@@ -173,6 +183,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
         <div className="flex flex-wrap gap-3">
             <button onClick={() => setActiveTab('overview')} className={`px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-white text-slate-500 border border-slate-200 hover:border-orange-200 hover:text-orange-600'}`}>Users</button>
             <button onClick={() => setActiveTab('courses')} className={`px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'courses' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-white text-slate-500 border border-slate-200 hover:border-orange-200 hover:text-orange-600'}`}>Courses</button>
+            <button onClick={() => setActiveTab('live')} className={`px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'live' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-white text-slate-500 border border-slate-200 hover:border-orange-200 hover:text-orange-600'}`}>Live Events</button>
             <button onClick={() => setActiveTab('server')} className={`px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'server' ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400 hover:text-slate-900'}`}>System</button>
         </div>
       </div>
@@ -307,6 +318,53 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ user: currentUser, onNav
                                     </td>
                                 </tr>
                             ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {activeTab === 'live' && (
+        <div className="space-y-6 animate-in slide-in-from-bottom-4">
+            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2"><Video size={20} className="text-orange-600"/> Live Session Management</h3>
+
+            <div className="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-xl shadow-slate-200/50">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-slate-50/50 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                            <tr><th className="px-8 py-5">Session Topic</th><th className="px-8 py-5">Course context</th><th className="px-8 py-5">Schedule</th><th className="px-8 py-5">Status</th><th className="px-8 py-5 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {liveSessions.map(session => {
+                                const course = courses.find(c => c._id === session.courseId);
+                                return (
+                                    <tr key={session._id} className="hover:bg-orange-50/10 transition-colors group">
+                                        <td className="px-8 py-5">
+                                            <div className="font-bold text-slate-800 text-base mb-1">{session.topic}</div>
+                                            <a href={session.meetingLink} target="_blank" rel="noreferrer" className="text-[10px] text-orange-600 font-bold hover:underline">Join Meeting</a>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <span className="font-semibold text-slate-600">{course?.title || 'Unknown Course'}</span>
+                                        </td>
+                                        <td className="px-8 py-5 text-slate-500 font-medium">
+                                            <div className="flex items-center gap-2"><Calendar size={14}/> {new Date(session.date).toLocaleString()}</div>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <div className={`flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest ${session.isActive ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                                <div className={`w-2 h-2 rounded-full ${session.isActive ? 'bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50' : 'bg-slate-300'}`}></div>
+                                                {session.isActive ? 'Live Now' : 'Scheduled'}
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5 text-right">
+                                            <button 
+                                                onClick={() => handleDeleteLiveSession(session.courseId, session._id)} 
+                                                className="p-2.5 bg-slate-100 border border-slate-200 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all"
+                                            ><Trash2 size={18}/></button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
