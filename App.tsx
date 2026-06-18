@@ -45,7 +45,7 @@ const App: React.FC = () => {
     window.location.hash = '/';
   };
 
-  const handleEnrollSuccess = (updatedUser: User) => {
+  const onUserUpdate = (updatedUser: User) => {
       if (!updatedUser) return;
       setUser({ ...updatedUser });
       localStorage.setItem(SESSION_KEY, JSON.stringify(updatedUser)); 
@@ -75,12 +75,12 @@ const App: React.FC = () => {
 
   if (normalizedRoute === '/' || normalizedRoute === '') {
       content = user.role === UserRole.STUDENT ? (
-        <BrowseCourses user={user} onNavigate={navigate} onEnrollSuccess={handleEnrollSuccess} />
+        <BrowseCourses user={user} onNavigate={navigate} onEnrollSuccess={onUserUpdate} />
       ) : (
         <Dashboard user={user} onNavigate={navigate} />
       );
   } else if (normalizedRoute === '/my-courses') {
-      content = <MyCourses user={user} onNavigate={navigate} />;
+      content = <MyCourses user={user} onNavigate={navigate} onUserUpdate={onUserUpdate} />;
   } else if (normalizedRoute === '/create-course') {
       content = <CourseEditor user={user} onNavigate={navigate} />;
   } else if (normalizedRoute.startsWith('/edit-course/')) {

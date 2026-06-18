@@ -7,9 +7,10 @@ import { Book, PlayCircle, CheckCircle, Award, Video, Calendar, ExternalLink, Cl
 interface MyCoursesProps {
   user: User;
   onNavigate: (path: string) => void;
+  onUserUpdate: (user: User) => void;
 }
 
-export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
+export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUpdate }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [progressMap, setProgressMap] = useState<Record<string, Progress>>({});
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,8 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
     if (window.confirm(`Are you sure you want to unenroll from "${course.title}"? All your progress will be permanently deleted.`)) {
       const res = await api.users.unenroll(user._id, courseId);
       if (res.data) {
-        loadEnrolledCourses(); // Reload to reflect the change
+        // This is the critical fix: update the user state in App.tsx
+        onUserUpdate(res.data);
       } else {
         alert(res.error || "Failed to unenroll. Please try again.");
       }
