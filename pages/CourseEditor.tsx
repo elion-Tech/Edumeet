@@ -322,7 +322,6 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                     </div>
                 </div>
             </div>
-        </div>
 
         <div className="space-y-4">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col items-center justify-center relative overflow-hidden group">
