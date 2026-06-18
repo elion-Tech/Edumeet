@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Course, User, LiveSession, CourseLiveSession } from '../types';
 import { usePaystackPayment } from 'react-paystack';
 import { api } from '../services/apiService';
-import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen, Eye } from 'lucide-react';
+import { Search, ShoppingCart, Check, CreditCard, Loader2, Lock, Star, Sparkles, Video, Calendar, Clock, ExternalLink, Compass, ArrowRight, User as UserIcon, BookOpen, Eye, Key, X } from 'lucide-react';
 
 interface BrowseCoursesProps {
   user: User;
@@ -64,6 +64,8 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [enrollingId, setEnrollingId] = useState<string | null>(null);
+  const [passwordModalCourse, setPasswordModalCourse] = useState<Course | null>(null);
+  const [coursePassword, setCoursePassword] = useState('');
 
   useEffect(() => { loadCourses(); }, []);
 
@@ -84,11 +86,28 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
     setEnrollingId(null);
   };
 
+  const handlePasswordEnroll = async () => {
+    if (!passwordModalCourse || !coursePassword) return;
+    setEnrollingId(passwordModalCourse._id);
+    const res = await api.users.enrollWithPassword(user._id, passwordModalCourse._id, coursePassword);
+    if (res.data) {
+        onEnrollSuccess(res.data);
+        onNavigate(`#/course/${passwordModalCourse._id}`);
+    } else {
+        alert(res.error || "Enrollment failed. Check the password and try again.");
+    }
+    setEnrollingId(null);
+    setPasswordModalCourse(null);
+    setCoursePassword('');
+  };
+
   const handleEnrollClick = (course: Course) => {
       if ((user.enrolledCourseIds?.length ?? 0) >= 3) { alert("Enrollment Limit Reached (Max 3)."); return; }
-      if (course.price <= 0) { 
+      if (course.price <= 0 && !course.isPasswordProtected) { 
         setEnrollingId(course._id); 
         handleEnrollLogic(course._id); 
+      } else if (course.price <= 0 && course.isPasswordProtected) {
+        setPasswordModalCourse(course);
       }
   };
 
@@ -268,7 +287,7 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                                   onStart={setEnrollingId}
                                 />
                               ) : (
-                                <button 
+                                <button
                                     onClick={() => handleEnrollClick(course)}
                                     disabled={isProcessing}
                                     className="flex-[2] bg-gradient-to-r from-orange-500 to-rose-600 text-white py-3 rounded-full font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg uppercase text-[10px] tracking-widest transition-all active:scale-95 group/btn"

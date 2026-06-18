@@ -79,6 +79,7 @@ export const api = {
     toggleSuspension: (userId: string, isSuspended: boolean) => request<void>(`/api/users/${userId}/suspend`, { method: 'PATCH', body: JSON.stringify({ isSuspended }) }),
     delete: (userId: string) => request<void>(`/api/users/${userId}`, { method: 'DELETE' }),
     unenroll: (userId: string, courseId: string) => request<User>(`/api/users/${userId}/unenroll/${courseId}`, { method: 'DELETE' }),
+    enrollWithPassword: (userId: string, courseId: string, password: string) => request<User>(`/api/users/${userId}/enroll-with-password/${courseId}`, { method: 'POST', body: JSON.stringify({ password }) }),
     enroll: (userId: string, courseId: string) => request<User>(`/api/users/${userId}/enroll`, { method: 'POST', body: JSON.stringify({ courseId }) }),
     requestPasswordReset: (data: { email: string }) => request<void>('/api/users/request-password-reset', { method: 'POST', body: JSON.stringify(data) }),
     resetPassword: (data: { token: string, newPassword: string }) => request<void>('/api/users/reset-password', { method: 'POST', body: JSON.stringify(data) })

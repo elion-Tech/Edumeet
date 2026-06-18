@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Course, Module, Quiz, Capstone, User, CapstoneType, UserRole } from '../types';
 import { api } from '../services/apiService';
 import { generateCourseContent, generateCourseImage } from '../services/geminiService';
-import { Plus, Trash2, Save, FileText, HelpCircle, Award, Video, DollarSign, Loader2, Sparkles, Wand2, Eye, Image as ImageIcon, CheckCircle2, Circle } from 'lucide-react';
+import { Plus, Trash2, Save, FileText, HelpCircle, Award, Video, DollarSign, Loader2, Sparkles, Wand2, Eye, Image as ImageIcon, CheckCircle2, Circle, Key, Lock, Unlock } from 'lucide-react';
 
 interface CourseEditorProps {
   user: User;
@@ -16,6 +16,8 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
   const [description, setDescription] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [price, setPrice] = useState<number>(0);
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
+  const [password, setPassword] = useState('');
   
   const [originalCourse, setOriginalCourse] = useState<Course | null>(null);
 
@@ -40,6 +42,8 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                 setDescription(course.description);
                 setThumbnailUrl(course.thumbnailUrl || '');
                 setPrice(course.price);
+                setIsPasswordProtected(course.isPasswordProtected || false);
+                setPassword(course.password || '');
                 setModules(course.modules);
                 setQuizzes(course.quizzes);
                 setCapstone(course.capstone);
@@ -204,6 +208,8 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
       description,
       thumbnailUrl,
       price,
+      isPasswordProtected: price === 0 && isPasswordProtected, // Only protect if free
+      password: price === 0 && isPasswordProtected ? password : '',
       tutorId: finalTutorId,
       tutorName: finalTutorName,
       createdAt: isEditing ? originalCourse.createdAt : new Date().toISOString(),
@@ -290,6 +296,29 @@ export const CourseEditor: React.FC<CourseEditorProps> = ({ user, onNavigate, ed
                         value={price}
                         onChange={e => setPrice(Number(e.target.value))}
                         />
+                    </div>
+                </div>
+                {price === 0 && (
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                        <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                {isPasswordProtected ? <Lock size={14} className="text-rose-500" /> : <Unlock size={14} />}
+                                Password Protection
+                            </label>
+                            <button onClick={() => setIsPasswordProtected(!isPasswordProtected)} className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase transition-all ${isPasswordProtected ? 'bg-rose-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
+                                {isPasswordProtected ? 'Enabled' : 'Disabled'}
+                            </button>
+                        </div>
+                        {isPasswordProtected && (
+                            <div className="relative animate-in fade-in duration-300">
+                                <Key className="absolute left-4 top-3.5 text-slate-400" size={16} />
+                                <input
+                                    className="w-full pl-10 p-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 outline-none transition-all font-bold text-slate-800"
+                                    placeholder="Set course password..."
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)} />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
