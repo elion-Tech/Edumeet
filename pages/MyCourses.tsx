@@ -119,6 +119,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
           const moduleCompletionPercentage = (completedModuleCount / modules.length) * 100;
           currentWeightedScore += (moduleCompletionPercentage / 100) * MODULE_WEIGHT;
           gradeBreakdown.modules = Math.round(moduleCompletionPercentage * 10) / 10;
+          gradeBreakdown.modules = Math.round(moduleCompletionPercentage);
           isModulesComplete = completedModuleCount === modules.length;
       } else {
           isModulesComplete = true;
@@ -138,6 +139,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
           }
           const quizTitle = quizzes.length === 1 ? 'Final Assessment' : q.title;
           gradeBreakdown.quizzes.push({ id: q._id, title: quizTitle, score: Math.round(quizScore * 10) / 10, passed: quizPassed });
+          gradeBreakdown.quizzes.push({ id: q._id, title: quizTitle, score: Math.round(quizScore), passed: quizPassed });
           quizCompletionStatus.push({ id: q._id, passed: quizPassed });
       });
       const areQuizzesComplete = quizzes.length === 0 || quizCompletionStatus.every(qs => qs.passed);
@@ -149,6 +151,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
           if (prog.capstoneStatus === 'graded' && prog.capstoneGrade !== undefined) {
               currentWeightedScore += (prog.capstoneGrade / 100) * CAPSTONE_WEIGHT;
               gradeBreakdown.capstone = Math.round(prog.capstoneGrade * 10) / 10;
+              gradeBreakdown.capstone = Math.round(prog.capstoneGrade);
               isCapstoneComplete = true;
           } else {
               gradeBreakdown.capstone = 0;
@@ -162,6 +165,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate, onUserUp
       let total = 0;
       if (maxPossibleWeightedScore > 0) {
           total = (currentWeightedScore / maxPossibleWeightedScore) * 100;
+          total = Math.round((currentWeightedScore / maxPossibleWeightedScore) * 100);
       } else {
           total = 100; // If no components, consider 100% complete (e.g., an empty course, though unlikely)
       }
