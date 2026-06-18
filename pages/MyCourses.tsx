@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Course, User, Progress, LiveSession, CourseLiveSession } from '../types';
 import { api } from '../services/apiService';
-import { Book, PlayCircle, CheckCircle, Award, Video, Calendar, ExternalLink, Clock, Loader2, BookOpen } from 'lucide-react';
+import { Book, PlayCircle, CheckCircle, Award, Video, Calendar, ExternalLink, Clock, Loader2, BookOpen, Trash2 } from 'lucide-react';
 
 interface MyCoursesProps {
   user: User;
@@ -40,6 +40,20 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
         setProgressMap(pMap);
     }
     setLoading(false);
+  };
+
+  const handleUnenroll = async (courseId: string) => {
+    const course = courses.find(c => c._id === courseId);
+    if (!course) return;
+
+    if (window.confirm(`Are you sure you want to unenroll from "${course.title}"? All your progress will be permanently deleted.`)) {
+      const res = await api.users.unenroll(user._id, courseId);
+      if (res.data) {
+        loadEnrolledCourses(); // Reload to reflect the change
+      } else {
+        alert(res.error || "Failed to unenroll. Please try again.");
+      }
+    }
   };
 
   useEffect(() => {
@@ -229,6 +243,13 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ user, onNavigate }) => {
 
                 return (
                 <div key={course._id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-all flex flex-col relative group">
+                    <button 
+                        onClick={() => handleUnenroll(course._id)}
+                        className="absolute top-3 right-3 z-10 p-2 bg-white/60 backdrop-blur-md rounded-full text-slate-500 hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90"
+                        title="Unenroll from this course"
+                    >
+                        <Trash2 size={14} />
+                    </button>
                     <div className="h-36 bg-slate-800 relative overflow-hidden">
                         <img src={thumbUrl} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" />
                     </div>
