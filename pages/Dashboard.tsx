@@ -260,7 +260,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
                                 </button>
                             </div>
                         </div>
-                    )}
+                    )))}
                     {/* Add new live session button if less than 2 sessions */}
                     {tutorLiveSessions.filter(ls => ls.courseId === course._id).length < 2 && (
                         <div className="mt-4">
