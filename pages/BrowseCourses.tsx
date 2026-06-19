@@ -101,14 +101,21 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
     setCoursePassword('');
   };
 
+  const isProtectedCourse = (course: Course) => !!course.isPasswordProtected || !!course.password;
+
   const handleEnrollClick = (course: Course) => {
-      if ((user.enrolledCourseIds?.length ?? 0) >= 3) { alert("Enrollment Limit Reached (Max 3)."); return; }
-      if (course.price <= 0 && !course.isPasswordProtected) { 
-        setEnrollingId(course._id); 
-        handleEnrollLogic(course._id); 
-      } else if (course.price <= 0 && course.isPasswordProtected) {
+      if ((user.enrolledCourseIds?.length ?? 0) >= 3) {
+        alert("Enrollment Limit Reached (Max 3).");
+        return;
+      }
+
+      if (course.price <= 0 && !isProtectedCourse(course)) {
+        setEnrollingId(course._id);
+        handleEnrollLogic(course._id);
+      } else if (course.price <= 0 && isProtectedCourse(course)) {
+        setCoursePassword('');
         setPasswordModalCourse(course);
-      } 
+      }
   };
 
   const getYoutubeId = (url: string) => {
@@ -206,6 +213,35 @@ export const BrowseCourses: React.FC<BrowseCoursesProps> = ({ user, onNavigate, 
                 </div>
               </div>
           </div>
+      )}
+
+      {passwordModalCourse && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[32px] p-8 max-w-md w-full shadow-2xl animate-in zoom-in duration-300 border border-slate-100">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Password Required</p>
+                        <h3 className="text-xl font-bold text-slate-900 line-clamp-1">{passwordModalCourse.title}</h3>
+                    </div>
+                    <button onClick={() => { setPasswordModalCourse(null); setCoursePassword(''); }} className="p-2 bg-slate-50 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-all"><X size={18}/></button>
+                </div>
+                <div className="space-y-4">
+                    <p className="text-sm text-slate-500 font-medium">This course is protected. Please enter the password provided by the instructor to enroll.</p>
+                    <div className="relative">
+                        <Key className="absolute left-4 top-3.5 text-slate-400" size={16} />
+                        <input 
+                            type="password"
+                            className="w-full pl-10 p-3 bg-slate-50 border border-slate-200 rounded-full font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-50 transition-all" 
+                            placeholder="Enter course password..." 
+                            value={coursePassword} 
+                            onChange={e => setCoursePassword(e.target.value)} />
+                    </div>
+                    <button onClick={handlePasswordEnroll} disabled={enrollingId === passwordModalCourse._id} className="w-full py-3 bg-orange-600 text-white rounded-full font-bold uppercase tracking-widest mt-2 hover:bg-orange-700 transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50">
+                        {enrollingId === passwordModalCourse._id ? <Loader2 className="animate-spin"/> : <Lock size={18}/>} Enroll Now
+                    </button>
+                </div>
+            </div>
+        </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
