@@ -65,6 +65,8 @@ export interface Course {
   description: string;
   thumbnailUrl?: string;
   price: number;
+  isPasswordProtected?: boolean;
+  password?: string;
   tutorId: string;
   tutorName: string;
   modules: Module[];
