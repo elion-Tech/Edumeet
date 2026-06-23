@@ -536,6 +536,9 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ user, courseId, onNa
                     {messages.map((m, i) => (
                         <div key={i} className={`p-4 rounded-2xl text-sm shadow-lg transition-all animate-in fade-in slide-in-from-bottom-6 ${m.role === 'user' ? 'bg-[#1e293b] text-white ml-10 rounded-br-none shadow-black/20' : 'glass border border-slate-200/80 text-slate-700 mr-10 rounded-bl-none leading-relaxed font-medium shadow-slate-200/50'}`}>
                             {m.text}
+                            <div className={`text-xs mt-2 ${m.role === 'user' ? 'text-slate-400 text-right' : 'text-slate-400'}`}>
+                                {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
                             {m.role === 'model' && (
                                 <button onClick={() => playAiVoice(m.text)} className="mt-3 text-orange-600 hover:text-orange-800 transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-100">
                                     <Volume2 size={16}/> Voice Synthesis

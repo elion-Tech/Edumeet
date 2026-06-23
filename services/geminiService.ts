@@ -7,7 +7,8 @@ const retryOperation = async <T>(operation: () => Promise<T>, retries = 3, delay
   try {
     return await operation();
   } catch (error: any) {
-    const isRateLimit = error?.status === 429 || 
+    const isRateLimit = error?.status === 429 ||
+                        error?.status === 503 ||
                         error?.message?.includes('429') || 
                         error?.message?.includes('quota') ||
                         error?.message?.includes('RESOURCE_EXHAUSTED');
@@ -84,7 +85,7 @@ export function localizeAndCompress(text: string, options: { useAfricanTone?: bo
 export async function* askAiTutorStream(
   question: string,
   course: any,
-  history: { role: string; text: string }[] = [],
+  history: { role: string; text: string; timestamp: number }[] = [],
   signal?: AbortSignal
 ) {
   try {
@@ -92,26 +93,33 @@ export async function* askAiTutorStream(
       apiKey: API_KEY
     });
 
+    // 1. Determine the best model for the job
+    const isSummaryRequest = /summarize|summary|recap|gist|tl;dr/i.test(question);
+    const modelName = isSummaryRequest ? 'gemini-1.5-pro-latest' : 'gemini-1.5-flash-latest';
+
+    // 2. Filter history to the last hour
+    const oneHourAgo = Date.now() - 60 * 60 * 1000;
+    const recentHistory = history.filter(h => h.timestamp >= oneHourAgo);
+
     const transcript = course.modules
       .map((m: any) => m.transcript)
       .join("\n\n")
-      .slice(0, 12000);
+      .slice(0, 80000); // Increased context for better answers
 
-    const historyText = history.map(h => `${h.role === 'user' ? 'Student' : 'AI'}: ${h.text}`).join("\n");
+    const historyText = recentHistory.map(h => `${h.role === 'user' ? 'Student' : 'AI'}: ${h.text}`).join("\n");
 
-    const prompt = `You are a professional and supportive AI Tutor. 
+    const prompt = `You are a professional, supportive AI Tutor for the course "${course.title}".
 
 Guidelines:
-1. Role & Style: Maintain a professional yet encouraging tone. Use clear, simple language suitable for education, but avoid slang or overly casual speech.
-2. Contextual Boundary: Strictly adhere to the lesson transcript provided below. Do not discuss topics outside the scope of this course. If the student asks an off-topic or non-educational question, politely decline and steer them back to the lesson.
-2. Formatting (STRICT):
+1. Tone: Professional, encouraging, and clear. Avoid slang.
+2. Context Boundary: Base all answers strictly on the provided lesson transcript. If a question is off-topic, politely steer the conversation back to the course material.
+3. Formatting (Strict):
    - Do NOT use markdown bold formatting (**).
    - Do NOT use bullet points beginning with "-". Use numbered lists (1. 2.) if needed.
    - Use short paragraphs and clear spacing.
 3. Continuity: Use the transcript as the primary source and the conversation history to build upon prior explanations. Avoid repetition.
 4. Length: 2-4 short, punchy paragraphs. Always end with a gentle, relevant follow-up question.
 
-Course: ${course.title}
 Transcript: ${transcript}
 History:
 ${historyText}
@@ -119,7 +127,7 @@ ${historyText}
 Student Question: ${question}`;
 
     const result = await retryOperation(() => ai.models.generateContentStream({
-      model: "gemini-2.5-flash",
+      model: modelName,
       contents: [
         {
           role: "user",
@@ -178,12 +186,12 @@ export const speakText = async (text: string, signal?: AbortSignal): Promise<str
 export const generateCourseImage = async (title: string, description: string): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const prompt = `A professional, 3D minimal education illustration. Title: "${title}". Description: "${description}". Clean, high-fidelity, artistic. No text.`;
-    // Use the same model as the cache for consistency and availability
+    const prompt = `Generate a professional, 3D minimal education-themed illustration for a course titled "${title}". The description is: "${description}". The image should be clean, high-fidelity, artistic, and contain no text.`;
+    
     const response = await retryOperation(() => ai.models.generateContent({ 
-      model: 'gemini-2.0-flash-preview-image-generation',
+      model: 'gemini-1.5-flash-latest',
       contents: { parts: [{ text: prompt }] },
-      config: {
+      generationConfig: {
         imageConfig: { aspectRatio: "16:9" }
       }
     }));
@@ -207,7 +215,7 @@ export const generateCourseContent = async (
 ): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-1.5-flash-latest';
     let prompt = '';
     let responseSchema: any = undefined;
 
@@ -216,7 +224,7 @@ export const generateCourseContent = async (
     } else if (type === 'transcript') {
       prompt = `Generate a deep-dive educational transcript for a lecture on "${topic}". Cover key technical concepts. Plain text only.`;
     } else if (type === 'quiz') {
-      prompt = `Generate 20 MCQ questions for "${topic}" in "${courseTitle}". 4 options each. Return valid JSON only.`;
+      prompt = `Generate 20 multiple-choice questions for the topic "${topic}" in the course "${courseTitle}". Each question must have 4 options and a correct index. Return valid JSON only, as an array of objects. If you cannot generate questions, return an empty array.`;
       responseSchema = {
         type: Type.ARRAY,
         items: {
@@ -233,7 +241,7 @@ export const generateCourseContent = async (
 
     const response = await retryOperation(() => ai.models.generateContent({
       model: model,
-      contents: prompt,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         temperature: 0.5,
         responseMimeType: responseSchema ? "application/json" : "text/plain",
