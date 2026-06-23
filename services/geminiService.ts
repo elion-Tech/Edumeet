@@ -162,7 +162,7 @@ export const speakText = async (text: string, signal?: AbortSignal): Promise<str
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await retryOperation(() => ai.models.generateContent({
       contents: [{ parts: [{ text: `Synthesize speech for: ${optimizedText}` }] }],
-      config: {
+      generationConfig: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
             voiceConfig: {
