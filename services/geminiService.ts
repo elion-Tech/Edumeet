@@ -94,9 +94,7 @@ export async function* askAiTutorStream(
     });
 
     // 1. Determine the best model for the job
-    const isSummaryRequest = /summarize|summary|recap|gist|tl;dr/i.test(question);
-    const modelName = isSummaryRequest ? 'gemini-1.5-pro-latest' : 'gemini-1.5-flash-latest';
-
+    const modelName = 'gemini-2.5-flash';
     // 2. Filter history to the last hour
     const oneHourAgo = Date.now() - 60 * 60 * 1000;
     const recentHistory = history.filter(h => h.timestamp >= oneHourAgo);
@@ -163,7 +161,6 @@ export const speakText = async (text: string, signal?: AbortSignal): Promise<str
     
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await retryOperation(() => ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Synthesize speech for: ${optimizedText}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
@@ -189,7 +186,6 @@ export const generateCourseImage = async (title: string, description: string): P
     const prompt = `Generate a professional, 3D minimal education-themed illustration for a course titled "${title}". The description is: "${description}". The image should be clean, high-fidelity, artistic, and contain no text.`;
     
     const response = await retryOperation(() => ai.models.generateContent({ 
-      model: 'gemini-1.5-flash-latest',
       contents: { parts: [{ text: prompt }] },
       generationConfig: {
         imageConfig: { aspectRatio: "16:9" }
@@ -215,8 +211,7 @@ export const generateCourseContent = async (
 ): Promise<string> => {
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
-    const model = 'gemini-1.5-flash-latest';
-    let prompt = '';
+    const model = 'gemini-2.5-flash';    let prompt = '';
     let responseSchema: any = undefined;
 
     if (type === 'description') {
