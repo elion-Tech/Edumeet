@@ -161,6 +161,7 @@ export const speakText = async (text: string, signal?: AbortSignal): Promise<str
     
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     const response = await retryOperation(() => ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Synthesize speech for: ${optimizedText}` }] }],
       generationConfig: {
         responseModalities: [Modality.AUDIO],
