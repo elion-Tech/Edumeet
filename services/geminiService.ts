@@ -164,6 +164,7 @@ export const speakText = async (text: string, signal?: AbortSignal): Promise<str
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text: `Synthesize speech for: ${optimizedText}` }] }],
       generationConfig: {
+        responseMimeType: "audio/wav",
         responseModalities: [Modality.AUDIO],
         speechConfig: {
             voiceConfig: {
